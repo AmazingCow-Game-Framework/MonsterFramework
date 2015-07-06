@@ -1,42 +1,42 @@
 //----------------------------------------------------------------------------//
-//                  _   _ ____   ___  ____                                    //
-//                 | \ | |___ \ / _ \| __ )  ___  _   _ ____                  //
-//                 |  \| | __) | | | |  _ \ / _ \| | | |_  /                  //
-//                 | |\  |/ __/| |_| | |_) | (_) | |_| |/ /                   //
-//                 |_| \_|_____|\___/|____/ \___/ \__, /___|                  //
-//                                                |___/                       //
+//                   _   _ ____   ___  ____                                   //
+//                  | \ | |___ \ / _ \| __ )  ___  _   _ ____                 //
+//                  |  \| | __) | | | |  _ \ / _ \| | | |_  /                 //
+//                  | |\  |/ __/| |_| | |_) | (_) | |_| |/ /                  //
+//                  |_| \_|_____|\___/|____/ \___/ \__, /___|                 //
+//                                                 |___/                      //
 //                                                                            //
-//                            Mateus Mesquita                                 //
-//                       www.N2OBoyz.com/~n2omatt                             //
-//                          N2OMatt@N2OBoyz.com                               //
+//                                   N2OMatt                                  //
+//                             N2OMatt@N2OBoyz.com                            //
+//                           www.N2OBoyz.com/N2OMatt                          //
 //                                                                            //
-//                   Copyright (C) 2015 Mateus Mesquita.                      //
-//                       Copyright (C) 2015 N2OBoyz.                          //
+//                         Copyright (C) 2015 N2OBoyz.                        //
 //                                                                            //
-//  This software is provided 'as-is', without any express or implied         //
-//  warranty. In no event will the authors be held liable for any damages     //
-//  arising from the use of this software.                                    //
+//      This software is provided 'as-is', without any express or implied     //
+//    warranty. In no event will the authors be held liable for any damages   //
+//                   arising from the use of this software.                   //
 //                                                                            //
-//  Permission is granted to anyone to use this software for any purpose,     //
-//  including commercial applications, and to alter it and redistribute it    //
-//  freely, subject to the following restrictions:                            //
+//    Permission is granted to anyone to use this software for any purpose,   //
+//   including commercial applications, and to alter it and redistribute it   //
+//               freely, subject to the following restrictions:               //
 //                                                                            //
-//  1. The origin of this software must not be misrepresented;                //
-//     you must not claim that you wrote the original software.               //
-//  2. If you use this software in a product, an acknowledgment in the        //
-//     product IS HIGHLY APPRECIATED, both in source and binary forms.        //
-//     If you will not acknowledge, just send me a email. We'll be VERY       //
-//     happy to see our work being used by other people. :)                   //
-//     (See opensource.N2OBoyz.com/acknowledgment.html for details).          //
-//  3. Altered source versions must be plainly marked as such, and must not   //
-//     be misrepresented as being the original software.                      //
-//  4. This notice may not be removed or altered from any source              //
-//     distribution.                                                          //
-//  5. Most important, you must have fun. ;)                                  //
+//     1. The origin of this software must not be misrepresented;             //
+//        you must not claim that you wrote the original software.            //
+//     2. If you use this software in a product, an acknowledgment in the     //
+//        product IS HIGHLY APPRECIATED, both in source and binary forms.     //
+//        (See opensource.N2OBoyz.com/acknowledgment.html for details).       //
+//        If you will not acknowledge, just send us a email. We'll be         //
+//        *VERY* happy to see our work being used by other people. :)         //
+//        The email is: acknowledgment.opensource@N2OBoyz.com                 //
+//     3. Altered source versions must be plainly marked as such,             //
+//        and must notbe misrepresented as being the original software.       //
+//     4. This notice may not be removed or altered from any source           //
+//        distribution.                                                       //
+//     5. Most important, you must have fun. ;)                               //
 //                                                                            //
-//       Visit OpenSource.N2OBoyz.com for more open-source projects.          //
+//         Visit OpenSource.N2OBoyz.com for more open-source projects.        //
 //                                                                            //
-//                            Enjoy :)                                        //
+//                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
 
@@ -92,7 +92,7 @@ USING_NS_STD_CC_CD_MF
         _target   = target;
         _selector = selector;
     }
-    
+
     return self;
 }
 
@@ -105,35 +105,35 @@ USING_NS_STD_CC_CD_MF
                         isHtml:(bool)isHtml
                    attachments:(const std::vector<std::tuple<std::string, std::string, std::string>> &)attachments
 {
-    
+
     //Turn the vectors into ObjC friendly format.
     NSMutableArray *toArr  = [self buildRecipientArray:toRecipients];
     NSMutableArray *ccArr  = [self buildRecipientArray:ccRecipients];
     NSMutableArray *bccArr = [self buildRecipientArray:bccRecipients];
-    
+
     //Turn the Subject to ObjC friendly format.
     NSString *subjectStr = [NSString stringWithCString:subject.c_str()
                                               encoding:NSUTF8StringEncoding];
-    
+
     //Turn the Message to ObjC friendly format.
     NSString *messageStr = [NSString stringWithCString:message.c_str()
                                               encoding:NSUTF8StringEncoding];
-    
-    
+
+
     //Build the controller object
     MFMailComposeViewController *controller = [[MFMailComposeViewController alloc] init];
     controller.mailComposeDelegate          = self;
-    
+
     [controller setToRecipients:toArr];
     [controller setCcRecipients:ccArr];
     [controller setBccRecipients:bccArr];
-    
+
     [controller setSubject:subjectStr];
     [controller setMessageBody:messageStr isHTML:isHtml];
-    
+
     //Add the attachments.
     [self addAttachmentsWithVector:attachments forMailController:controller];
-    
+
     //Get the referece to RootViewController of application
     //and present the Twitter controller into it.
     UIViewController *rvc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
@@ -160,11 +160,11 @@ USING_NS_STD_CC_CD_MF
         auto name = std::get<0>(tuple);
         auto ext  = std::get<1>(tuple);
         auto mime = std::get<2>(tuple);
-        
+
         auto path = CCFileUtils::sharedFileUtils()->fullPathForFilename(name + "." + ext);
 
         NSData *myData = [NSData dataWithContentsOfFile:[NSString stringWithUTF8String:path.c_str()]];
-        
+
         // Attach an image to the email
         [controller addAttachmentData:myData
                              mimeType:[NSString stringWithUTF8String:mime.c_str()]
@@ -181,12 +181,12 @@ USING_NS_STD_CC_CD_MF
     [controller dismissViewControllerAnimated:YES completion:^(){
         MF_LOG("MailComposer_iOS - MailComposerController did dissmiss ViewController");
     }];
-    
+
     if(error)
     {
         //Error! Log it and return false.
         NSLog(@"Mail_iOS: %@", error);
-        
+
         if(_target && _selector)
             (_target->*_selector)(false);
     }
@@ -197,8 +197,8 @@ USING_NS_STD_CC_CD_MF
         if(_target && _selector)
             (_target->*_selector)(result == MFMailComposeResultSent);
     }
-    
-    
+
+
     //Memory clean up.
     //The (mail)controller is straightforward but the self is because we can not
     //mantain self as autorelease so when the user dismiss the mail controller
@@ -229,12 +229,12 @@ void mf::MailComposer_ShowMailComposer(const std::vector<string> &toRecipients,
         MF_LOG("MailComposer_iOS: This device cannot send mail");
         return;
     }
-    
+
     //Init the MailComposer_iOS object with the target (a CCNode that will handle the
     //callback funtion) and selector (the callback function)
     MailComposer_iOS *instance = [[MailComposer_iOS alloc] initWithTarget:target
                                                      selector:selector];
-    
+
     [instance showMailComposerWithTo:toRecipients
                             Cc:ccRecipients
                            Bcc:bccRecipients

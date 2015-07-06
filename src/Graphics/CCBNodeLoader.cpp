@@ -1,42 +1,42 @@
 //----------------------------------------------------------------------------//
-//                  _   _ ____   ___  ____                                    //
-//                 | \ | |___ \ / _ \| __ )  ___  _   _ ____                  //
-//                 |  \| | __) | | | |  _ \ / _ \| | | |_  /                  //
-//                 | |\  |/ __/| |_| | |_) | (_) | |_| |/ /                   //
-//                 |_| \_|_____|\___/|____/ \___/ \__, /___|                  //
-//                                                |___/                       //
+//                   _   _ ____   ___  ____                                   //
+//                  | \ | |___ \ / _ \| __ )  ___  _   _ ____                 //
+//                  |  \| | __) | | | |  _ \ / _ \| | | |_  /                 //
+//                  | |\  |/ __/| |_| | |_) | (_) | |_| |/ /                  //
+//                  |_| \_|_____|\___/|____/ \___/ \__, /___|                 //
+//                                                 |___/                      //
 //                                                                            //
-//                            Mateus Mesquita                                 //
-//                       www.N2OBoyz.com/~n2omatt                             //
-//                          N2OMatt@N2OBoyz.com                               //
+//                                   N2OMatt                                  //
+//                             N2OMatt@N2OBoyz.com                            //
+//                           www.N2OBoyz.com/N2OMatt                          //
 //                                                                            //
-//                   Copyright (C) 2015 Mateus Mesquita.                      //
-//                       Copyright (C) 2015 N2OBoyz.                          //
+//                         Copyright (C) 2015 N2OBoyz.                        //
 //                                                                            //
-//  This software is provided 'as-is', without any express or implied         //
-//  warranty. In no event will the authors be held liable for any damages     //
-//  arising from the use of this software.                                    //
+//      This software is provided 'as-is', without any express or implied     //
+//    warranty. In no event will the authors be held liable for any damages   //
+//                   arising from the use of this software.                   //
 //                                                                            //
-//  Permission is granted to anyone to use this software for any purpose,     //
-//  including commercial applications, and to alter it and redistribute it    //
-//  freely, subject to the following restrictions:                            //
+//    Permission is granted to anyone to use this software for any purpose,   //
+//   including commercial applications, and to alter it and redistribute it   //
+//               freely, subject to the following restrictions:               //
 //                                                                            //
-//  1. The origin of this software must not be misrepresented;                //
-//     you must not claim that you wrote the original software.               //
-//  2. If you use this software in a product, an acknowledgment in the        //
-//     product IS HIGHLY APPRECIATED, both in source and binary forms.        //
-//     If you will not acknowledge, just send me a email. We'll be VERY       //
-//     happy to see our work being used by other people. :)                   //
-//     (See opensource.N2OBoyz.com/acknowledgment.html for details).          //
-//  3. Altered source versions must be plainly marked as such, and must not   //
-//     be misrepresented as being the original software.                      //
-//  4. This notice may not be removed or altered from any source              //
-//     distribution.                                                          //
-//  5. Most important, you must have fun. ;)                                  //
+//     1. The origin of this software must not be misrepresented;             //
+//        you must not claim that you wrote the original software.            //
+//     2. If you use this software in a product, an acknowledgment in the     //
+//        product IS HIGHLY APPRECIATED, both in source and binary forms.     //
+//        (See opensource.N2OBoyz.com/acknowledgment.html for details).       //
+//        If you will not acknowledge, just send us a email. We'll be         //
+//        *VERY* happy to see our work being used by other people. :)         //
+//        The email is: acknowledgment.opensource@N2OBoyz.com                 //
+//     3. Altered source versions must be plainly marked as such,             //
+//        and must notbe misrepresented as being the original software.       //
+//     4. This notice may not be removed or altered from any source           //
+//        distribution.                                                       //
+//     5. Most important, you must have fun. ;)                               //
 //                                                                            //
-//       Visit OpenSource.N2OBoyz.com for more open-source projects.          //
+//         Visit OpenSource.N2OBoyz.com for more open-source projects.        //
 //                                                                            //
-//                            Enjoy :)                                        //
+//                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
 //Header
@@ -71,11 +71,11 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent, mf::ILoadRes
     auto customPropertiesIt = map.find("customProperties");
     if(customPropertiesIt != end(map))
          customProperties = map.at("customProperties").asValueVector();
-    
+
     //LOG
 //    MF_LOG("Loading a Node with BaseClass:(%s) with CustomClass:(%s) and MemberVarAssignment:(%s)",
 //          baseClass.c_str(), customClass.c_str(), memberVarAssignmentName.c_str());
-    
+
     //Create the node and assign its properties.
     cc::Node *node = nullptr;
     if(baseClass == "CCBFile")
@@ -91,17 +91,17 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent, mf::ILoadRes
     {
         node = resolveCustomClasses(customClass, pResolver, customProperties);
     }
-    
+
     MF_ASSERT(node, "CCBNodeLoader - Node is null (%s)", baseClass.c_str());
-    
+
     parent->addChild(node);
     assignProperties(node, properties, pResolver);
-    
+
     //Resolve Custom Class.
-    
+
     //Resolve Member Var Assignment
     pResolver->resolveVarAssignment(memberVarAssignmentName, node);
-    
+
     //Create the Node's children.
     for(const auto &childItem : children)
     {
@@ -113,9 +113,9 @@ void CCBNodeLoader::loadNodeGraph(const cc::ValueMap &map, cc::Node *parent, mf:
 {
     auto children   = map.at("children"  ).asValueVector();
     auto properties = map.at("properties").asValueVector();
-    
+
     assignProperties(parent, properties, pResolver);
-    
+
     //Create the Node's children.
     for(const auto &childItem : children)
     {
@@ -132,7 +132,7 @@ std::string CCBNodeLoader::findCCBFilename(const cc::ValueVector &properties)
     for(auto it = begin(properties); it != end(properties); ++it)
     {
         const auto &item = it->asValueMap();
-        
+
         if(item.at("name").asString() == "ccbFile")
             return item.at("value").asString();
     }
@@ -148,9 +148,9 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj, const cc::ValueVector &
         //Get the name/value pair.
         const auto &name  = item.at("name" ).asString();
         const auto &value = item.at("value");
-        
+
 //        MF_LOG("CCBNodeLoader - %s", name.c_str());
-        
+
         //Check if the name of property matches and set the property.
         _SET_PROPERTY_FUNCTION(anchorPoint,                  name, obj, value);
         _SET_PROPERTY_FUNCTION(scale,                        name, obj, value);
@@ -170,24 +170,24 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj, const cc::ValueVector &
         _SET_PROPERTY_FUNCTION(fontSize,                     name, obj, value);
         _SET_PROPERTY_FUNCTION(string,                       name, obj, value);
         _SET_PROPERTY_FUNCTION(opacity,                      name, obj, value);
-        
+
         //Block is special, because we need the ILoadResolver
         //to communicate with the object owner class.
         if(name == "block")
             _set_block(obj, value, pResolver);
     }
-    
+
     return obj;
 }
 
 cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
 {
     cc::Node *node;
-    
+
     //Layer.
     if(baseClass == "CCLayer")
         node = cc::Layer::create();
-    
+
     //LayerColor
     //ETODO: This is very strange. With we don't set a color here at craetion
     //of the LayerColor, later the object will not set any color. So any color
@@ -195,23 +195,23 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
     //but know works in this way.
     else if(baseClass == "CCLayerColor")
         node = cc::LayerColor::create(cc::Color4B::BLUE);
-    
+
     //Sprite
     else if(baseClass == "CCSprite")
         node = cc::Sprite::create();
-    
+
     //Menu
     else if(baseClass == "CCMenu")
         node = cc::Menu::create();
-    
+
     //MenuItem
     else if(baseClass == "CCMenuItemImage")
         node = cc::MenuItemSprite::create(nullptr, nullptr);
-    
+
     //LabelTTF
     else if(baseClass == "CCLabelTTF")
         node = cc::Label::create();
-    
+
     return node;
 }
 cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
@@ -227,7 +227,7 @@ cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
 //        node = cc::SpriteBatchNode::createWithTexture(texture);
 //    }
 //    return node;
-    
+
 
     return pResolver->resolveCustomClass(customClass);
 }

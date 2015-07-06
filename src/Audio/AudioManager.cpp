@@ -72,7 +72,7 @@ void AudioManager::muteAll(bool mute)
     if(mute)
     {
         //Save the current volumes to later restore.
-        m_prevFxVol  = getEffectsVolume();        
+        m_prevFxVol  = getEffectsVolume();
         setEffectsVolume(0);
     }
     else
@@ -80,7 +80,7 @@ void AudioManager::muteAll(bool mute)
         //Restore the previous volumes.
         setEffectsVolume(m_prevFxVol);
     }
-    
+
     m_muted = mute;
     MF_LOG("AudioManager - Audio is now %s", mute ? "Off" : "On");
 }
@@ -99,10 +99,10 @@ void AudioManager::loadEffect(const std::string &path)
     if(!fileExits)
         MF_LOG_WARNING("Audio Manager - Cannot load effect file [PATH:(%s)]", path.c_str());
 #endif
-    
+
     m_effects[path] = -1;
     m_pAudioEngine->preloadEffect(path.c_str());
-    
+
     MF_LOG("AudioManager - LoadEffect: (%s)", path.c_str());
 }
 void AudioManager::loadEffect(const std::vector<std::string> &list)
@@ -118,16 +118,16 @@ void AudioManager::unloadEffect(const std::string &name)
 
 void AudioManager::playEffect(const std::string &name, bool loop)
 {
-    
+
 #if MONSTERFRAMEWORK_DEBUG
     auto it = m_effects.find(name);
     if(it == m_effects.end())
         MF_LOG_WARNING("Audio Manager - Effects file is not loaded:(%s)", name.c_str());
-#endif    
+#endif
 
     int id = m_pAudioEngine->playEffect(name.c_str(), loop);
     m_effects[name] = id;
-    
+
     MF_LOG("AudioManager - Playing Effect:(%s) - ID:(%d)", name.c_str(), id);
 }
 void AudioManager::pauseEffect(const std::string &name)
