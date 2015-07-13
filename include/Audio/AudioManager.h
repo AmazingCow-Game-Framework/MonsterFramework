@@ -73,19 +73,18 @@ public:
     bool isMuted();
 
     //Effects
-    void loadEffect(const std::string &path);
-    void loadEffect(const std::vector<std::string> &paths);
-    void unloadEffect(const std::string &path);
+    void loadEffect(const std::string &effectId, const std::string &path);
+    void unloadEffect(const std::string &effectId);
 
-    void playEffect(const std::string &path, bool loop = false);
+    void playEffect(const std::string &effectId, bool loop = false);
 
-    void pauseEffect(const std::string &path);
+    void pauseEffect(const std::string &effectId);
     void pauseAllEffects();
 
-    void resumeEffect(const std::string &path);
+    void resumeEffect(const std::string &effectId);
     void resumeAllEffects();
 
-    void stopEffect(const std::string &path);
+    void stopEffect(const std::string &effectId);
     void stopAllEffects();
 
     float getEffectsVolume();
@@ -97,9 +96,8 @@ private:
     // iVars //
 private:
     cd::SimpleAudioEngine      *m_pAudioEngine;
-    std::map<std::string, int> m_effects;
-
-    bool  m_muted;
+    std::map<std::string, std::pair<std::string, int>> m_effectsMap;
+    
     float m_prevFxVol;
 }; //class AudioManager
 

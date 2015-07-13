@@ -54,14 +54,14 @@ AudioManager* AudioManager::instance()
 
 // CTOR/DTOR //
 AudioManager::AudioManager() :
-m_pAudioEngine(SimpleAudioEngine::getInstance()),
-m_muted(false),
-m_prevFxVol(m_pAudioEngine->getEffectsVolume())
+    m_pAudioEngine(SimpleAudioEngine::getInstance()),
+    m_prevFxVol(m_pAudioEngine->getEffectsVolume())
 {
     //Empty...
 }
 AudioManager::~AudioManager()
 {
+    //Release the SimpleAudioEngine.
     SimpleAudioEngine::end();
 }
 
@@ -80,75 +80,96 @@ void AudioManager::muteAll(bool mute)
         //Restore the previous volumes.
         setEffectsVolume(m_prevFxVol);
     }
-
-    m_muted = mute;
     MF_LOG("AudioManager - Audio is now %s", mute ? "Off" : "On");
 }
 bool AudioManager::isMuted()
 {
-    return m_muted;
+    return getEffectsVolume() == 0;
 }
 
 //Effects
-void AudioManager::loadEffect(const std::string &path)
+void AudioManager::loadEffect(const std::string &effectId, const std::string &path)
 {
 #if MONSTERFRAMEWORK_DEBUG
-    //In Debug mode check if file exists, and if not emit a warning about that.
-    //In Release mode do nothing.
-    auto fileExits = CCFileUtils::sharedFileUtils()->isFileExist(path.c_str());
-    if(!fileExits)
-        MF_LOG_WARNING("Audio Manager - Cannot load effect file [PATH:(%s)]", path.c_str());
+    //In Debug mode check if file exists...
+    auto fileExists = FileUtils::getInstance()->isFileExist(path.c_str());
+    MF_ASSERT(fileExists, "Audio Manager - Cannot load effect file [PATH:(%s)]", path.c_str());
 #endif
 
-    m_effects[path] = -1;
+    //Insert a default invalid id into effects map with effectId key.
+    m_effectsMap[effectId] = make_pair(path, -1);
     m_pAudioEngine->preloadEffect(path.c_str());
 
     MF_LOG("AudioManager - LoadEffect: (%s)", path.c_str());
 }
-void AudioManager::loadEffect(const std::vector<std::string> &list)
+void AudioManager::unloadEffect(const std::string &effectId)
 {
-    for (auto &pair : list)
-        loadEffect(pair);
-}
-void AudioManager::unloadEffect(const std::string &name)
-{
-    m_pAudioEngine->unloadEffect(name.c_str());
-    m_effects.erase(name);
+    //Check if effectId is valid.
+    auto it = m_effectsMap.find(effectId);
+    MF_ASSERT((it == end(m_effectsMap)), "Audio Manager - Invalid EffectId %s", effectId.c_str());
+    
+    //Remove the effect from audio engine and delete it
+    //from effects map.
+    m_pAudioEngine->unloadEffect(it->second.first.c_str());
+    m_effectsMap.erase(effectId);
 }
 
-void AudioManager::playEffect(const std::string &name, bool loop)
+void AudioManager::playEffect(const std::string &effectId, bool loop)
 {
-
+    //Get the iterator for effectId.
+    auto it = m_effectsMap.find(effectId);
 #if MONSTERFRAMEWORK_DEBUG
-    auto it = m_effects.find(name);
-    if(it == m_effects.end())
-        MF_LOG_WARNING("Audio Manager - Effects file is not loaded:(%s)", name.c_str());
+    //In Debug mode check if file exists...
+    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
+    
+    //Play effect and update its engine id.
+    int id = m_pAudioEngine->playEffect(it->second.first.c_str(), loop);
+    m_effectsMap[effectId].second = id;
 
-    int id = m_pAudioEngine->playEffect(name.c_str(), loop);
-    m_effects[name] = id;
-
-    MF_LOG("AudioManager - Playing Effect:(%s) - ID:(%d)", name.c_str(), id);
+    //Log
+    MF_LOG("AudioManager - Playing Effect:(%s) - EngineId:(%d)", effectId.c_str(), id);
 }
-void AudioManager::pauseEffect(const std::string &name)
+void AudioManager::pauseEffect(const std::string &effectId)
 {
-    m_pAudioEngine->pauseEffect(m_effects[name]);
+    //Get the iterator for effectId.
+    auto it = m_effectsMap.find(effectId);
+#if MONSTERFRAMEWORK_DEBUG
+    //In Debug mode check if file exists...
+    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
+#endif
+    
+    m_pAudioEngine->pauseEffect(it->second.second);
 }
 void AudioManager::pauseAllEffects()
 {
     m_pAudioEngine->pauseAllEffects();
 }
-void AudioManager::resumeEffect(const std::string &name)
+void AudioManager::resumeEffect(const std::string &effectId)
 {
-    m_pAudioEngine->resumeEffect(m_effects[name]);
+    //Get the iterator for effectId.
+    auto it = m_effectsMap.find(effectId);
+#if MONSTERFRAMEWORK_DEBUG
+    //In Debug mode check if file exists...
+    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
+#endif
+    
+    m_pAudioEngine->resumeEffect(it->second.second);
 }
 void AudioManager::resumeAllEffects()
 {
     m_pAudioEngine->resumeAllEffects();
 }
-void AudioManager::stopEffect(const std::string &name)
+void AudioManager::stopEffect(const std::string &effectId)
 {
-    m_pAudioEngine->stopEffect(m_effects[name]);
+    //Get the iterator for effectId.
+    auto it = m_effectsMap.find(effectId);
+#if MONSTERFRAMEWORK_DEBUG
+    //In Debug mode check if file exists...
+    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
+#endif
+    
+    m_pAudioEngine->stopEffect(it->second.second);
 }
 void AudioManager::stopAllEffects()
 {

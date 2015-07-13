@@ -50,8 +50,15 @@ class Internet
 {
     // Public Methods //
 public:
-    static bool hasInternetConnection();
-    static void openURLInBrowser(const std::string &url);
+    static bool hasInternetConnection()
+    {
+        //ETODO: Implement
+    }
+    static void openURLInBrowser(const std::string &url)
+    {
+            //ETODO: Implement
+    }
+
 };
 
 NS_MF_END
