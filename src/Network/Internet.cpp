@@ -39,27 +39,20 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __GreenLittleMonster_MonsterFramework_Internet_h__
-#define __GreenLittleMonster_MonsterFramework_Internet_h__
+//Header
+#include "MonsterFramework/include/Network/Internet.h"
+//Internet Private Functions
+#include "MonsterFramework/src/Network/private/Internet_Functions.h"
 
-//DonkeyBas
-#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
+//Usings
+USING_NS_STD_CC_CD_MF
 
-NS_MF_BEGIN
-class Internet
+// Public Methods //
+bool Internet::hasInternetConnection()
 {
-    // Public Methods //
-public:
-    static bool hasInternetConnection()
-    {
-        //ETODO: Implement
-    }
-    static void openURLInBrowser(const std::string &url)
-    {
-            //ETODO: Implement
-    }
-
-};
-
-NS_MF_END
-#endif // defined(__GreenLittleMonster_MonsterFramework_Internet_h__) //
+    return Internet_HasInternetConnection();
+}
+void Internet::openURLInBrowser(const std::string &url)
+{
+    Internet_OpenURLInBrowser(url);
+}
