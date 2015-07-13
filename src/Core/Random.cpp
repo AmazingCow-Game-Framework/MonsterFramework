@@ -42,9 +42,9 @@
 //Header
 #include "MonsterFramework/include/Core/Random.h"
 //std
-#include <cstdlib>
-#include <ctime>
+#include <limits>
 
+//Usings
 USING_NS_STD_CC_CD_MF
 
 // CTOR/DTOR //
@@ -56,40 +56,33 @@ Random::Random(int seed)
 // Public Methods //
 int Random::next()
 {
-    return next(0, RAND_MAX);
+    return next(std::numeric_limits<int>::max());
 }
 int Random::next(int max)
 {
+    MF_ASSERT((max > 0), "Random - max must be greater than 0");
     return next(0, max);
 }
 int Random::next(int min, int max)
 {
-    return min + arc4random() % (max - min);
-}
-
-float Random::nextFloat()
-{
-    return next(10000) / 10000.0;
+    MF_ASSERT((min < max), "Random - max must be greater than min");
+    return min + (m_distribution(m_randomEngine) % (max - min));
 }
 
 int Random::getSeed() const
 {
-    return static_cast<int>(m_seed);
+    return m_seed;
 }
 void Random::setSeed(int seed)
 {
-    m_seed            = seed;
-    m_usingRandomSeed = false;
-
-    if(m_seed == RANDOM_SEED)
+    if(seed == Random::kRandomSeed)
     {
-        m_seed = time(0);
-        m_usingRandomSeed = true;
+        m_isUsingRandomSeed = true;
+        m_seed            = static_cast<RandomEngineType::result_type>(time(nullptr));
+        m_randomEngine.seed(m_seed);
     }
-
-//    srand(time(&m_seed));
 }
 bool Random::isUsingRandomSeed() const
 {
-    return m_usingRandomSeed;
+    return m_isUsingRandomSeed;
 }

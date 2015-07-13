@@ -42,21 +42,24 @@
 #ifndef __DonkeyBas_iPhone_Base__Random__
 #define __DonkeyBas_iPhone_Base__Random__
 
-//std
-#include <ctime>
-//DonkeyBas
+//MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
+//std
+#include <random>
 
 NS_MF_BEGIN
 class Random
 {
     // Enums/Constants/Typedefs //
 public:
-    static const int RANDOM_SEED = -1;
+    typedef std::mt19937                       RandomEngineType;
+    typedef std::uniform_int_distribution<int> DistributionType;
+    
+    static const int kRandomSeed = -1;
 
     // CTOR/DTOR //
 public:
-    Random(int seed = RANDOM_SEED);
+    Random(int seed = kRandomSeed);
 
     // Public Methods //
 public:
@@ -64,10 +67,9 @@ public:
     int next(int max);
     int next(int min, int max);
 
-    float nextFloat();
-
-    int getSeed() const;
+    int  getSeed() const;
     void setSeed(int seed);
+    
     bool isUsingRandomSeed() const;
 
     // Private Methods //
@@ -75,9 +77,11 @@ private:
 
     // iVars //
 private:
-    std::time_t m_seed;
-    bool m_usingRandomSeed;
-
+    RandomEngineType              m_randomEngine;
+    RandomEngineType::result_type m_seed;
+    DistributionType              m_distribution;
+    bool                          m_isUsingRandomSeed;
+    
 }; //class
 NS_MF_END
 
