@@ -39,43 +39,49 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef U7_MasterKidsGames_GraphicsHelper_h
-#define U7_MasterKidsGames_GraphicsHelper_h
+//Header
+#include "MonsterFramework/include/Graphics/GraphicsHelper.h"
 
-//MonsterFramework
-#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
+//Usings
+USING_NS_STD_CC_CD_MF
 
-NS_MF_BEGIN
-
-class GraphicsHelper
+// Public Static Methods //
+void GraphicsHelper::setAnchorToCenter(cc::Node *pNode)
 {
-    // Public Static Methods //
-public:
-    static void setAnchorToCenter(cc::Node *pNode);
-    
-    static cc::Point getAbsolutePosition(float px, float py,
-                                         cc::Node *pParentNode);
-    
-    static cc::Point getAbsolutePositionCenter(cc::Node *pParentNode);
-    
-    static void setRelativePosition(float px, float py,
-                                    cc::Node *pNode,
-                                    cc::Node *pParentNode);
-    
-    static void setPositionToCenter(cc::Node *pNode,
-                                    cc::Node *pParentNode);
-    
-    typedef void PlatformImage;
-    static PlatformImage* spriteToPlatformImage(cc::Sprite *pSprite);
-    /*N2OTODO:
-     
-     static PlatformImage* textureToPlaformImage(cc::Texture2d *pTexture);
-     static cc::Sprite* spriteFromPlatformImage(PlatformImage *pImage);
-     static cc::Sprite* textureFromPlatformImage(PlatformImage *pImage);
-     
-     static
-     */
-};
+    pNode->ignoreAnchorPointForPosition(false);
+    pNode->setAnchorPoint(cc::Point(0.5, 0.5));
+}
 
-NS_MF_END
-#endif
+cc::Point GraphicsHelper::getAbsolutePosition(float px, float py,
+                                              cc::Node *pParentNode)
+{
+    auto size = pParentNode->getContentSize();
+    return cc::Point((size.width * (px/100.0f)), size.height * (py/100.0f));
+}
+cc::Point GraphicsHelper::getAbsolutePositionCenter(cc::Node *pParentNode)
+{
+    return getAbsolutePosition(50, 50, pParentNode);
+}
+
+void GraphicsHelper::setRelativePosition(float px, float py,
+                                         cc::Node *pNode,
+                                         cc::Node *pParentNode)
+{
+    auto point = getAbsolutePosition(px, py, pParentNode);
+    pNode->setPosition(point);
+}
+
+void GraphicsHelper::setPositionToCenter(cc::Node *pNode,
+                                         cc::Node *pParentNode)
+{
+    setRelativePosition(50, 50, pNode, pParentNode);
+}
+
+/*N2OTODO:
+ PlatformImage* spriteToPlatformImage(cc::Sprite *pSprite);
+ PlatformImage* textureToPlaformImage(cc::Texture2d *pTexture);
+ cc::Sprite* spriteFromPlatformImage(PlatformImage *pImage);
+ cc::Sprite* textureFromPlatformImage(PlatformImage *pImage);
+ 
+ 
+ */
