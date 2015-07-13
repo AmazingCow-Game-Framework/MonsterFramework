@@ -54,7 +54,7 @@ const std::string StringsManager::getString(const std::string &path)
 {
 }
 
-	// Private Methods //
+// Private Methods //
 string StringsManager::getLocalizedFilename(const std::string &filename)
 {
 	return filename + "_en.plist";
