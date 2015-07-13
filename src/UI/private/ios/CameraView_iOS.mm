@@ -98,32 +98,51 @@ USING_NS_STD_CC_CD_MF
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+
     id rvc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-
-        [rvc dismissViewControllerAnimated:picker completion:^(){
-
-            //Get the UIImage selected by user and get the NSData representation of it.
-            UIImage *image       = [info objectForKey:UIImagePickerControllerOriginalImage];
-            NSData  *nsDataImage = UIImagePNGRepresentation(image);
-
-            //Set the CameraView vars pointers.
-            *self.cameraView_imageDataLength  = [nsDataImage length];
-            *self.cameraView_imageData        = (CameraView::ByteArrayPtr)malloc(*self.cameraView_imageDataLength);
-            memcpy(*self.cameraView_imageData, [nsDataImage bytes], *self.cameraView_imageDataLength);
-
-            //Inform the listener that user selected the image.
-            self.cameraview_callback();
-
-            //Release the allocated memory.
-            //This is done here because in c++ we just used alloc/init
-            //we cannot use autorelease in c++ because the view will be released
-            //to soon.
-            [self release];
-        }];
+    [rvc dismissViewControllerAnimated:YES completion:^(){
+        
+        //Get the UIImage selected by user and get the NSData representation of it.
+        UIImage *image       = [info objectForKey:UIImagePickerControllerOriginalImage];
+        NSData  *nsDataImage = UIImagePNGRepresentation(image);
+        
+        //Set the CameraView vars pointers.
+        *self.cameraView_imageDataLength  = [nsDataImage length];
+        *self.cameraView_imageData        = (CameraView::ByteArrayPtr)malloc(*self.cameraView_imageDataLength);
+        memcpy(*self.cameraView_imageData, [nsDataImage bytes], *self.cameraView_imageDataLength);
+        
+        //Inform the listener that user selected the image.
+        self.cameraview_callback();
+        
+        //Release the allocated memory.
+        //This is done here because in c++ we just used alloc/init
+        //we cannot use autorelease in c++ because the view will be released
+        //to soon.
+        [self release];
+    }];
 }
 
 
 // CameraView Functions Implementation //
+//This is a helper function just to make the creation
+//of Camera View Controller be placed in one single place.
+CameraView_UIImagePickerController* _buildCameraViewController(const CameraView::Callback  &func,
+                                                               CameraView::ByteArrayPtr    *pImageData,
+                                                               CameraView::ByteArrayLength *pLength)
+{
+    //N2ONote: Important the controller is not set to autorelease because we need a
+    //valid reference and with autorelase the object will be released too soon.
+    //The method that handles the dismmissal of the controller will be the responsible
+    //to relase the controller object.
+    CameraView_UIImagePickerController *controller = [[CameraView_UIImagePickerController alloc] init];
+    controller.cameraview_callback        = func;
+    controller.cameraView_imageData       = pImageData;
+    controller.cameraView_imageDataLength = pLength;
+
+    return controller;
+}
+
+//The actual CameraView Functions...
 bool mf::CameraView_CanAccessCamera()
 {
     return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
@@ -137,24 +156,15 @@ void mf::CameraView_ShowCamera(const CameraView::Callback  &func,
                                CameraView::ByteArrayPtr    *pImageData,
                                CameraView::ByteArrayLength *pLength)
 {
-    CameraView_UIImagePickerController *controller = [[CameraView_UIImagePickerController alloc] init];
-    controller.cameraview_callback        = func;
-    controller.cameraView_imageData       = pImageData;
-    controller.cameraView_imageDataLength = pLength;
-
+    id controller = _buildCameraViewController(func, pImageData, pLength);
     [controller showCamera];
-
 }
 
 void mf::CameraView_ShowCameraRoll(const CameraView::Callback  &func,
                                    CameraView::ByteArrayPtr    *pImageData,
                                    CameraView::ByteArrayLength *pLength)
 {
-    CameraView_UIImagePickerController *controller = [[CameraView_UIImagePickerController alloc] init];
-    controller.cameraview_callback        = func;
-    controller.cameraView_imageData       = pImageData;
-    controller.cameraView_imageDataLength = pLength;
-
+    id controller = _buildCameraViewController(func, pImageData, pLength);
     [controller showCameraRoll];
 }
 
