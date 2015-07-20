@@ -140,7 +140,7 @@ USING_NS_STD_CC_CD_MF
 - (BOOL)showBannerAd:(const ADManager::AdOptions &)options
 {
     //Get the reference to banner and check if it's valid.
-    GADBannerView *banner = _banners[N2O_MF_STR_CPP2NS(options.Key)];
+    GADBannerView *banner = _banners[MF_STR_CPP2NS(options.Key)];
     if(!banner)
     {
         MF_LOG_WARNING("ADManager_iOS - Trying to show a BannerAd that was not previously added");
@@ -159,7 +159,7 @@ USING_NS_STD_CC_CD_MF
 - (BOOL)showInterstitialAd:(const ADManager::AdOptions &)options
 {
     //Get the reference to banner and check if it's valid.
-    GADInterstitial *interstitial = _interstitials[N2O_MF_STR_CPP2NS(options.Key)];
+    GADInterstitial *interstitial = _interstitials[MF_STR_CPP2NS(options.Key)];
     if(!interstitial)
     {
         MF_LOG_WARNING("ADManager_iOS - Trying to show a InterstitialAd that was not previously added");
@@ -174,7 +174,7 @@ USING_NS_STD_CC_CD_MF
     }
 
     //Get the root view controller.
-    id rvc = N2O_MF_GETAPPRVC();
+    id rvc = MF_GETAPPRVC();
     [interstitial presentFromRootViewController:rvc];
 
     //Everything went fine.
@@ -195,7 +195,7 @@ USING_NS_STD_CC_CD_MF
 - (BOOL)addInterstitialAd:(const ADManager::AdOptions &)options
 {
     //Get the reference for the Ad and check if it's valid.
-    GADInterstitial *interstitial = _interstitials[N2O_MF_STR_CPP2NS(options.Key)];
+    GADInterstitial *interstitial = _interstitials[MF_STR_CPP2NS(options.Key)];
     if(interstitial)
     {
         MF_LOG_WARNING("ADManager_iOS - InterstitialAd was previously added");
@@ -203,20 +203,20 @@ USING_NS_STD_CC_CD_MF
     }
 
     //Create and Add it.
-    interstitial = [[GADInterstitial alloc] initWithAdUnitID:N2O_MF_STR_CPP2NS(options.Key)];
+    interstitial = [[GADInterstitial alloc] initWithAdUnitID:MF_STR_CPP2NS(options.Key)];
     interstitial.delegate = self;
 
     //Load it.
     GADRequest *request = [GADRequest request];
     [interstitial loadRequest:request];
 
-    [_interstitials setObject:interstitial forKey:N2O_MF_STR_CPP2NS(options.Key)];
+    [_interstitials setObject:interstitial forKey:MF_STR_CPP2NS(options.Key)];
     return YES;
 }
 - (BOOL)removeInterstitialAd:(const ADManager::AdOptions &)options
 {
     //Get the reference for the Ad and check if it's valid.
-    GADInterstitial *interstitial = _interstitials[N2O_MF_STR_CPP2NS(options.Key)];
+    GADInterstitial *interstitial = _interstitials[MF_STR_CPP2NS(options.Key)];
     if(!interstitial)
     {
         MF_LOG_WARNING("ADManager_iOS - InterstitialAd was not previously added");
@@ -224,7 +224,7 @@ USING_NS_STD_CC_CD_MF
     }
 
     //Remove it.
-    [_interstitials removeObjectForKey:N2O_MF_STR_CPP2NS(options.Key)];
+    [_interstitials removeObjectForKey:MF_STR_CPP2NS(options.Key)];
 
     return YES;
 }
@@ -237,7 +237,7 @@ USING_NS_STD_CC_CD_MF
 
     //Create the same options as the original.
     auto options = ADManager::AdOptions{
-        .Key  = N2O_MF_STR_NS2CPP(key),
+        .Key  = MF_STR_NS2CPP(key),
         .Type = ADManager::AdOptions::AdType::Interstitial
     };
 

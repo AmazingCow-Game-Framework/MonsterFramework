@@ -39,12 +39,23 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Private_Utils__
-#define __MonsterFramework_Private_Utils__
+#ifndef __MonsterFramework_Private_Utils_iOS__
+#define __MonsterFramework_Private_Utils_iOS__
 
-// Include iOS Private Utils //
 #ifdef MONSTERFRAMEWORK_IOS
-    #include "./ios/Private_Utils.h"
-#endif
 
-#endif // defined (__MonsterFramework_Private_Utils__) //
+// String //
+//char * -> NSString
+#define MF_STR_C2NS(_str_) [NSString stringWithFormat:@"%s", _str_]
+//std::string -> NSString
+#define MF_STR_CPP2NS(_str_) MF_STR_C2NS(_str_.c_str())
+//NSString -> char *
+#define MF_STR_NS2C(_str_) [_str_ UTF8String]
+//NSString -> std::string
+#define MF_STR_NS2CPP(_str_) std::string(MF_STR_NS2C(_str_))
+
+// Get the App's RootViewController //
+#define MF_GETAPPRVC() [[[UIApplication sharedApplication] keyWindow] rootViewController]
+
+#endif // MONSTERFRAMEWORK_IOS
+#endif // defined (__MonsterFramework_Private_Utils_iOS__) //
