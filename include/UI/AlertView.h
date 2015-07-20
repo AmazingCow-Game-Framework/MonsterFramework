@@ -50,28 +50,32 @@
 
 NS_MF_BEGIN
 
-typedef void (cc::CCObject::*SEL_AlertViewHandler)(int);
-#define AlertView_selector(_SELECTOR) (SEL_AlertViewHandler)(&_SELECTOR)
-
 class AlertView
 {
+    // Enums/Contants/Typedefs //
+public:
+    typedef std::function<void (const std::string &buttonTitle, int buttonIndex)> Callback;
+
     // CTOR/DTOR //
 public:
     AlertView();
-    AlertView(const std::string &title, const std::string &message,
+    AlertView(const std::string &title,
+              const std::string &message,
               const std::string &cancelButtonTitle,
               const std::vector<std::string> &otherButtonTitles,
-              cc::Node *pTarget, mf::SEL_AlertViewHandler selector);
+              const Callback &callback);
 
     // Public Methods //
 public:
-    void setTitle(const std::string &title);
-    void setMessage(const std::string &message);
+    void setTitle            (const std::string &title);
+    void setMessage          (const std::string &message);
     void setCancelButtonTitle(const std::string &cancelButtonTitle);
     void setOtherButtonTitles(const std::vector<std::string> &message);
 
-    void setTarget(cc::Node *pTarget, mf::SEL_AlertViewHandler selector);
+    //Callback
+    void setCallback(const Callback &callback);
 
+    //Show
     void showAlertView();
 
     // iVars //
@@ -81,8 +85,7 @@ private:
     std::string              m_cancelButtonTitle;
     std::vector<std::string> m_otherButtonTitles;
 
-    cc::Node               *m_pTarget;
-    mf::SEL_AlertViewHandler  m_selector;
+    Callback m_callback;
 
 }; //class AlertView
 

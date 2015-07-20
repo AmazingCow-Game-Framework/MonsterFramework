@@ -48,97 +48,91 @@
 //Cocoa
 #import <UIKit/UIKit.h>
 //MonsterFramework
-#include "../../include/Utils/MonsterFramework_Utils.h"
-#include "AlertView_Functions.h"
+#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
+#include "MonsterFramework/src/UI/private/AlertView_Functions.h"
+#include "MonsterFramework/src/Utils/private/Private_Utils.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
 
 // Interface //
-@interface AlertView_iOS : NSObject <UIAlertViewDelegate>
+@interface AlertView_iOS : NSObject
+    <UIAlertViewDelegate>
 {
-    cc::CCNode               *_target;
-    mf::SEL_AlertViewHandler  _selector;
+    AlertView::Callback _callback;
 }
 
-#pragma mark - Init
-- (id)initWithTarget:(CCNode *)target selector:(mf::SEL_AlertViewHandler)selector;
+// Init //
+- (id)initWithCallback:(const AlertView::Callback &)callback;
 
-#pragma mark - Actions
+// Actions //
 - (void)showAlertViewWithTitle:(const std::string &)title
                        message:(const std::string &)message
              cancelButtonTitle:(const std::string &)cancelButtonTitle
              otherButtonTitles:(const std::vector<std::string> &)otherButtonTitles;
 
-
 @end
 
 @implementation AlertView_iOS
-
-#pragma mark - Init
-- (id)initWithTarget:(cc::CCNode *)target selector:(mf::SEL_AlertViewHandler)selector
+// Init //
+- (id)initWithCallback:(const AlertView::Callback &)callback
 {
     if(self = [super init])
     {
-        _target   = target;
-        _selector = selector;
+        _callback = callback;
     }
 
     return self;
 }
 
-#pragma mark - Actions
+// Actions //
 - (void)showAlertViewWithTitle:(const std::string &)title
                        message:(const std::string &)message
              cancelButtonTitle:(const std::string &)cancelButtonTitle
              otherButtonTitles:(const std::vector<std::string> &)otherButtonTitles
 {
-    //Turn Title, Message, CancelButtonTitle into a ObjC friendly format.
-    NSString *titleStr             = [NSString stringWithUTF8String:title.c_str()];
-    NSString *messageStr           = [NSString stringWithUTF8String:message.c_str()];
-    NSString *cancelButtonTitleStr = [NSString stringWithUTF8String:cancelButtonTitle.c_str()];
-
     //Build the UIAlertView.
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:titleStr
-                                                        message:messageStr
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:MF_STR_CPP2NS(title)
+                                                        message:MF_STR_CPP2NS(message)
                                                        delegate:self
-                                              cancelButtonTitle:cancelButtonTitleStr
+                                              cancelButtonTitle:MF_STR_CPP2NS(cancelButtonTitle)
                                               otherButtonTitles:nil, nil];
 
     //We need add the OtherButtonTitles into the UIAlertView so we will iterate
     //for each item in vector and turn it on NSString and add the result on UIAlertView.
     for(auto &title : otherButtonTitles)
-    {
-        NSString *currentStr = [NSString stringWithUTF8String:title.c_str()];
-        [alertView addButtonWithTitle:currentStr];
-    }
+        [alertView addButtonWithTitle:MF_STR_CPP2NS(title)];
 
     //Present the AlertView.
     [alertView show];
 }
 
-#pragma mark - UIAlertView Delegate
+// UIAlertView Delegate //
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if(_target && _selector)
-        (_target->*_selector)(buttonIndex);
+    if(_callback)
+    {
+        _callback(MF_STR_NS2CPP([alertView buttonTitleAtIndex:buttonIndex]),
+                  buttonIndex);
+    }
 
     [alertView release];
     [self release];
 }
 @end
 
-#pragma mark - AlerView_Functions Implementations
+// AlerView_Functions Implementations //
 void mf::AlertView_ShowAlertView(const std::string &title,
                                  const std::string &message,
                                  const std::string &cancelButtonTitle,
                                  const std::vector<std::string> &otherButtonTitles,
-                                 cc::CCNode *target, mf::SEL_AlertViewHandler selector)
+                                 const AlertView::Callback &callback)
 {
-    AlertView_iOS *instance = [[AlertView_iOS alloc] initWithTarget:target
-                                                           selector:selector];
+    AlertView_iOS *instance = [[AlertView_iOS alloc] initWithCallback:callback];
+    
     [instance showAlertViewWithTitle:title message:message
                    cancelButtonTitle:cancelButtonTitle
                    otherButtonTitles:otherButtonTitles];
 }
+
 #endif //MONSTERFRAMEWORK_IOS

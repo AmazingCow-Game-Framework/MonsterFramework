@@ -55,8 +55,7 @@ void AlertView_ShowAlertView(const std::string &title,
                              const std::string &message,
                              const std::string &cancelButtonTitle,
                              const std::vector<std::string> &otherButtonTitles,
-                             cc::Node *target, mf::SEL_AlertViewHandler selector)
-{}
+                             const AlertView::Callback &callback);
 
 NS_MF_END
 #endif // defined(__MonsterFramework_AlertView_Functions_h__) //

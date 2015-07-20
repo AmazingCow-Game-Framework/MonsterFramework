@@ -48,22 +48,19 @@
 USING_NS_STD_CC_CD_MF
 
 // CTOR/DTOR //
-AlertView::AlertView() :
-m_pTarget(nullptr),
-m_selector(nullptr)
+AlertView::AlertView()
 {
     //Empty...
 }
 AlertView::AlertView(const string &title, const string &message,
                      const string &cancelButtonTitle,
                      const vector<string> &otherButtonTitles,
-                     cc::Node *pTarget, mf::SEL_AlertViewHandler selector) :
-m_title(title),
-m_message(message),
-m_cancelButtonTitle(cancelButtonTitle),
-m_otherButtonTitles(otherButtonTitles),
-m_pTarget(pTarget),
-m_selector(selector)
+                     const Callback &callback) :
+    m_title(title),
+    m_message(message),
+    m_cancelButtonTitle(cancelButtonTitle),
+    m_otherButtonTitles(otherButtonTitles),
+    m_callback(callback)
 {
     //Empty...
 }
@@ -87,10 +84,10 @@ void AlertView::setOtherButtonTitles(const vector<string> &otherButtonTitles)
     m_otherButtonTitles = otherButtonTitles;
 }
 
-void AlertView::setTarget(Node *pTarget, SEL_AlertViewHandler selector)
+//Callback
+void AlertView::setCallback(const Callback &callback)
 {
-    m_pTarget  = pTarget;
-    m_selector = selector;
+    m_callback = callback;
 }
 
 void AlertView::showAlertView()
@@ -99,5 +96,5 @@ void AlertView::showAlertView()
                             m_message,
                             m_cancelButtonTitle,
                             m_otherButtonTitles,
-                            m_pTarget, m_selector);
+                            m_callback);
 }
