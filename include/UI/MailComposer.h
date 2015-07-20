@@ -50,15 +50,22 @@
 
 NS_MF_BEGIN
 
-typedef void (cc::CCObject::*SEL_MailComposerHandler)(bool);
-#define MailComposer_selector(_SELECTOR) (SEL_MailComposerHandler)(&_SELECTOR)
-
 class MailComposer
 {
-    // Constants //
+    // Inner Types //
 public:
-    static const std::string MIME_JPG;
-    static const std::string MIME_PNG;
+    struct Attachment
+    {
+        const std::string name;
+        const std::string ext;
+        const std::string mimeType;
+    };
+    
+    // Enums/Constants/Typedefs //
+public:
+    static const std::string kMIME_JPG;
+    static const std::string kMIME_PNG;
+    typedef std::function<void (bool)> Callback;
 
     // Static Methods //
 public:
@@ -69,8 +76,9 @@ public:
     MailComposer();
     MailComposer(const std::vector<std::string> &to,
                  const std::string &subject,
-                 const std::string &message, bool isHTML,
-                 cc::Node *pTarget, mf::SEL_MailComposerHandler selector);
+                 const std::string &message,
+                 bool isHTML,
+                 const Callback &callback);
 
     // Public Methods //
 public:
@@ -87,14 +95,13 @@ public:
     //Message
     void setMessage(const std::string &message, bool isHTML);
     //Attachment
-    void addAttachment(const std::string &name, const std::string &ext,
-                       const std::string &mimeType);
+    void addAttachment(const Attachment &attachment);
 
-    //Target
-    void setTarget(cc::Node *target, mf::SEL_MailComposerHandler selector);
+    //Callback
+    void setCallback(const Callback &callback);
 
     //Show
-    void showMailComposerUI();
+    void showMailComposer();
 
     // iVars //
 private:
@@ -106,10 +113,9 @@ private:
     std::vector<std::string> m_ccRecipients;
     std::vector<std::string> m_bccRecipients;
 
-    std::vector<std::tuple<std::string, std::string, std::string>> m_attachments;
-
-    cc::Node                  *m_pTarget;
-    mf::SEL_MailComposerHandler  m_selector;
+    std::vector<Attachment>  m_attachments;
+    
+    Callback m_callback;
 };
 
 NS_MF_END

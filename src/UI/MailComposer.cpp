@@ -48,8 +48,8 @@
 USING_NS_STD_CC_CD_MF;
 
 // Constants //
-const string MailComposer::MIME_JPG = "image/jpeg";
-const string MailComposer::MIME_PNG = "image/png";
+const string MailComposer::kMIME_JPG = "image/jpeg";
+const string MailComposer::kMIME_PNG = "image/png";
 
 // Static Methods //
 bool MailComposer::canSendMail()
@@ -58,22 +58,19 @@ bool MailComposer::canSendMail()
 }
 
 // CTOR/DTOR //
-MailComposer::MailComposer() :
-m_pTarget(nullptr),
-m_selector(nullptr)
+MailComposer::MailComposer()
 {
     //Empty...
 }
 MailComposer::MailComposer(const std::vector<std::string> &to,
                            const std::string &subject,
                            const std::string &message, bool isHTML,
-                           cc::Node *pTarget, mf::SEL_MailComposerHandler selector) :
-m_toRecipients(to),
-m_subject(subject),
-m_message(message),
-m_isHTML(isHTML),
-m_pTarget(pTarget),
-m_selector(selector)
+                           const Callback &callback) :
+    m_toRecipients(to),
+    m_subject(subject),
+    m_message(message),
+    m_isHTML(isHTML),
+    m_callback(callback)
 {
     //Empty...
 }
@@ -117,23 +114,26 @@ void MailComposer::setMessage(const std::string &message, bool isHTML)
 }
 
 //Attachment
-void MailComposer::addAttachment(const string &name, const string &ext,
-                                 const string &mimeType)
+void MailComposer::addAttachment(const Attachment &attachment)
 {
-    m_attachments.push_back(make_tuple(name, ext, mimeType));
+    m_attachments.push_back(attachment);
 }
 
-//Target
-void MailComposer::setTarget(cc::Node *target, SEL_MailComposerHandler selector)
+//Callback
+void MailComposer::setCallback(const Callback &callback)
 {
-    m_pTarget  = target;
-    m_selector = selector;
+    m_callback = callback;
 }
 
 //Show
-void MailComposer::showMailComposerUI()
+void MailComposer::showMailComposer()
 {
-    MailComposer_ShowMailComposer(m_toRecipients, m_ccRecipients, m_bccRecipients,
-                                  m_subject, m_message, m_isHTML, m_attachments,
-                                  m_pTarget, m_selector);
+    MailComposer_ShowMailComposer(m_toRecipients,
+                                  m_ccRecipients,
+                                  m_bccRecipients,
+                                  m_subject,
+                                  m_message,
+                                  m_isHTML,
+                                  m_attachments,
+                                  m_callback);
 }

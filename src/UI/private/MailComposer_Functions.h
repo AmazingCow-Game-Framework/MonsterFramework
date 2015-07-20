@@ -50,17 +50,17 @@
 #include "MonsterFramework/include/UI/MailComposer.h"
 
 NS_MF_BEGIN
-bool MailComposer_CanSendMail()
-{}
+
+bool MailComposer_CanSendMail();
 
 void MailComposer_ShowMailComposer(const std::vector<std::string> &toRecipients,
                                    const std::vector<std::string> &ccRecipients,
                                    const std::vector<std::string> &bccRecipients,
                                    const std::string &subject,
-                                   const std::string &message, bool isHtml,
-                                   const std::vector<std::tuple<std::string, std::string, std::string>> &attachments,
-                                   cc::Node *target, mf::SEL_MailComposerHandler selector)
-{}
+                                   const std::string &message,
+                                   bool isHtml,
+                                   const std::vector<MailComposer::Attachment> &attachments,
+                                   const MailComposer::Callback &callback);
 
 NS_MF_END
 #endif // defined(__MonsterFramework_MailComposer_Functions_h__) //

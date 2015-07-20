@@ -49,61 +49,62 @@
 //std
 #include <vector>
 #include <string>
-//DonkeyBas
-#include "../../include/Utils/MonsterFramework_Utils.h"
-#include "MailComposer_Functions.h"
+//MonsterFramweork
+#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
+#include "MonsterFramework/include/UI/MailComposer.h"
+#include "MonsterFramework/src/UI/private/MailComposer_Functions.h"
+#include "MonsterFramework/src/Utils/Private/Private_Utils.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
 
 // Interface //
-@interface MailComposer_iOS : UIViewController <MFMailComposeViewControllerDelegate>
+@interface MailComposer_iOS : UIViewController
+    <MFMailComposeViewControllerDelegate>
 {
-    cc::CCNode                  *_target;
-    mf::SEL_MailComposerHandler _selector;
+    MailComposer::Callback _callback;
 }
 
-#pragma mark - Init
-- (id)initWithTarget:(cc::CCNode *)target selector:(mf::SEL_MailComposerHandler)selector;
+// Init //
+- (id)initWithCallback:(const MailComposer::Callback &)callback;
 
-#pragma mark - Actions
+// Actions //
 - (void)showMailComposerWithTo:(const std::vector<std::string> &)toRecipients
                             Cc:(const std::vector<std::string> &)ccRecipients
                            Bcc:(const std::vector<std::string> &)bccRecipients
                        subject:(const std::string &)subject
                        message:(const std::string&)message
                         isHtml:(bool)isHtml
-                   attachments:(const std::vector<std::tuple<std::string, std::string, std::string>> &)attachments;
+                   attachments:(const std::vector<MailComposer::Attachment> &)attachments;
 
-#pragma mark - Helpers
+// Helpers //
 - (NSMutableArray *)buildRecipientArray:(const std::vector<std::string> &)recipients;
-- (void)addAttachmentsWithVector:(const std::vector<std::tuple<std::string, std::string, std::string>> &)attachments
+- (void)addAttachmentsWithVector:(const std::vector<MailComposer::Attachment> &)attachments
                forMailController:(MFMailComposeViewController *)controller;
 @end
 
 
 // Implementation //
 @implementation MailComposer_iOS
-#pragma mark - Init
-- (id)initWithTarget:(cc::CCNode *)target selector:(mf::SEL_MailComposerHandler)selector
+// Init //
+- (id)initWithCallback:(const MailComposer::Callback &)callback
 {
     if(self = [super init])
     {
-        _target   = target;
-        _selector = selector;
+        _callback = callback;
     }
 
     return self;
 }
 
-#pragma - Actions
+// Actions //
 - (void)showMailComposerWithTo:(const std::vector<std::string> &)toRecipients
                             Cc:(const std::vector<std::string> &)ccRecipients
                            Bcc:(const std::vector<std::string> &)bccRecipients
                        subject:(const std::string &)subject
-                       message:(const std::string &)message
+                       message:(const std::string&)message
                         isHtml:(bool)isHtml
-                   attachments:(const std::vector<std::tuple<std::string, std::string, std::string>> &)attachments
+                   attachments:(const std::vector<MailComposer::Attachment> &)attachments
 {
 
     //Turn the vectors into ObjC friendly format.
@@ -112,13 +113,9 @@ USING_NS_STD_CC_CD_MF
     NSMutableArray *bccArr = [self buildRecipientArray:bccRecipients];
 
     //Turn the Subject to ObjC friendly format.
-    NSString *subjectStr = [NSString stringWithCString:subject.c_str()
-                                              encoding:NSUTF8StringEncoding];
-
+    NSString *subjectStr = MF_STR_CPP2NS(subject);
     //Turn the Message to ObjC friendly format.
-    NSString *messageStr = [NSString stringWithCString:message.c_str()
-                                              encoding:NSUTF8StringEncoding];
-
+    NSString *messageStr = MF_STR_CPP2NS(message);
 
     //Build the controller object
     MFMailComposeViewController *controller = [[MFMailComposeViewController alloc] init];
@@ -136,11 +133,11 @@ USING_NS_STD_CC_CD_MF
 
     //Get the referece to RootViewController of application
     //and present the Twitter controller into it.
-    UIViewController *rvc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    UIViewController *rvc = MF_GETAPPRVC();
     [rvc presentViewController:controller animated:YES completion:nil];
 }
 
-#pragma mark - Helpers
+// Helpers //
 - (NSMutableArray *)buildRecipientArray:(const std::vector<std::string> &)recipients
 {
     //For each item in recipients vector build a NSString with it and
@@ -148,31 +145,28 @@ USING_NS_STD_CC_CD_MF
     NSMutableArray *arr = [NSMutableArray arrayWithCapacity:recipients.size()];
     for(auto &str : recipients)
     {
-        [arr addObject:[NSString stringWithUTF8String:str.c_str()]];
+        [arr addObject:MF_STR_CPP2NS(str)];
     }
     return arr;
 }
-- (void)addAttachmentsWithVector:(const std::vector<std::tuple<std::string, std::string, std::string>> &)attachments
+- (void)addAttachmentsWithVector:(const std::vector<MailComposer::Attachment> &)attachments
                forMailController:(MFMailComposeViewController *)controller
 {
-    for(auto &tuple : attachments)
+    for(auto &attachment : attachments)
     {
-        auto name = std::get<0>(tuple);
-        auto ext  = std::get<1>(tuple);
-        auto mime = std::get<2>(tuple);
+        auto path = cc::FileUtils::getInstance()->fullPathForFilename(attachment.name + "." + attachment.ext);
 
-        auto path = CCFileUtils::sharedFileUtils()->fullPathForFilename(name + "." + ext);
-
-        NSData *myData = [NSData dataWithContentsOfFile:[NSString stringWithUTF8String:path.c_str()]];
+        NSData *myData = [NSData dataWithContentsOfFile:MF_STR_CPP2NS(path)];
 
         // Attach an image to the email
         [controller addAttachmentData:myData
-                             mimeType:[NSString stringWithUTF8String:mime.c_str()]
-                             fileName:[NSString stringWithUTF8String:name.c_str()]];
+                             mimeType:MF_STR_CPP2NS(attachment.mimeType)
+                             fileName:MF_STR_CPP2NS(attachment.name)];
+        
     }
 }
 
-#pragma mark - MailComposer Delegate
+// MailComposer Delegate //
 - (void)mailComposeController:(MFMailComposeViewController *)controller
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError *)error
@@ -182,22 +176,18 @@ USING_NS_STD_CC_CD_MF
         MF_LOG("MailComposer_iOS - MailComposerController did dissmiss ViewController");
     }];
 
+    bool wasSent = true;
     if(error)
     {
         //Error! Log it and return false.
         NSLog(@"Mail_iOS: %@", error);
-
-        if(_target && _selector)
-            (_target->*_selector)(false);
-    }
-    else
-    {
-        //Inform the target that user was done with the Mail. And pass
-        //if the mail was sent.
-        if(_target && _selector)
-            (_target->*_selector)(result == MFMailComposeResultSent);
+        wasSent = false;
     }
 
+    //Inform that user was done with the Mail. And pass
+    //if the mail was sent.
+    if(_callback)
+        _callback(result == MFMailComposeResultSent || wasSent);
 
     //Memory clean up.
     //The (mail)controller is straightforward but the self is because we can not
@@ -209,7 +199,7 @@ USING_NS_STD_CC_CD_MF
 @end
 
 
-#pragma mark - MailComposer_Functions Implementation
+// MailComposer_Functions Implementation //
 bool mf::MailComposer_CanSendMail()
 {
     return [MFMailComposeViewController canSendMail];
@@ -218,10 +208,12 @@ void mf::MailComposer_ShowMailComposer(const std::vector<string> &toRecipients,
                                        const std::vector<string> &ccRecipients,
                                        const std::vector<string> &bccRecipients,
                                        const std::string &subject,
-                                       const std::string &message, bool isHtml,
-                                       const std::vector<std::tuple<std::string, std::string, std::string>> &attachments,
-                                       cc::CCNode *target, mf::SEL_MailComposerHandler selector)
+                                       const std::string &message,
+                                       bool isHtml,
+                                       const std::vector<MailComposer::Attachment> &attachments,
+                                       const MailComposer::Callback &callback)
 {
+
     //Check if the current device can send mail. Need because if device
     //cannot the further functions will fail. Game should inform the player about this.
     if(!MailComposer_CanSendMail())
@@ -232,8 +224,7 @@ void mf::MailComposer_ShowMailComposer(const std::vector<string> &toRecipients,
 
     //Init the MailComposer_iOS object with the target (a CCNode that will handle the
     //callback funtion) and selector (the callback function)
-    MailComposer_iOS *instance = [[MailComposer_iOS alloc] initWithTarget:target
-                                                     selector:selector];
+    MailComposer_iOS *instance = [[MailComposer_iOS alloc] initWithCallback:callback];
 
     [instance showMailComposerWithTo:toRecipients
                             Cc:ccRecipients
@@ -243,4 +234,5 @@ void mf::MailComposer_ShowMailComposer(const std::vector<string> &toRecipients,
                         isHtml:isHtml
                    attachments:attachments];
 }
+
 #endif //MONSTERFRAMEWORK_IOS
