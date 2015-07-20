@@ -50,11 +50,12 @@
 
 NS_MF_BEGIN
 
-typedef void (cc::CCObject::*SEL_ActionSheetHandler)(int);
-#define ActionSheet_selector(_SELECTOR) (SEL_ActionSheetHandler)(&_SELECTOR)
-
 class ActionSheet
 {
+    // Enums/Contants/Typedefs //
+public:
+    typedef std::function<void (const std::string &buttonTitle, int buttonIndex)> Callback;
+
     // CTOR/DTOR //
 public:
     ActionSheet();
@@ -62,16 +63,16 @@ public:
                 const std::string &canceButtonTitle,
                 const std::string &destructiveButtonTitle,
                 const std::vector<std::string> otherButtonTitles,
-                cc::Node *pTarget, mf::SEL_ActionSheetHandler selector);
+                const Callback &callback);
 
     // Public Methods //
 public:
-    void setTitle(const std::string &title);
-    void setCancelButtonTitle(const std::string &cancelButtonTitle);
+    void setTitle                 (const std::string &title);
+    void setCancelButtonTitle     (const std::string &cancelButtonTitle);
     void setDestructiveButtonTitle(const std::string &destructiveButtonTitle);
-    void setOtherButtonTitles(const std::vector<std::string> &otherButtonTitles);
+    void setOtherButtonTitles     (const std::vector<std::string> &otherButtonTitles);
 
-    void setTarget(cc::Node *pTarget, mf::SEL_ActionSheetHandler selector);
+    void setCallback(const Callback &callback);
 
     void showActionSheet();
 
@@ -82,8 +83,7 @@ private:
     std::string              m_destructiveButtonTitle;
     std::vector<std::string> m_otherButtonTitles;
 
-    cc::Node                 *m_pTarget;
-    mf::SEL_ActionSheetHandler  m_selector;
+    Callback m_callback;
 
 }; //class ActionSheet
 

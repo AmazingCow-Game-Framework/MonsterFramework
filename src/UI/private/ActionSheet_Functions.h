@@ -55,8 +55,7 @@ void ActionSheet_ShowActionSheet(const std::string &title,
                                  const std::string &canceButtonTitle,
                                  const std::string &destructiveButtonTitle,
                                  const std::vector<std::string> otherButtonTitles,
-                                 cc::Node *pTarget, mf::SEL_ActionSheetHandler selector)
-{}
+                                 const ActionSheet::Callback &callback);
 
 NS_MF_END
 #endif // defined(__MonsterFramework_ActionSheet_Function_h__) //

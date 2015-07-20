@@ -46,10 +46,9 @@
 
 //Usings
 USING_NS_STD_CC_CD_MF
+
 // CTOR/DTOR //
-ActionSheet::ActionSheet() :
-m_pTarget(nullptr),
-m_selector(nullptr)
+ActionSheet::ActionSheet()
 {
     //Empty...
 }
@@ -58,13 +57,12 @@ ActionSheet::ActionSheet(const string &title,
                          const string &canceButtonTitle,
                          const string &destructiveButtonTitle,
                          const vector<string> otherButtonTitles,
-                         Node *pTarget, SEL_ActionSheetHandler selector) :
+                         const Callback &callback) :
     m_title(title),
     m_cancelButtonTitle(canceButtonTitle),
     m_destructiveButtonTitle(destructiveButtonTitle),
     m_otherButtonTitles(otherButtonTitles),
-    m_pTarget(pTarget),
-    m_selector(selector)
+    m_callback(callback)
 {
     //Empty...
 }
@@ -87,10 +85,9 @@ void ActionSheet::setOtherButtonTitles(const vector<string> &otherButtonTitles)
     m_otherButtonTitles = otherButtonTitles;
 }
 
-void ActionSheet::setTarget(Node *pTarget, SEL_ActionSheetHandler selector)
+void ActionSheet::setCallback(const Callback &callback)
 {
-    m_pTarget  = pTarget;
-    m_selector = selector;
+    m_callback = callback;
 }
 
 void ActionSheet::showActionSheet()
@@ -99,5 +96,5 @@ void ActionSheet::showActionSheet()
                                 m_cancelButtonTitle,
                                 m_destructiveButtonTitle,
                                 m_otherButtonTitles,
-                                m_pTarget, m_selector);
+                                m_callback);
 }

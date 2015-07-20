@@ -48,8 +48,9 @@
 //Cocoa
 #import <UIKit/UIKit.h>
 //MonsterFramework
-#include "../../include/Utils/MonsterFramework_Utils.h"
-#include "ActionSheet_Functions.h"
+#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
+#include "MonsterFramework/src/UI/private/ActionSheet_Functions.h"
+#include "MonsterFramework/src/Utils/private/Private_Utils.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
@@ -57,20 +58,16 @@ USING_NS_STD_CC_CD_MF
 // Interface //
 @interface ActionSheet_iOS : NSObject <UIActionSheetDelegate>
 {
-    CCNode                 *_target;
-    SEL_ActionSheetHandler  _selector;
+    ActionSheet::Callback _callback;
 }
 
-#pragma mark - Init
-- (id)initWithTarget:(CCNode *)target selector:(SEL_ActionSheetHandler)selector;
+- (id)initWithCallback:(const ActionSheet::Callback &)callback;
 
-#pragma mark - Actions
 - (void)showActionSheetWithTitle:(const string &)title
                cancelButtonTitle:(const string &)cancelButtonTitle
           destructiveButtonTitle:(const string &)destructiveButtonTitle
                otherButtonTitles:(const vector<string> &)otherButtonTitles;
 
-#pragma mark - Helpers
 - (NSString *)NSStringOrNilIfEmpty:(const string &)str;
 
 @end
@@ -79,18 +76,17 @@ USING_NS_STD_CC_CD_MF
 // Implementation //
 @implementation ActionSheet_iOS
 
-#pragma mark - Init
-- (id)initWithTarget:(cc::CCNode *)target selector:(mf::SEL_ActionSheetHandler)selector
+// Init //
+- (id)initWithCallback:(const ActionSheet::Callback &)callback
 {
     if(self = [super init])
     {
-        _target   = target;
-        _selector = selector;
+        _callback = callback;
     }
     return self;
 }
 
-#pragma mark - Actions
+// Actions //
 - (void)showActionSheetWithTitle:(const string &)title
                cancelButtonTitle:(const string &)cancelButtonTitle
           destructiveButtonTitle:(const string &)destructiveButtonTitle
@@ -113,29 +109,32 @@ USING_NS_STD_CC_CD_MF
     //for each item in vector and turn it on NSString and add the result on UIActionSheet
     for(auto &title : otherButtonTitles)
     {
-        NSString *currentStr = [NSString stringWithUTF8String:title.c_str()];
+        NSString *currentStr = MF_STR_CPP2NS(title);
         [actionSheet addButtonWithTitle:currentStr];
     }
 
     //Get the referece to RootViewController of application
     //and present the Twitter controller into it.
-    UIViewController *rvc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    UIViewController *rvc = MF_GETAPPRVC();
     [actionSheet showInView:rvc.view];
 }
 
-#pragma mark - Helpers
+// Helpers //
 - (NSString *)NSStringOrNilIfEmpty:(const string &)str
 {
     return (str == "") ? nil : [NSString stringWithUTF8String:str.c_str()];
 }
 
-#pragma mark - UIActionSheet Delegate
+// UIActionSheet Delegate //
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //Call the callback, if it exists.
-    if(_target && _selector)
-        (_target->*_selector)(buttonIndex);
-
+    if(_callback)
+    {
+        _callback(MF_STR_NS2CPP([actionSheet buttonTitleAtIndex:buttonIndex]),
+                  buttonIndex);
+    }
+    
     //Memory clean up.
     //The actionShet is straightforward but the self is because we can not
     //mantain self as autorelease so when the user dismiss the mail controller
@@ -145,16 +144,15 @@ USING_NS_STD_CC_CD_MF
 }
 @end
 
-#pragma mark - AlertView_Functions Implementations
+// AlertView_Functions Implementations //
 void mf::ActionSheet_ShowActionSheet(const string &title,
                                      const string &cancelButtonTitle,
                                      const string &destructiveButtonTitle,
                                      const vector<string> otherButtonTitles,
-                                     cc::CCNode *pTarget,
-                                     mf::SEL_ActionSheetHandler selector)
+                                     const ActionSheet::Callback &callback)
 {
-    ActionSheet_iOS *instance = [[ActionSheet_iOS alloc] initWithTarget:pTarget
-                                                               selector:selector];
+    ActionSheet_iOS *instance = [[ActionSheet_iOS alloc] initWithCallback:callback];
+    
     [instance showActionSheetWithTitle:title
                      cancelButtonTitle:cancelButtonTitle
                 destructiveButtonTitle:destructiveButtonTitle
