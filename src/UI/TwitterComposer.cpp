@@ -54,17 +54,14 @@ bool TwitterComposer::canSendTweet()
 }
 
 // CTOR/DTOR //
-TwitterComposer::TwitterComposer() :
-m_pTarget(nullptr),
-m_selector(nullptr)
+TwitterComposer::TwitterComposer()
 {
     //Empty...
 }
 TwitterComposer::TwitterComposer(const std::string &text,
-                                 cc::Node *pTarget, mf::SEL_TwitterComposerHandler selector) :
-m_text(text),
-m_pTarget(pTarget),
-m_selector(selector)
+                                 const Callback &callback) :
+    m_text(text),
+    m_callback(callback)
 {
     //Empty...
 }
@@ -75,9 +72,9 @@ void TwitterComposer::setText(const std::string &text)
 {
     m_text = text;
 }
-void TwitterComposer::addImage(const std::string &image, const std::string &ext)
+void TwitterComposer::addImage(const ImageInfo &info)
 {
-    m_images.push_back(make_tuple(image, ext));
+    m_images.push_back(info);
 }
 void TwitterComposer::addURL(const std::string &url)
 {
@@ -85,17 +82,16 @@ void TwitterComposer::addURL(const std::string &url)
 }
 
 //Target
-void TwitterComposer::setTarget(cc::Node *target, SEL_TwitterComposerHandler selector)
+void TwitterComposer::setCallback(const Callback &callback)
 {
-    m_pTarget  = target;
-    m_selector = selector;
+    m_callback = callback;
 }
 
 //Show
-void TwitterComposer::showTwitterComposerUI()
+void TwitterComposer::showTwitterComposer()
 {
     TwitterComposer_ShowTwitterComposer(m_text,
                                         m_images,
                                         m_urls,
-                                        m_pTarget, m_selector);
+                                        m_callback);
 }

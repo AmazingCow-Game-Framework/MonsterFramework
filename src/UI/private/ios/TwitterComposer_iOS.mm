@@ -48,9 +48,10 @@
 //Cocoa
 #include <UIKit/UIKit.h>
 #include <Twitter/Twitter.h>
-//DonkeyBas
-#include "../../include/Utils/MonsterFramework_Utils.h"
-#include "TwitterComposer_Functions.h"
+//MonsterFramework
+#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
+#include "MonsterFramework/src/UI/private/TwitterComposer_Functions.h"
+#include "MonsterFramework/src/Utils/private/Private_Utils.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
@@ -58,23 +59,22 @@ USING_NS_STD_CC_CD_MF
 // Interface //
 @interface TwitterComposer_iOS : NSObject
 {
-    cc::CCNode                     *_target;
-    mf::SEL_TwitterComposerHandler  _selector;
+    TwitterComposer::Callback _callback;
 }
 
-#pragma mark - Init
-- (id)initWithTarget:(cc::CCNode *)target selector:(mf::SEL_TwitterComposerHandler)selector;
+// Init //
+- (id)initWithCallback:(const TwitterComposer::Callback &)callback;
 
-#pragma mark - Actions
+// Actions
 - (void)showTwitterComposerWithText:(const string &)text
-                             images:(const std::vector<std::tuple<std::string, std::string>> &)images
+                             images:(const std::vector<TwitterComposer::ImageInfo> &)images
                                urls:(const vector<string> &)urls;
 
-#pragma mark - Helpers
-- (NSMutableArray *)buildImagesArray:(const std::vector<std::tuple<std::string, std::string>> &)vec;
+// Helpers //
+- (NSMutableArray *)buildImagesArray:(const std::vector<TwitterComposer::ImageInfo> &)vec;
 - (NSMutableArray *)buildURLsArray:(const vector<string> &)vec;
 
-#pragma mark - Twitter Composer Callback
+// Twitter Composer Callback //
 - (void)twitterComposerDidFinishedWithResult:(TWTweetComposeViewControllerResult)result;
 
 @end
@@ -82,23 +82,22 @@ USING_NS_STD_CC_CD_MF
 
 // Implementation //
 @implementation TwitterComposer_iOS
-#pragma mark - init
-- (id)initWithTarget:(cc::CCNode *)target selector:(mf::SEL_TwitterComposerHandler)selector
+// Init ///
+- (id)initWithCallback:(const TwitterComposer::Callback &)callback
 {
     if(self = [super init])
     {
-        _target   = target;
-        _selector = selector;
+        _callback = callback;
     }
     return self;
 }
-#pragma mark - Actions
+// Actions //
 - (void)showTwitterComposerWithText:(const string &)text
-                             images:(const std::vector<std::tuple<std::string, std::string>> &)images
+                             images:(const std::vector<TwitterComposer::ImageInfo> &)images
                                urls:(const vector<string> &)urls
 {
     //Turn the Text, Images vector and Urls vector to ObjC friendly format.
-    NSString       *textStr   = [NSString stringWithUTF8String:text.c_str()];
+    NSString       *textStr   = MF_STR_CPP2NS(text);
     NSMutableArray *imagesArr = [self buildImagesArray:images];
     NSMutableArray *urlsArr   = [self buildURLsArray:urls];
 
@@ -107,14 +106,16 @@ USING_NS_STD_CC_CD_MF
 
     //Text
     [controller setInitialText:textStr];
+
     //Images
     for (UIImage *image in imagesArr)
          [controller addImage:image];
+    
     //Urls
     for (NSURL *url in urlsArr)
         [controller addURL:url];
 
-    //ETODO Completion Handlers
+    //Completion Handlers
     [controller setCompletionHandler:^(TWTweetComposeViewControllerResult result)
     {
         [controller dismissViewControllerAnimated:YES completion:nil];
@@ -123,23 +124,20 @@ USING_NS_STD_CC_CD_MF
 
     //Get the referece to RootViewController of application
     //and present the Twitter controller into it.
-    UIViewController *rvc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    UIViewController *rvc = MF_GETAPPRVC();
     [rvc presentViewController:controller animated:YES completion:nil];
 }
 
-#pragma mark - Helpers
-- (NSMutableArray *)buildImagesArray:(const std::vector<std::tuple<std::string, std::string>> &)vec
+// Helpers //
+- (NSMutableArray *)buildImagesArray:(const std::vector<TwitterComposer::ImageInfo> &)vec
 {
     NSMutableArray *arr = [NSMutableArray arrayWithCapacity:vec.size()];
-    for(auto &tuple : vec)
+    for(auto &imageInfo : vec)
     {
-        auto name = std::get<0>(tuple);
-        auto ext  = std::get<1>(tuple);
-
-        auto path = CCFileUtils::sharedFileUtils()->fullPathForFilename(name + "." + ext);
-        UIImage *img = [UIImage imageWithData:
-                        [NSData dataWithContentsOfFile:
-                         [NSString stringWithUTF8String:path.c_str()]]];
+        auto path = cc::FileUtils::getInstance()->fullPathForFilename(imageInfo.name + "." + imageInfo.ext);
+        
+        id       data = [NSData dataWithContentsOfFile:MF_STR_CPP2NS(path)];
+        UIImage *img  = [UIImage imageWithData:data];
 
         [arr addObject:img];
     }
@@ -150,22 +148,18 @@ USING_NS_STD_CC_CD_MF
     NSMutableArray *arr = [NSMutableArray arrayWithCapacity:vec.size()];
 
     for(auto &item : vec)
-    {
-        NSString *str = [NSString stringWithUTF8String:item.c_str()];
-        NSURL    *url = [NSURL URLWithString:str];
+        [arr addObject:[NSURL URLWithString:MF_STR_CPP2NS(item)]];
 
-        [arr addObject:url];
-    }
     return arr;
 }
 
-#pragma mark - Twitter Composer Callback
+// Twitter Composer Callback
 - (void)twitterComposerDidFinishedWithResult:(TWTweetComposeViewControllerResult)result
 {
-    //Inform the target that user was done with the Tweet. And pass
+    //Inform that user was done with the Tweet. And pass
     //if the tweet was sent.
-    if(_target && _selector)
-        (_target->*_selector)(result == TWTweetComposeViewControllerResultDone);
+    if(_callback)
+        _callback(result == TWTweetComposeViewControllerResultDone);
 
     //Memory clean up.
     //self is because we can not
@@ -176,17 +170,17 @@ USING_NS_STD_CC_CD_MF
 @end
 
 
-#pragma mark - TwitterComposer_Functions Implementations
+// TwitterComposer_Functions Implementations //
 bool mf::TwitterComposer_CanSendTweet()
 {
     return [TWTweetComposeViewController canSendTweet];
 }
 void mf::TwitterComposer_ShowTwitterComposer(const std::string &text,
-                                             const std::vector<std::tuple<std::string, std::string>> &images,
+                                             const std::vector<TwitterComposer::ImageInfo> &images,
                                              const std::vector<std::string> &urls,
-                                             cc::CCNode *target, mf::SEL_TwitterComposerHandler selector)
+                                             const TwitterComposer::Callback &callback)
 {
-    //Check if the current device can send mail. Need because if device
+    //Check if the current device can send tweets. Need because if device
     //cannot the further functions will fail. Game should inform the player about this.
     if(!TwitterComposer_CanSendTweet())
     {
@@ -195,11 +189,11 @@ void mf::TwitterComposer_ShowTwitterComposer(const std::string &text,
 
     //Init the TwitterComposer_iOS object with the target (a CCNode that will handle the
     //callback funtion) and selector (the callback function)
-    TwitterComposer_iOS *instance = [[TwitterComposer_iOS alloc] initWithTarget:target
-                                                           selector:selector];
+    TwitterComposer_iOS *instance = [[TwitterComposer_iOS alloc] initWithCallback:callback];
 
     [instance showTwitterComposerWithText:text
                          images:images
                            urls:urls];
 }
+
 #endif //MONSTERFRAMEWORK_IOS

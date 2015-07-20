@@ -51,13 +51,11 @@
 
 NS_MF_BEGIN
 
-bool TwitterComposer_CanSendTweet()
-{}
+bool TwitterComposer_CanSendTweet();
 void TwitterComposer_ShowTwitterComposer(const std::string &text,
-                                         const std::vector<std::tuple<std::string, std::string>> &images,
+                                         const std::vector<TwitterComposer::ImageInfo> &images,
                                          const std::vector<std::string> &urls,
-                                         cc::Node *target, mf::SEL_TwitterComposerHandler selector)
-{}
+                                         const TwitterComposer::Callback &callback);
 
 NS_MF_END
 #endif // define(__MonsterFramework_TwitterComposer_Functions_h__) //

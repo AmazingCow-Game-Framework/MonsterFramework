@@ -50,42 +50,50 @@
 
 NS_MF_BEGIN
 
-typedef void (cc::CCObject::*SEL_TwitterComposerHandler)(bool);
-#define TwitterComposer_selector(_SELECTOR) (SEL_TwitterComposerHandler)(&_SELECTOR)
-
 class TwitterComposer
 {
+    // Inner Types //
+public:
+    struct ImageInfo
+    {
+        std::string name;
+        std::string ext;
+    };
+    
     // Static Methods //
 public:
-    bool canSendTweet();
+    static bool canSendTweet();
 
+    // Enums/Constants/Typedefs //
+public:
+    typedef std::function<void (bool)> Callback;
+    
     // CTOR/DTOR //
 public:
     TwitterComposer();
     TwitterComposer(const std::string &text,
-                    cc::Node *pTarget, mf::SEL_TwitterComposerHandler selector);
+                    const Callback &callback);
 
     // Public Methods //
 public:
     //Text/Image/URL
-    void setText(const std::string &text);
-    void addImage(const std::string &image, const std::string &ext);
-    void addURL(const std::string &url);
+    void setText (const std::string &text);
+    void addImage(const ImageInfo &info);
+    void addURL  (const std::string &url);
 
-    //Target
-    void setTarget(cc::Node *target, mf::SEL_TwitterComposerHandler selector);
+    //Callback
+    void setCallback(const Callback &callback);
 
     //Show
-    void showTwitterComposerUI();
+    void showTwitterComposer();
 
     // iVars //
 private:
     std::string              m_text;
-    std::vector<std::tuple<std::string, std::string>> m_images;
+    std::vector<ImageInfo>   m_images;
     std::vector<std::string> m_urls;
-
-    cc::Node                    *m_pTarget;
-    mf::SEL_TwitterComposerHandler m_selector;
+    
+    Callback m_callback;
 };
 
 NS_MF_END
