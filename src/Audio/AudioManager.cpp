@@ -1,42 +1,42 @@
 //----------------------------------------------------------------------------//
-//                  _   _ ____   ___  ____                                    //
-//                 | \ | |___ \ / _ \| __ )  ___  _   _ ____                  //
-//                 |  \| | __) | | | |  _ \ / _ \| | | |_  /                  //
-//                 | |\  |/ __/| |_| | |_) | (_) | |_| |/ /                   //
-//                 |_| \_|_____|\___/|____/ \___/ \__, /___|                  //
-//                                                |___/                       //
+//                 █      █                                                   //
+//                 ████████                                                   //
+//               ██        ██                                                 //
+//              ███  █  █  ███    AudioManager.cpp                            //
+//              █ █        █ █    MonsterFramework                            //
+//               ████████████                                                 //
+//             █              █   Copyright (c) 2015 AmazingCow               //
+//            █     █    █     █  www.AmazingCow.com                          //
+//            █     █    █     █                                              //
+//             █              █   N2OMatt - n2omatt@amazingcow.com            //
+//               ████████████     www.amazingcow.com/n2omatt                  //
 //                                                                            //
-//                            Mateus Mesquita                                 //
-//                       www.N2OBoyz.com/~n2omatt                             //
-//                          N2OMatt@N2OBoyz.com                               //
 //                                                                            //
-//                   Copyright (C) 2015 Mateus Mesquita.                      //
-//                       Copyright (C) 2015 N2OBoyz.                          //
+//                  This software is licensed as BSD-3                        //
+//                 CHECK THE COPYING FILE TO MORE DETAILS                     //
 //                                                                            //
-//  This software is provided 'as-is', without any express or implied         //
-//  warranty. In no event will the authors be held liable for any damages     //
-//  arising from the use of this software.                                    //
+//    Permission is granted to anyone to use this software for any purpose,   //
+//   including commercial applications, and to alter it and redistribute it   //
+//               freely, subject to the following restrictions:               //
 //                                                                            //
-//  Permission is granted to anyone to use this software for any purpose,     //
-//  including commercial applications, and to alter it and redistribute it    //
-//  freely, subject to the following restrictions:                            //
+//     0. You **CANNOT** change the type of the license.                      //
+//     1. The origin of this software must not be misrepresented;             //
+//        you must not claim that you wrote the original software.            //
+//     2. If you use this software in a product, an acknowledgment in the     //
+//        product IS HIGHLY APPRECIATED, both in source and binary forms.     //
+//        (See opensource.AmazingCow.com/acknowledgment.html for details).    //
+//        If you will not acknowledge, just send us a email. We'll be         //
+//        *VERY* happy to see our work being used by other people. :)         //
+//        The email is: acknowledgment.opensource@AmazingCow.com              //
+//     3. Altered source versions must be plainly marked as such,             //
+//        and must notbe misrepresented as being the original software.       //
+//     4. This notice may not be removed or altered from any source           //
+//        distribution.                                                       //
+//     5. Most important, you must have fun. ;)                               //
 //                                                                            //
-//  1. The origin of this software must not be misrepresented;                //
-//     you must not claim that you wrote the original software.               //
-//  2. If you use this software in a product, an acknowledgment in the        //
-//     product IS HIGHLY APPRECIATED, both in source and binary forms.        //
-//     If you will not acknowledge, just send me a email. We'll be VERY       //
-//     happy to see our work being used by other people. :)                   //
-//     (See opensource.N2OBoyz.com/acknowledgment.html for details).          //
-//  3. Altered source versions must be plainly marked as such, and must not   //
-//     be misrepresented as being the original software.                      //
-//  4. This notice may not be removed or altered from any source              //
-//     distribution.                                                          //
-//  5. Most important, you must have fun. ;)                                  //
+//      Visit opensource.amazingcow.com for more open-source projects.        //
 //                                                                            //
-//       Visit OpenSource.N2OBoyz.com for more open-source projects.          //
-//                                                                            //
-//                            Enjoy :)                                        //
+//                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
 //Header
@@ -107,7 +107,7 @@ void AudioManager::unloadEffect(const std::string &effectId)
     //Check if effectId is valid.
     auto it = m_effectsMap.find(effectId);
     MF_ASSERT((it == end(m_effectsMap)), "Audio Manager - Invalid EffectId %s", effectId.c_str());
-    
+
     //Remove the effect from audio engine and delete it
     //from effects map.
     m_pAudioEngine->unloadEffect(it->second.first.c_str());
@@ -122,7 +122,7 @@ void AudioManager::playEffect(const std::string &effectId, bool loop)
     //In Debug mode check if file exists...
     MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
-    
+
     //Play effect and update its engine id.
     int id = m_pAudioEngine->playEffect(it->second.first.c_str(), loop);
     m_effectsMap[effectId].second = id;
@@ -138,7 +138,7 @@ void AudioManager::pauseEffect(const std::string &effectId)
     //In Debug mode check if file exists...
     MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
-    
+
     m_pAudioEngine->pauseEffect(it->second.second);
 }
 void AudioManager::pauseAllEffects()
@@ -153,7 +153,7 @@ void AudioManager::resumeEffect(const std::string &effectId)
     //In Debug mode check if file exists...
     MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
-    
+
     m_pAudioEngine->resumeEffect(it->second.second);
 }
 void AudioManager::resumeAllEffects()
@@ -168,7 +168,7 @@ void AudioManager::stopEffect(const std::string &effectId)
     //In Debug mode check if file exists...
     MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
-    
+
     m_pAudioEngine->stopEffect(it->second.second);
 }
 void AudioManager::stopAllEffects()
