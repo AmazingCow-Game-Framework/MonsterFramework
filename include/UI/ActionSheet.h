@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_ActionSheet_h__
-#define __MonsterFramework_ActionSheet_h__
+#ifndef __MonsterFramework_UI_ActionSheet_h__
+#define __MonsterFramework_UI_ActionSheet_h__
 
 //std
 #include <string>
@@ -88,4 +88,4 @@ private:
 }; //class ActionSheet
 
 NS_MF_END
-#endif // defined(__MonsterFramework_ActionSheet) //
+#endif // defined(__MonsterFramework_UI_ActionSheet_h__) //

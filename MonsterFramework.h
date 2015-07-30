@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __GreenLittleMonster_MonsterFramework_MonsterFramework_h__
-#define __GreenLittleMonster_MonsterFramework_MonsterFramework_h__
+#ifndef __MonsterFramework_MonsterFramework_h__
+#define __MonsterFramework_MonsterFramework_h__
 
 //Utils
 #include "include/Utils/MonsterFramework_Utils.h"
@@ -67,4 +67,4 @@
 //Localization
 #include "include/Localization/StringsManager.h"
 
-#endif // defined(__GreenLittleMonster_MonsterFramework_MonsterFramework_h__) //
+#endif // defined(__MonsterFramework_MonsterFramework_h__) //

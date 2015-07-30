@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef U7_MasterKidsGames_GraphicsHelper_h
-#define U7_MasterKidsGames_GraphicsHelper_h
+#ifndef __MonsterFramework_Graphics_GraphicsHelper_h__
+#define __MonsterFramework_Graphics_GraphicsHelper_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -78,4 +78,4 @@ public:
 };
 
 NS_MF_END
-#endif
+#endif // defined(__MonsterFramework_Graphics_GraphicsHelper_h__) //

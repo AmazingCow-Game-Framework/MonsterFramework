@@ -39,10 +39,10 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __DonkeyBas__AnimationManager__
-#define __DonkeyBas__AnimationManager__
+#ifndef __MonsterFramework_Graphics_AnimationManager_h__
+#define __MonsterFramework_Graphics_AnimationManager_h__
 
-//DonkeyBas
+//MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
 NS_MF_BEGIN
@@ -52,4 +52,4 @@ class AnimationManager
 }; //class
 NS_MF_END
 
-#endif /* defined(__DonkeyBas__AnimationManager__) */
+#endif // defined(__MonsterFramework_Graphics_AnimationManager_h__) //

@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_AudioManager_h__
-#define __MonsterFramework_AudioManager_h__
+#ifndef __MonsterFramework_Audio_AudioManager_h__
+#define __MonsterFramework_Audio_AudioManager_h__
 
 //std
 #include <string>
@@ -102,4 +102,4 @@ private:
 }; //class AudioManager
 
 NS_MF_END
-#endif // defined(__MonsterFramework_AudioManager_h__) //
+#endif // defined(__MonsterFramework_Audio_AudioManager_h__) //

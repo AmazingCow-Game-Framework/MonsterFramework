@@ -39,12 +39,12 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Private_Utils__
-#define __MonsterFramework_Private_Utils__
+#ifndef __MonsterFramework_Utils_Private_Private_Utils_h__
+#define __MonsterFramework_Utils_Private_Private_Utils_h__
 
 // Include iOS Private Utils //
 #ifdef MONSTERFRAMEWORK_IOS
     #include "./ios/Private_Utils_iOS.h"
 #endif
 
-#endif // defined (__MonsterFramework_Private_Utils__) //
+#endif // defined (__MonsterFramework_Utils_Private_Private_Utils_h__) //

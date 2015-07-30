@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef U7_MasterKidsGames_Internet_Functions_h
-#define U7_MasterKidsGames_Internet_Functions_h
+#ifndef __MonsterFramework_Network_Private_Internet_Functions_h__
+#define __MonsterFramework_Network_Private_Internet_Functions_h__
 
 //std
 #include <string>
@@ -53,4 +53,4 @@ bool Internet_HasInternetConnection();
 void Internet_OpenURLInBrowser(const std::string &url);
 
 NS_MF_END
-#endif // defined(__MonsterFramework_MailComposer_Functions_h__) //
+#endif // defined(__MonsterFramework_Network_Private_Internet_Functions_h__) //

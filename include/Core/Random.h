@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __DonkeyBas_iPhone_Base__Random__
-#define __DonkeyBas_iPhone_Base__Random__
+#ifndef __MonsterFramework_Core_Random_h__
+#define __MonsterFramework_Core_Random_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -85,4 +85,4 @@ private:
 }; //class
 NS_MF_END
 
-#endif /* defined(__DonkeyBas_iPhone_Base__Random__) */
+#endif // defined(__MonsterFramework_Core_Random_h__) //

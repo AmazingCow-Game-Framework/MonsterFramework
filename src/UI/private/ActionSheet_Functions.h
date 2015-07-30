@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_ActionSheet_Function_h__
-#define __MonsterFramework_ActionSheet_Function_h__
+#ifndef __MonsterFramework_UI_Private_ActionSheet_Functions_h__
+#define __MonsterFramework_UI_Private_ActionSheet_Functions_h__
 
 //std
 #include <vector>
@@ -58,4 +58,4 @@ void ActionSheet_ShowActionSheet(const std::string &title,
                                  const ActionSheet::Callback &callback);
 
 NS_MF_END
-#endif // defined(__MonsterFramework_ActionSheet_Function_h__) //
+#endif // defined(__MonsterFramework_UI_Private_ActionSheet_Functions_h__) //

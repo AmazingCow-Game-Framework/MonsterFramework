@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_CameraView_h__
-#define __MonsterFramework_CameraView_h__
+#ifndef __MonsterFramework_UI_CameraView_h__
+#define __MonsterFramework_UI_CameraView_h__
 
 //std
 #include <string>
@@ -97,4 +97,4 @@ private:
 };
 
 NS_MF_END
-#endif
+#endif // defined(__MonsterFramework_UI_CameraView_h__) //

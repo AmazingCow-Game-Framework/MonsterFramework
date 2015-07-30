@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_StringsManager_h__
-#define __MonsterFramework_StringsManager_h__
+#ifndef __MonsterFramework_Localization_StringsManager_h__
+#define __MonsterFramework_Localization_StringsManager_h__
 
 //std
 #include <string>
@@ -74,4 +74,4 @@ private:
 };
 
 NS_MF_END
-#endif // defined(__MonsterFramework_StringsManager_h__) //
+#endif // defined(__MonsterFramework_Localization_StringsManager_h__) //

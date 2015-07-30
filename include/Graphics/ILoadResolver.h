@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __GreenLittleMonster_MonsterFramework_ILoadResolver_h__
-#define __GreenLittleMonster_MonsterFramework_ILoadResolver_h__
+#ifndef __MonsterFramework_Graphics_ILoadResolver_h__
+#define __MonsterFramework_Graphics_ILoadResolver_h__
 
 //std
 #include <string>
@@ -77,4 +77,4 @@ public:
 };
 
 NS_MF_END
-#endif // defined(__GreenLittleMonster_MonsterFramework_ILoadResolver_h__) //
+#endif // defined(__MonsterFramework_Graphics_ILoadResolver_h__) //

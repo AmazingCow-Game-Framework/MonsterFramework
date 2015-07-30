@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_AlertView_h__
-#define __MonsterFramework_AlertView_h__
+#ifndef __MonsterFramework_UI_AlertView_h__
+#define __MonsterFramework_UI_AlertView_h__
 
 //std
 #include <string>
@@ -90,4 +90,4 @@ private:
 }; //class AlertView
 
 NS_MF_END
-#endif // defined(__MonsterGenius_AlertView_h__) //
+#endif // defined(__MonsterFramework_UI_AlertView_h__) //

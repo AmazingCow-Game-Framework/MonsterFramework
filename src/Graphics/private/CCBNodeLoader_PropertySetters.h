@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __U7_MasterKidsGames__CCBNodeLoader_PropertySetters__
-#define __U7_MasterKidsGames__CCBNodeLoader_PropertySetters__
+#ifndef __MonsterFramework_Graphics_Private_CCBNodeLoader_PropertySetters_h__
+#define __MonsterFramework_Graphics_Private_CCBNodeLoader_PropertySetters_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -69,4 +69,4 @@ void _set_string                       (cc::Node *obj, const cc::Value &value);
 void _set_opacity                      (cc::Node *obj, const cc::Value &value);
 
 NS_MF_END
-#endif /* defined(__U7_MasterKidsGames__CCBNodeLoader_PropertySetters__) */
+#endif // defined(__MonsterFramework_Graphics_Private_CCBNodeLoader_PropertySetters_h__) //

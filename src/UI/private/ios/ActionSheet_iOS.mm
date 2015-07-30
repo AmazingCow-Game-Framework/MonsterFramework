@@ -134,7 +134,7 @@ USING_NS_STD_CC_CD_MF
         _callback(MF_STR_NS2CPP([actionSheet buttonTitleAtIndex:buttonIndex]),
                   buttonIndex);
     }
-    
+
     //Memory clean up.
     //The actionShet is straightforward but the self is because we can not
     //mantain self as autorelease so when the user dismiss the mail controller
@@ -152,7 +152,7 @@ void mf::ActionSheet_ShowActionSheet(const string &title,
                                      const ActionSheet::Callback &callback)
 {
     ActionSheet_iOS *instance = [[ActionSheet_iOS alloc] initWithCallback:callback];
-    
+
     [instance showActionSheetWithTitle:title
                      cancelButtonTitle:cancelButtonTitle
                 destructiveButtonTitle:destructiveButtonTitle

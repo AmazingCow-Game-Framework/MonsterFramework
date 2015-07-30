@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_AlertView_Functions_h__
-#define __MonsterFramework_AlertView_Functions_h__
+#ifndef __MonsterFramework_UI_Private_AlertView_Functions_h__
+#define __MonsterFramework_UI_Private_AlertView_Functions_h__
 
 //std
 #include <vector>
@@ -58,4 +58,4 @@ void AlertView_ShowAlertView(const std::string &title,
                              const AlertView::Callback &callback);
 
 NS_MF_END
-#endif // defined(__MonsterFramework_AlertView_Functions_h__) //
+#endif // defined(__MonsterFramework_UI_Private_AlertView_Functions_h__) //

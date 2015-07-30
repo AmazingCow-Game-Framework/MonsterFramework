@@ -39,10 +39,10 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __GreenLittleMonster_MonsterFramework_Internet_h__
-#define __GreenLittleMonster_MonsterFramework_Internet_h__
+#ifndef __MonsterFramework_Network_Internet_h__
+#define __MonsterFramework_Network_Internet_h__
 
-//DonkeyBas
+//MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
 NS_MF_BEGIN
@@ -55,4 +55,4 @@ public:
 };
 
 NS_MF_END
-#endif // defined(__GreenLittleMonster_MonsterFramework_Internet_h__) //
+#endif // defined(__MonsterFramework_Network_Internet_h__) //

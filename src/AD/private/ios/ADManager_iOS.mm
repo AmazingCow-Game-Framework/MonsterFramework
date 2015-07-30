@@ -40,7 +40,7 @@
 //----------------------------------------------------------------------------//
 
 //Prevent this file being included on non Apple devices.
-//#ifdef MONSTERFRAMEWORK_IOS
+#ifdef MONSTERFRAMEWORK_IOS
 
 //std
 #include <string>
@@ -269,4 +269,4 @@ bool mf::ADManager_RemoveAd(const ADManager::AdOptions &options)
     return [[ADManager_iOS instance] removeAd:options];
 }
 
-//#endif // MONSTERFRAMEWORK_IOS //
+#endif // MONSTERFRAMEWORK_IOS //

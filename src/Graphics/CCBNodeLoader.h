@@ -39,9 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-
-#ifndef __GreenLittleMonster_MonsterFramework_CCBNodeLoader_h__
-#define __GreenLittleMonster_MonsterFramework_CCBNodeLoader_h__
+#ifndef __MonsterFramework_Graphics_Private_CCBNodeLoader_h__
+#define __MonsterFramework_Graphics_Private_CCBNodeLoader_h__
 
 //std
 #include <string>
@@ -73,4 +72,4 @@ private:
 };
 
 NS_MF_END
-#endif // defined(__GreenLittleMonster_MonsterFramework_CCBNodeLoader_h__) //
+#endif // defined(__MonsterFramework_Graphics_Private_CCBNodeLoader_h__) //

@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Private_Utils_iOS__
-#define __MonsterFramework_Private_Utils_iOS__
+#ifndef __MonsterFramework_Utils_Private_Private_Utils_iOS_h__
+#define __MonsterFramework_Utils_Private_Private_Utils_iOS_h__
 
 #ifdef MONSTERFRAMEWORK_IOS
 
@@ -57,5 +57,5 @@
 // Get the App's RootViewController //
 #define MF_GETAPPRVC() [[[UIApplication sharedApplication] keyWindow] rootViewController]
 
-#endif // MONSTERFRAMEWORK_IOS
-#endif // defined (__MonsterFramework_Private_Utils_iOS__) //
+#endif // MONSTERFRAMEWORK_IOS //
+#endif // defined (__MonsterFramework_Utils_Private_Private_Utils_iOS_h__) //
