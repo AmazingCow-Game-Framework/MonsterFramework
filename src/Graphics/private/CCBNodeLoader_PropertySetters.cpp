@@ -61,11 +61,11 @@ void mf::_set_ignoreAnchorPointForPosition(cc::Node *obj, const cc::Value &value
 }
 void mf::_set_isTouchEnabled(cc::Node *obj, const cc::Value &value)
 {
-    //ETODO: Ignoring by now, but must check what this method will do.
+    //COWTODO:: Ignoring by now, but must check what this method will do.
 }
 void mf::_set_isAccelerometerEnabled(cc::Node *obj, const cc::Value &value)
 {
-    //ETODO: Ignoring by now, but must check what this method will do.
+    //COWTODO:: Ignoring by now, but must check what this method will do.
 }
 void mf::_set_position(cc::Node *obj, const cc::Value &value)
 {

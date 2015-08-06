@@ -67,14 +67,6 @@ public:
 
     typedef void PlatformImage;
     static PlatformImage* spriteToPlatformImage(cc::Sprite *pSprite);
-    /*N2OTODO:
-
-     static PlatformImage* textureToPlaformImage(cc::Texture2d *pTexture);
-     static cc::Sprite* spriteFromPlatformImage(PlatformImage *pImage);
-     static cc::Sprite* textureFromPlatformImage(PlatformImage *pImage);
-
-     static
-     */
 };
 
 NS_MF_END

@@ -76,12 +76,3 @@ void GraphicsHelper::setPositionToCenter(cc::Node *pNode,
 {
     setRelativePosition(50, 50, pNode, pParentNode);
 }
-
-/*N2OTODO:
- PlatformImage* spriteToPlatformImage(cc::Sprite *pSprite);
- PlatformImage* textureToPlaformImage(cc::Texture2d *pTexture);
- cc::Sprite* spriteFromPlatformImage(PlatformImage *pImage);
- cc::Sprite* textureFromPlatformImage(PlatformImage *pImage);
-
-
- */

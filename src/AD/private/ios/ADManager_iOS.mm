@@ -147,12 +147,12 @@ USING_NS_STD_CC_CD_MF
         return NO;
     }
 
-    //ETODO: Implement banners.
+    //COWTODO: Implement banners.
     return YES;
 }
 - (BOOL)hideBannerAd:(const ADManager::AdOptions &)options
 {
-    //ETODO: Implement banners.
+    //COWTODO: Implement banners.
     return YES;
 }
 //Show/Hide Interstitial.
@@ -183,12 +183,12 @@ USING_NS_STD_CC_CD_MF
 //Add/Remove banner.
 - (BOOL)addBannerAd:(const ADManager::AdOptions &)options
 {
-    //ETODO: Implement banners.
+    //COWTODO: Implement banners.
     return YES;
 }
 - (BOOL)removeBannerAd:(const ADManager::AdOptions &)options
 {
-    //ETODO: Implement banners.
+    //COWTODO: Implement banners.
     return YES;
 }
 //Add/Remove Interstitial.

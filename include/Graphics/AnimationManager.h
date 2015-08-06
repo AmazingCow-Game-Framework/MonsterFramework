@@ -48,7 +48,7 @@
 NS_MF_BEGIN
 class AnimationManager
 {
-    //ETODO: Think and implement.
+    //COWTODO:: Think and implement.
 }; //class
 NS_MF_END
 
