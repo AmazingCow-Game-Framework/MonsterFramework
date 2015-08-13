@@ -113,7 +113,7 @@ USING_NS_STD_CC_CD_MF
     if(_callback)
     {
         _callback(MF_STR_NS2CPP([alertView buttonTitleAtIndex:buttonIndex]),
-                  buttonIndex);
+                  static_cast<int>(buttonIndex));
     }
 
     [alertView release];
