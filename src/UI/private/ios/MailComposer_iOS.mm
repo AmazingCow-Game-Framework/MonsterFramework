@@ -45,11 +45,10 @@
 
 //Cocoa
 #import <UIKit/UIKit.h>
-#import <MessageUI/MessageUI.h>
 //std
 #include <vector>
 #include <string>
-//MonsterFramweork
+//MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 #include "MonsterFramework/include/UI/MailComposer.h"
 #include "MonsterFramework/src/UI/private/MailComposer_Functions.h"
@@ -57,6 +56,10 @@
 
 //Usings
 USING_NS_STD_CC_CD_MF
+
+//Prevent the inclusion if the project aren't use the Mail stuff.
+#ifdef MONSTERFRAMEWORK_USE_MAIL_MODULE
+#import <MessageUI/MessageUI.h>
 
 // Interface //
 @interface MailComposer_iOS : UIViewController
@@ -235,4 +238,23 @@ void mf::MailComposer_ShowMailComposer(const std::vector<string> &toRecipients,
                    attachments:attachments];
 }
 
-#endif //MONSTERFRAMEWORK_IOS
+#else // Not using MONSTERFRAMEWORK_USE_MAIL_MODULE //
+
+bool mf::MailComposer_CanSendMail()
+{
+    return false;
+}
+void mf::MailComposer_ShowMailComposer(const std::vector<string> &toRecipients,
+                                       const std::vector<string> &ccRecipients,
+                                       const std::vector<string> &bccRecipients,
+                                       const std::string &subject,
+                                       const std::string &message,
+                                       bool isHtml,
+                                       const std::vector<MailComposer::Attachment> &attachments,
+                                       const MailComposer::Callback &callback)
+{
+    //COWTODO: Here we should invoke the callback or do nothing?
+}
+
+#endif // MONSTERFRAMEWORK_USE_MAIL_MODULE //
+#endif // MONSTERFRAMEWORK_IOS //

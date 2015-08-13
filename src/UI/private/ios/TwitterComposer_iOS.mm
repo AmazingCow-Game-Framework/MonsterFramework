@@ -42,12 +42,11 @@
 //Prevent this file being included on non Apple devices.
 #ifdef MONSTERFRAMEWORK_IOS
 
+//Cocoa
+#include <UIKit/UIKit.h>
 //std
 #include <vector>
 #include <string>
-//Cocoa
-#include <UIKit/UIKit.h>
-#include <Twitter/Twitter.h>
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 #include "MonsterFramework/src/UI/private/TwitterComposer_Functions.h"
@@ -55,6 +54,10 @@
 
 //Usings
 USING_NS_STD_CC_CD_MF
+
+//Prevent the inclusion if the project aren't use the Twitter stuff.
+#ifdef MONSTERFRAMEWORK_USE_TWITTER_MODULE
+#include <Twitter/Twitter.h>
 
 // Interface //
 @interface TwitterComposer_iOS : NSObject
@@ -196,4 +199,20 @@ void mf::TwitterComposer_ShowTwitterComposer(const std::string &text,
                            urls:urls];
 }
 
-#endif //MONSTERFRAMEWORK_IOS
+#else // Not using MONSTERFRAMEWORK_USE_TWITTER_MODULE //
+
+// TwitterComposer_Functions Implementations //
+bool mf::TwitterComposer_CanSendTweet()
+{
+    return false;
+}
+void mf::TwitterComposer_ShowTwitterComposer(const std::string &text,
+                                             const std::vector<TwitterComposer::ImageInfo> &images,
+                                             const std::vector<std::string> &urls,
+                                             const TwitterComposer::Callback &callback)
+{
+    //COWTODO: Here we should invoke the callback or do nothing?
+}
+
+#endif // MONSTERFRAMEWORK_USE_TWITTER_MODULE //
+#endif // MONSTERFRAMEWORK_IOS //
