@@ -41,7 +41,6 @@
 
 //Prevent this file being included on non Apple devices.
 #ifdef MONSTERFRAMEWORK_IOS
-
 //std
 #include <string>
 //Cocoa
@@ -50,12 +49,12 @@
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 #include "MonsterFramework/src/Utils/private/Private_Utils.h"
 #include "MonsterFramework/src/AD/private/ADManager_Functions.h"
-//ADMob
-//#import "GoogleMobileAds";
-#import <GoogleMobileAds/GoogleMobileAds.h>
-
 //Usings
 USING_NS_STD_CC_CD_MF
+
+//Prevent the inclusion if the project aren't use the ADMOB stuff.
+#ifdef MONSTERFRAMEWORK_USE_ADMOB
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
 // ADManager iOS Interface/Implementation //
 // Interface //
@@ -267,6 +266,27 @@ bool mf::ADManager_AddAd(const ADManager::AdOptions &options)
 bool mf::ADManager_RemoveAd(const ADManager::AdOptions &options)
 {
     return [[ADManager_iOS instance] removeAd:options];
+}
+
+#endif // MONSTERFRAMEWORK_USE_ADMOB //
+
+// Implementation when project aren't using ADMOB.
+bool mf::ADManager_ShowAd(const ADManager::AdOptions &options)
+{
+    return false;
+}
+bool mf::ADManager_HideAd(const ADManager::AdOptions &options)
+{
+     return false;
+}
+
+bool mf::ADManager_AddAd(const ADManager::AdOptions &options)
+{
+    return false;
+}
+bool mf::ADManager_RemoveAd(const ADManager::AdOptions &options)
+{
+    return false;
 }
 
 #endif // MONSTERFRAMEWORK_IOS //
