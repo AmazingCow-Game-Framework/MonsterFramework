@@ -53,7 +53,7 @@
 USING_NS_STD_CC_CD_MF
 
 //Prevent the inclusion if the project aren't use the ADMOB stuff.
-#ifdef MONSTERFRAMEWORK_USE_ADMOB
+#ifdef MONSTERFRAMEWORK_USE_MODULE_ADMOB
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 // ADManager iOS Interface/Implementation //
@@ -268,7 +268,7 @@ bool mf::ADManager_RemoveAd(const ADManager::AdOptions &options)
     return [[ADManager_iOS instance] removeAd:options];
 }
 
-#endif // MONSTERFRAMEWORK_USE_ADMOB //
+#else // Not using MONSTERFRAMEWORK_USE_MODULE_ADMOB //
 
 // Implementation when project aren't using ADMOB.
 bool mf::ADManager_ShowAd(const ADManager::AdOptions &options)
@@ -289,4 +289,5 @@ bool mf::ADManager_RemoveAd(const ADManager::AdOptions &options)
     return false;
 }
 
+#endif // MONSTERFRAMEWORK_USE_MODULE_ADMOB //
 #endif // MONSTERFRAMEWORK_IOS //
