@@ -44,15 +44,17 @@
 
 #ifdef MONSTERFRAMEWORK_DEBUG
 
+constexpr int kBufferSize = 1024;
+
 void  mf::__not_to_direct_use_mf_log(const char *pPrefix, const char *pFormat, ...)
 {
     printf("%s ", pPrefix);
 
-    char buffer[1024+1] = {0};
+    char buffer[kBufferSize+1] = {0};
 
     va_list ap;
     va_start(ap, pFormat);
-    vsnprintf(buffer, 1024, pFormat, ap);
+    vsnprintf(buffer, kBufferSize, pFormat, ap);
     va_end(ap);
 
     printf("%s", buffer);
