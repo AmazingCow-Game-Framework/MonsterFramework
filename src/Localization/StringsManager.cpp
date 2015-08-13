@@ -49,13 +49,20 @@ USING_NS_STD_CC_CD_MF
 // Public Methods //
 void StringsManager::loadStringsFile(const std::string &filename)
 {
+    //COWTODO: Implement this method.
+    MF_ASSERT(false, "Not Implemented yet");
 }
 const std::string StringsManager::getString(const std::string &path)
 {
+    //COWTODO: Implement this method.
+    MF_ASSERT(false, "Not Implemented yet");
 }
 
 // Private Methods //
 string StringsManager::getLocalizedFilename(const std::string &filename)
 {
-	return filename + "_en.plist";
+    //COWTODO: Implement this method.
+    MF_ASSERT(false, "Not Implemented yet");
+
+    return "";
 }
