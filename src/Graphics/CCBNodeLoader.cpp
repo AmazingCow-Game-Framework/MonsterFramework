@@ -182,14 +182,15 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj, const cc::ValueVector &
 
 cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
 {
-    cc::Node *node;
+    cc::Node *node = nullptr;
 
     //Layer.
     if(baseClass == "CCLayer")
         node = cc::Layer::create();
 
     //LayerColor
-    //COWTODO:: This is very strange. With we don't set a color here at craetion
+    //COWTODO: Bug?
+    //This is very strange. With we don't set a color here at craetion
     //of the LayerColor, later the object will not set any color. So any color
     //set in CCB won't be applied. I don't know why this behaviour is occurring
     //but know works in this way.
