@@ -1,2 +1,6 @@
 #1 Write README file.
 #2 Make the Animation stuff.
+#3 Write explanation about the MonsterFramework defines.
+   (MONSTERFRAMEWORK_IOS, 
+    MONSTERFRAMEWORK_DEBUG,
+    MONSTERFRAMEWORK_ADMOB)
