@@ -53,6 +53,7 @@ class ADManager
 {
     // Inner Types //
 public:
+    //COWTODO: Add descriptive comments.
     struct AdOptions
     {
         // Enums/Constants/Typedefs //

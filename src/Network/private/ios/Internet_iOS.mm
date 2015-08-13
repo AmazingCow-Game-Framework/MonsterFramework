@@ -52,8 +52,10 @@ USING_NS_STD_CC_CD_MF
 // Internet Functions Implementation //
 bool mf::Internet_HasInternetConnection()
 {
+    //COWTODO: Implement this method.
     return false;
 }
 void mf::Internet_OpenURLInBrowser(const std::string &url)
 {
+    //COWTODO: Implement this method.
 }

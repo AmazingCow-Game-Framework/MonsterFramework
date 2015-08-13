@@ -96,6 +96,7 @@ private:
     // iVars //
 private:
     cd::SimpleAudioEngine      *m_pAudioEngine;
+    //COWTODO: typedef it.
     std::map<std::string, std::pair<std::string, int>> m_effectsMap;
 
     float m_prevFxVol;

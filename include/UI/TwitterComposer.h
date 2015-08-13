@@ -54,6 +54,7 @@ class TwitterComposer
 {
     // Inner Types //
 public:
+    //COWTODO: Add descriptive comments.
     struct ImageInfo
     {
         std::string name;

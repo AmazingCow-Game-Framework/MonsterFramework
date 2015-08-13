@@ -54,6 +54,7 @@ class MailComposer
 {
     // Inner Types //
 public:
+    //COWTODO: Add descriptive comments.
     struct Attachment
     {
         const std::string name;

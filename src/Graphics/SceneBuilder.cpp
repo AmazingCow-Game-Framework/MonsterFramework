@@ -59,6 +59,7 @@ void SceneBuilder::build(const std::string &name, cc::Node *pOwner,
                          mf::ILoadResolver *pResolver)
 
 {
+    //COWTODO: Add descriptive comments.
     std::string fullname = name;
     if(name.find(".ccb") == std::string::npos)
         fullname += ".ccb";
@@ -72,6 +73,4 @@ void SceneBuilder::build(const std::string &name, cc::Node *pOwner,
 
     CCBNodeLoader b;
     b.loadNodeGraph(nodeGraphMap, pOwner, pResolver);
-
-
 }
