@@ -50,22 +50,39 @@ SettingsManager::SettingsManager()
 {
     m_path = FileUtils::getInstance()->getWritablePath();
     m_path += "CommonSettings";
-
-    localStorageInit(m_path.c_str());
+    
+    //COWTODO: Implement the initialization of storage.
 }
 SettingsManager::~SettingsManager()
 {
-    localStorageFree();
+    //COWTODO: Implement the release of storage.
+    MF_ASSERT(false, "NOT IMPLEMENTED YET");
 }
 
 // Public Methods //
 //Remove
 void SettingsManager::removeValueForKey(const std::string &key)
 {
-    localStorageRemoveItem(key.c_str());
+    //COWTODO: Implement the removal of value in storage.
+    MF_ASSERT(false, "NOT IMPLEMENTED YET");
 }
 
+//Other
 const string& SettingsManager::getStoragePath()
 {
     return m_path;
+}
+
+// Private Methods //
+std::stringstream SettingsManager::_getValueForKey(const std::string &key)
+{
+    //COWTODO: Implement the retrieval of storage.
+    MF_ASSERT(false, "NOT IMPLEMENTED YET");
+    return stringstream();
+}
+void SettingsManager::_setValueForKey(const std::string &key,
+                                      const std::string &value)
+{
+    //COWTODO: Implement the setting of storage.
+    MF_ASSERT(false, "NOT IMPLEMENTED YET");
 }

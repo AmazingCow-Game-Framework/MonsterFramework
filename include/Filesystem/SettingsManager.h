@@ -47,7 +47,6 @@
 #include <sstream>
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
-#include "../../../../../cocos2d/cocos/storage/local-storage/LocalStorage.h"
 
 NS_MF_BEGIN
 class SettingsManager
@@ -63,30 +62,36 @@ private:
 
     // Public Methods //
 public:
+    //Set
     template <typename T>
     void setValueForKey(const std::string &key, const T &value)
     {
         std::stringstream ss;
         ss << value;
-
-        localStorageSetItem(key, ss.str());
+        
+        _setValueForKey(key, ss.str());
     }
+
+    //Get
     template <typename T>
     T getValueForKey(const std::string &key)
     {
-        std::stringstream ss;
-        ss << localStorageGetItem(key);
         T t;
-        ss >> t;
+        _getValueForKey(key) >> t;
         return t;
     }
 
     //Remove
     void removeValueForKey(const std::string &key);
-
+  
     //Other
     const std::string& getStoragePath();
 
+    // Private Methods //
+private:
+    std::stringstream _getValueForKey(const std::string &key);
+    void _setValueForKey(const std::string &key, const std::string &value);
+    
     // iVars //
 private:
     std::string m_path;
