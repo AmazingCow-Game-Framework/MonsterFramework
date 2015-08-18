@@ -100,7 +100,8 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent, mf::ILoadRes
     //Resolve Custom Class.
 
     //Resolve Member Var Assignment
-    pResolver->resolveVarAssignment(memberVarAssignmentName, node);
+    if(!memberVarAssignmentName.empty())
+        pResolver->resolveVarAssignment(memberVarAssignmentName, node);
 
     //Create the Node's children.
     for(const auto &childItem : children)
