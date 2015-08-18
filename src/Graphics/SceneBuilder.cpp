@@ -59,7 +59,8 @@ void SceneBuilder::build(const std::string &name, cc::Node *pOwner,
                          mf::ILoadResolver *pResolver)
 
 {
-    //COWTODO: Add descriptive comments.
+    //Check if the name argument includes the .cbb extension.
+    //If not add it to fullname so FileUtils could find it.
     std::string fullname = name;
     if(name.find(".ccb") == std::string::npos)
         fullname += ".ccb";
