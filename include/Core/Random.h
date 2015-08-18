@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Core_Random_h__
-#define __MonsterFramework_Core_Random_h__
+#ifndef __MonsterFramework_include_Core_Random_h__
+#define __MonsterFramework_include_Core_Random_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -85,4 +85,4 @@ private:
 }; //class
 NS_MF_END
 
-#endif // defined(__MonsterFramework_Core_Random_h__) //
+#endif // defined(__MonsterFramework_include_Core_Random_h__) //

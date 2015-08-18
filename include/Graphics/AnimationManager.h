@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Graphics_AnimationManager_h__
-#define __MonsterFramework_Graphics_AnimationManager_h__
+#ifndef __MonsterFramework_include_Graphics_AnimationManager_h__
+#define __MonsterFramework_include_Graphics_AnimationManager_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -52,4 +52,4 @@ class AnimationManager
 }; //class
 NS_MF_END
 
-#endif // defined(__MonsterFramework_Graphics_AnimationManager_h__) //
+#endif // defined(__MonsterFramework_include_Graphics_AnimationManager_h__) //

@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Network_Private_Internet_Functions_h__
-#define __MonsterFramework_Network_Private_Internet_Functions_h__
+#ifndef __MonsterFramework_src_Network_private_Internet_Functions_h__
+#define __MonsterFramework_src_Network_private_Internet_Functions_h__
 
 //std
 #include <string>
@@ -53,4 +53,4 @@ bool Internet_HasInternetConnection();
 void Internet_OpenURLInBrowser(const std::string &url);
 
 NS_MF_END
-#endif // defined(__MonsterFramework_Network_Private_Internet_Functions_h__) //
+#endif // defined(__MonsterFramework_src_Network_private_Internet_Functions_h__) //

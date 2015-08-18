@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_UI_TwitterComposer_h__
-#define __MonsterFramework_UI_TwitterComposer_h__
+#ifndef __MonsterFramework_include_UI_TwitterComposer_h__
+#define __MonsterFramework_include_UI_TwitterComposer_h__
 
 //std
 #include <string>
@@ -98,4 +98,4 @@ private:
 };
 
 NS_MF_END
-#endif // defined(__MonsterFramework_UI_TwitterComposer_h__) //
+#endif // defined(__MonsterFramework_include_UI_TwitterComposer_h__) //

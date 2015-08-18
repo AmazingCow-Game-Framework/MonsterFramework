@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Network_Internet_h__
-#define __MonsterFramework_Network_Internet_h__
+#ifndef __MonsterFramework_include_Network_Internet_h__
+#define __MonsterFramework_include_Network_Internet_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -55,4 +55,4 @@ public:
 };
 
 NS_MF_END
-#endif // defined(__MonsterFramework_Network_Internet_h__) //
+#endif // defined(__MonsterFramework_include_Network_Internet_h__) //

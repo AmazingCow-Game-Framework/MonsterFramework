@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Graphics_Private_CCBNodeLoader_Decoders_h__
-#define __MonsterFramework_Graphics_Private_CCBNodeLoader_Decoders_h__
+#ifndef __MonsterFramework_src_Graphics_private_CCBNodeLoader_Decoders_h__
+#define __MonsterFramework_src_Graphics_private_CCBNodeLoader_Decoders_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -61,4 +61,4 @@ std::string _decodeAsString      (const cc::Value &value);
 int         _decodeAsByte        (const cc::Value &value);
 
 NS_MF_END
-#endif // defined(__MonsterFramework_Graphics_Private_CCBNodeLoader_Decoders_h__) //
+#endif // defined(__MonsterFramework_src_Graphics_private_CCBNodeLoader_Decoders_h__) //

@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Utils_MonsterFramework_Utils_h__
-#define __MonsterFramework_Utils_MonsterFramework_Utils_h__
+#ifndef __MonsterFramework_include_Utils_MonsterFramework_Utils_h__
+#define __MonsterFramework_include_Utils_MonsterFramework_Utils_h__
 
 // Includes //
 //cocos2d
@@ -189,4 +189,4 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
 #endif //MONSTERFRAMEWORK_DEBUG
 
 NS_MF_END
-#endif // defined(__MonsterFramework_Utils_MonsterFramework_Utils_h__) //
+#endif // defined(__MonsterFramework_include_Utils_MonsterFramework_Utils_h__) //

@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_Graphics_GraphicsHelper_h__
-#define __MonsterFramework_Graphics_GraphicsHelper_h__
+#ifndef __MonsterFramework_include_Graphics_GraphicsHelper_h__
+#define __MonsterFramework_include_Graphics_GraphicsHelper_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -70,4 +70,4 @@ public:
 };
 
 NS_MF_END
-#endif // defined(__MonsterFramework_Graphics_GraphicsHelper_h__) //
+#endif // defined(__MonsterFramework_include_Graphics_GraphicsHelper_h__) //

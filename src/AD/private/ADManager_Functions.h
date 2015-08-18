@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_AD_Private_ADManager_Functions_h__
-#define __MonsterFramework_AD_Private_ADManager_Functions_h__
+#ifndef __MonsterFramework_src_AD_private_ADManager_Functions_h__
+#define __MonsterFramework_src_AD_private_ADManager_Functions_h__
 
 //std
 #include <string>
@@ -57,4 +57,4 @@ bool ADManager_AddAd   (const ADManager::AdOptions &options);
 bool ADManager_RemoveAd(const ADManager::AdOptions &options);
 
 NS_MF_END
-#endif // defined(__MonsterFramework_AD_Private_ADManager_Functions_h__)
+#endif // defined(__MonsterFramework_src_AD_private_ADManager_Functions_h__)

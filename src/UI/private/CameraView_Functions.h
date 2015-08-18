@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_UI_Private_CameraView_Functions_h__
-#define __MonsterFramework_UI_Private_CameraView_Functions_h__
+#ifndef __MonsterFramework_src_UI_private_CameraView_Functions_h__
+#define __MonsterFramework_src_UI_private_CameraView_Functions_h__
 
 //std
 #include <string>
@@ -64,4 +64,4 @@ void CameraView_ShowCameraRoll(const CameraView::Callback  &func,
                                CameraView::ByteArrayLength *pLength);
 
 NS_MF_END
-#endif // defined(__MonsterFramework_UI_Private_CameraView_Functions_h__) //
+#endif // defined(__MonsterFramework_src_UI_private_CameraView_Functions_h__) //

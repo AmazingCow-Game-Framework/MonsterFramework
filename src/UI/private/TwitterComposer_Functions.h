@@ -39,8 +39,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_UI_Private_TwitterComposer_Functions_h__
-#define __MonsterFramework_UI_Private_TwitterComposer_Functions_h__
+#ifndef __MonsterFramework_src_UI_private_TwitterComposer_Functions_h__
+#define __MonsterFramework_src_UI_private_TwitterComposer_Functions_h__
 
 //std
 #include <string>
@@ -58,4 +58,4 @@ void TwitterComposer_ShowTwitterComposer(const std::string &text,
                                          const TwitterComposer::Callback &callback);
 
 NS_MF_END
-#endif // define(__MonsterFramework_UI_Private_TwitterComposer_Functions_h__) //
+#endif // define(__MonsterFramework_src_UI_private_TwitterComposer_Functions_h__) //
