@@ -106,10 +106,9 @@ void AudioManager::unloadEffect(const std::string &effectId)
 {
     //Check if effectId is valid.
     auto it = m_effectsMap.find(effectId);
-    MF_ASSERT((it == end(m_effectsMap)), "Audio Manager - Invalid EffectId %s", effectId.c_str());
+    MF_ASSERT((it != end(m_effectsMap)), "Audio Manager - Invalid EffectId %s", effectId.c_str());
 
-    //Remove the effect from audio engine and delete it
-    //from effects map.
+    //Remove the effect from audio engine and delete it from effects map.
     m_pAudioEngine->unloadEffect(it->second.first.c_str());
     m_effectsMap.erase(effectId);
 }
@@ -120,7 +119,7 @@ void AudioManager::playEffect(const std::string &effectId, bool loop)
     auto it = m_effectsMap.find(effectId);
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
-    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
+    MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
 
     //Play effect and update its engine id.
@@ -136,7 +135,7 @@ void AudioManager::pauseEffect(const std::string &effectId)
     auto it = m_effectsMap.find(effectId);
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
-    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
+    MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
 
     m_pAudioEngine->pauseEffect(it->second.second);
@@ -151,7 +150,7 @@ void AudioManager::resumeEffect(const std::string &effectId)
     auto it = m_effectsMap.find(effectId);
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
-    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
+    MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
 
     m_pAudioEngine->resumeEffect(it->second.second);
@@ -166,7 +165,7 @@ void AudioManager::stopEffect(const std::string &effectId)
     auto it = m_effectsMap.find(effectId);
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
-    MF_ASSERT((it == m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
+    MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
 #endif
 
     m_pAudioEngine->stopEffect(it->second.second);
