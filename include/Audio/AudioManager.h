@@ -56,7 +56,8 @@ class AudioManager
 {
     // Enums/Constants/Typedefs //
 private:
-
+    typedef std::map<std::string, std::pair<std::string, int>> SoundsMap;
+    
     // Singleton //
 public:
     static AudioManager* instance();
@@ -95,11 +96,11 @@ private:
 
     // iVars //
 private:
-    cd::SimpleAudioEngine      *m_pAudioEngine;
-    //COWTODO: typedef it.
-    std::map<std::string, std::pair<std::string, int>> m_effectsMap;
+    cd::SimpleAudioEngine *m_pAudioEngine;
+    SoundsMap              m_effectsMap;
 
     float m_prevFxVol;
+    
 }; //class AudioManager
 
 NS_MF_END
