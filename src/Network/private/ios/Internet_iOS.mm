@@ -44,7 +44,7 @@
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 #include "MonsterFramework/src/Network/private/Internet_Functions.h"
-
+#include "MonsterFramework/src/Utils/private/ios/Private_Utils_iOS.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
@@ -57,5 +57,6 @@ bool mf::Internet_HasInternetConnection()
 }
 void mf::Internet_OpenURLInBrowser(const std::string &url)
 {
-    //COWTODO: Implement this method.
+    NSURL *nsurl = [NSURL URLWithString:MF_STR_CPP2NS(url)];
+    [[UIApplication sharedApplication] openURL:nsurl];
 }
