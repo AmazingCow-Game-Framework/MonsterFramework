@@ -50,6 +50,7 @@ USING_NS_STD_CC_CD_MF;
 #define kColumn_Key   "Key"
 #define kColumn_Value "Value"
 
+//COWTODO: Several methods have same code, check if could refactor them.
 
 // CTOR/DTOR //
 BasicStorage::BasicStorage(const std::string &storagePath) :
