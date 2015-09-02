@@ -54,7 +54,14 @@ class TwitterComposer
 {
     // Inner Types //
 public:
-    //COWTODO: Add descriptive comments.
+    //Type that holds the information about the image
+    //that will be included in tweet.
+    //name is the filename of the image **without** the extension.
+    //ext  is the extension of the image **without** the leading dot.
+    //Example:
+    //  name = "Pingo";     ext = "png";  <- RIGHT
+    //  name = "Pingo.png"; ext = "png";  <- WRONG (Name with extension)
+    //  name = "Pingo";     ext = ".png"; <- WRONG (Extension with dot)
     struct ImageInfo
     {
         std::string name;
