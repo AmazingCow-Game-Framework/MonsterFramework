@@ -41,6 +41,8 @@
 
 //Header
 #include "MonsterFramework/include/Filesystem/SettingsManager.h"
+//Storage.
+#include "./private/BasicStorage.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
@@ -48,25 +50,27 @@ USING_NS_STD_CC_CD_MF
 // Private CTOR/DTOR //
 SettingsManager::SettingsManager()
 {
+    //Get the path for the storage.
     m_path = FileUtils::getInstance()->getWritablePath();
     m_path += "CommonSettings";
     
-    //COWTODO: Implement the initialization of storage.
+    //Initialize the unique_ptr. BasicStorage implements RAII.
+    m_pStorage.reset(new BasicStorage(m_path));
 }
 SettingsManager::~SettingsManager()
 {
-    //COWTODO: Implement the release of storage.
-    MF_ASSERT(false, "NOT IMPLEMENTED YET");
 }
 
 // Public Methods //
 //Remove
-void SettingsManager::removeValueForKey(const std::string &key)
+void SettingsManager::removeItem(const std::string &key)
 {
-    //COWTODO: Implement the removal of value in storage.
-    MF_ASSERT(false, "NOT IMPLEMENTED YET");
+    m_pStorage->removeItem(key);
 }
-
+void SettingsManager::removeAllItems()
+{
+    m_pStorage->removeAllItems();
+}
 //Other
 const string& SettingsManager::getStoragePath()
 {
@@ -74,15 +78,13 @@ const string& SettingsManager::getStoragePath()
 }
 
 // Private Methods //
-std::stringstream SettingsManager::_getValueForKey(const std::string &key)
+std::string SettingsManager::_getValueForKey(const std::string &key,
+                                             bool *pExists)
 {
-    //COWTODO: Implement the retrieval of storage.
-    MF_ASSERT(false, "NOT IMPLEMENTED YET");
-    return stringstream();
+    return m_pStorage->getItem(key, pExists);
 }
 void SettingsManager::_setValueForKey(const std::string &key,
                                       const std::string &value)
 {
-    //COWTODO: Implement the setting of storage.
-    MF_ASSERT(false, "NOT IMPLEMENTED YET");
+    m_pStorage->setItem(key, value);
 }

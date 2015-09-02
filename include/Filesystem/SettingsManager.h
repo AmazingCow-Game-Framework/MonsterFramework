@@ -49,6 +49,9 @@
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
 NS_MF_BEGIN
+//Forward declarations.
+class BasicStorage;
+
 class SettingsManager
 {
     // Singleton //
@@ -74,27 +77,39 @@ public:
 
     //Get
     template <typename T>
-    T getValueForKey(const std::string &key)
+    T getValueForKey(const std::string &key, const T &defaultValue = T())
     {
+        bool exists = false;
+        std::string value = _getValueForKey(key, &exists);
+
+        if(!exists)
+            return defaultValue;
+
+        std::stringstream ss;
+        ss << value;
+        
         T t;
-        _getValueForKey(key) >> t;
+        ss >> t;
+            
         return t;
     }
-
+    
     //Remove
-    void removeValueForKey(const std::string &key);
-  
+    void removeItem(const std::string &key);
+    void removeAllItems();
+    
     //Other
     const std::string& getStoragePath();
 
     // Private Methods //
 private:
-    std::stringstream _getValueForKey(const std::string &key);
+    std::string _getValueForKey(const std::string &key, bool *pExists);
     void _setValueForKey(const std::string &key, const std::string &value);
     
     // iVars //
 private:
     std::string m_path;
+    std::unique_ptr<BasicStorage> m_pStorage;
 };
 
 NS_MF_END
