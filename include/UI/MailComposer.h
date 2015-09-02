@@ -54,7 +54,17 @@ class MailComposer
 {
     // Inner Types //
 public:
-    //COWTODO: Add descriptive comments.
+    //Type that holds the information about the attachment
+    //that will be included in mail.
+    //
+    //name     is the filename of the attachment **without** the extension.
+    //ext      is the extension of the attachment **without** the leading dot.
+    //mimeType is the MIME of the attachement, like (image/jpeg).
+    //         check the prefined mimes for jpg and png images.
+    //Example:
+    //  name = "Pingo";     ext = "png";  <- RIGHT
+    //  name = "Pingo.png"; ext = "png";  <- WRONG (Name with extension)
+    //  name = "Pingo";     ext = ".png"; <- WRONG (Extension with dot)
     struct Attachment
     {
         const std::string name;
