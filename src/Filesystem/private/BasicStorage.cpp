@@ -69,8 +69,30 @@ BasicStorage::~BasicStorage()
 // Public Methods //
 void BasicStorage::setItem(const std::string &key, const std::string &item)
 {
-    //COWTODO: Implement
-    MF_ASSERT(false, "Basic Storage - Not implemented yet.");
+    //REPALCE
+    auto sql = cc::StringUtils::format("REPLACE INTO %s (%s, %s) VALUES (?,?);",
+                                       kTable_Name,
+                                       kColumn_Key,
+                                       kColumn_Value);
+    
+    //Create the Statement.
+    sqlite3_stmt *stmt;
+    if(sqlite3_prepare_v2(m_pDB,
+                          sql.c_str(),
+                          -1,
+                          &stmt,
+                          nullptr) != SQLITE_OK)
+    {
+        MF_LOG_ERROR("Basic Storage - Failed to create the REPLACE Statement - %s",
+                     getSQLError().c_str());
+    }
+    
+    //Execute the Statement.
+    if(sqlite3_step(stmt) != SQLITE_DONE)
+    {
+        MF_LOG_ERROR("Basic Storage - Failed while executing REPLACE Statement - %s",
+                     getSQLError().c_str());
+    }
 }
 
 std::string BasicStorage::getItem(const std::string &key, bool *pExists)
@@ -109,14 +131,55 @@ std::string BasicStorage::getItem(const std::string &key, bool *pExists)
 
 void BasicStorage::removeItem(const std::string &key)
 {
-    //COWTODO: Implement
-    MF_ASSERT(false, "Basic Storage - Not implemented yet.");
+    //DELETE
+    auto sql = cc::StringUtils::format("DELETE FROM %s WHERE %s=?;",
+                                       kTable_Name,
+                                       kColumn_Key);
+    
+    //Create the Statement.
+    sqlite3_stmt *stmt;
+    if(sqlite3_prepare_v2(m_pDB,
+                          sql.c_str(),
+                          -1,
+                          &stmt,
+                          nullptr) != SQLITE_OK)
+    {
+        MF_LOG_ERROR("Basic Storage - Failed to create the Delete Statement - %s",
+                     getSQLError().c_str());
+    }
+    
+    //Execute the Statement.
+    if(sqlite3_step(stmt) != SQLITE_DONE)
+    {
+        MF_LOG_ERROR("Basic Storage - Failed while executing DELETE Statement - %s",
+                     getSQLError().c_str());
+    }
 }
 
 void BasicStorage::removeAllItems()
 {
-    //COWTODO: Implement
-    MF_ASSERT(false, "Basic Storage - Not implemented yet.");
+    //DELETE
+    auto sql = cc::StringUtils::format("DELETE FROM %s;",
+                                       kTable_Name);
+    
+    //Create the Statement.
+    sqlite3_stmt *stmt;
+    if(sqlite3_prepare_v2(m_pDB,
+                          sql.c_str(),
+                          -1,
+                          &stmt,
+                          nullptr) != SQLITE_OK)
+    {
+        MF_LOG_ERROR("Basic Storage - Failed to create the Delete Statement - %s",
+                     getSQLError().c_str());
+    }
+    
+    //Execute the Statement.
+    if(sqlite3_step(stmt) != SQLITE_DONE)
+    {
+        MF_LOG_ERROR("Basic Storage - Failed while executing DELETE Statement - %s",
+                     getSQLError().c_str());
+    }
 }
 
 // Private Methods //
