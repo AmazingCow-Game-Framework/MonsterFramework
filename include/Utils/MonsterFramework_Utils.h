@@ -112,6 +112,8 @@ static __TYPE__* create(const __OPT__ &options) \
 
 #define INIT_OPTIONS(__OPT__) \
     virtual bool init(const __OPT__ &options);
+#define INIT() \
+    bool init() override;
 
 // DEPRECATED //
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
