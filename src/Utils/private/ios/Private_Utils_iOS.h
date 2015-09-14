@@ -46,7 +46,7 @@
 
 // String //
 //char * -> NSString
-#define MF_STR_C2NS(_str_) [NSString stringWithFormat:@"%s", _str_]
+#define MF_STR_C2NS(_str_) [NSString stringWithUTF8String:_str_]
 //std::string -> NSString
 #define MF_STR_CPP2NS(_str_) MF_STR_C2NS(_str_.c_str())
 //NSString -> char *
