@@ -158,7 +158,7 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
 
     //Assertion.
     #define MF_ASSERT(_cond_, _msg_, ...) do { \
-        if(!_cond_) {                                  \
+        if(!(_cond_)) {                                \
             __not_to_direct_use_mf_log("MFASSERT:",    \
                                        _msg_,          \
                                        ##__VA_ARGS__); \
