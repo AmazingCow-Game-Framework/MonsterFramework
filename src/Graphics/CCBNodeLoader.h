@@ -66,6 +66,7 @@ private:
                                  mf::ILoadResolver *pResolver);
 
     cc::Node* resolveDefaultClasses(const std::string &baseClass);
+    cc::Node* resolveMFClasses(const std::string &customClass);
     cc::Node* resolveCustomClasses(const std::string &customClass,
                                    mf::ILoadResolver *pResolver,
                                    const cc::ValueVector &customProperties);

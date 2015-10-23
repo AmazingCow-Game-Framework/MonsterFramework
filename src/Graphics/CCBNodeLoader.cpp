@@ -88,7 +88,14 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
     {
         node = resolveDefaultClasses(baseClass);
     }
-    else
+    else if(customClass.size() > 2 && customClass.substr(0, 2) == "MF")
+    {
+        node = resolveMFClasses(customClass);
+    }
+    
+    //Node isn't a Default class nor a custom MF class, so let's do a last
+    //try and check if the client code has a loader for it.
+    if(!node)
     {
         node = resolveCustomClasses(customClass, pResolver, customProperties);
     }
@@ -153,7 +160,7 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
         const auto &name  = item.at("name" ).asString();
         const auto &value = item.at("value");
 
-//        MF_LOG("CCBNodeLoader - %s", name.c_str());
+        MF_LOG("CCBNodeLoader - %s", name.c_str());
 
         //Check if the name of property matches and set the property.
         _SET_PROPERTY_FUNCTION(anchorPoint,                  name, obj, value);
@@ -166,7 +173,7 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
         _SET_PROPERTY_FUNCTION(isEnabled,                    name, obj, value);
         _SET_PROPERTY_FUNCTION(normalSpriteFrame,            name, obj, value);
         _SET_PROPERTY_FUNCTION(selectedSpriteFrame,          name, obj, value);
-        _SET_PROPERTY_FUNCTION(selectedSpriteFrame,          name, obj, value);
+        _SET_PROPERTY_FUNCTION(disabledSpriteFrame,          name, obj, value);
         _SET_PROPERTY_FUNCTION(color,                        name, obj, value);
         _SET_PROPERTY_FUNCTION(contentSize,                  name, obj, value);
         _SET_PROPERTY_FUNCTION(rotation,                     name, obj, value);
@@ -183,6 +190,7 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
 
     return obj;
 }
+
 
 cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
 {
@@ -218,6 +226,13 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
         node = cc::Label::create();
 
     return node;
+}
+cc::Node* CCBNodeLoader::resolveMFClasses(const std::string &customClass)
+{
+    if(customClass == "MFToggle")
+        return cc::MenuItemToggle::create();
+    
+    return nullptr;
 }
 cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
                                               mf::ILoadResolver *pResolver,

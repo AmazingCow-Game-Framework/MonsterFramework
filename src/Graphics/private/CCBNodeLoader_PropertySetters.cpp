@@ -39,8 +39,11 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
+
 #include "CCBNodeLoader_PropertySetters.h"
 #include "CCBNodeLoader_Decoders.h"
+
+#include <typeinfo>
 
 USING_NS_STD_CC_CD_MF
 
@@ -86,20 +89,60 @@ void mf::_set_isEnabled(cc::Node *obj, const cc::Value &value)
 }
 void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
-    cc::Sprite *sprite = cc::Sprite::create();
-    mf::_set_displayFrame(sprite, value);
+    if(typeid(*obj) == typeid(cc::MenuItemToggle))
+    {
+        auto toggle = static_cast<cc::MenuItemToggle *>(obj);
+        
+        cc::Sprite *sprite1 = cc::Sprite::create();
+        cc::Sprite *sprite2 = cc::Sprite::create();
+        
+        mf::_set_displayFrame(sprite1,  value);
+        mf::_set_displayFrame(sprite2, value);
+        
+        auto menuItem = cc::MenuItemSprite::create(sprite1, sprite2);
+        toggle->addSubItem(menuItem);
+        toggle->setSelectedIndex(0);
+    }
+    else
+    {
+        cc::Sprite *sprite = cc::Sprite::create();
+        mf::_set_displayFrame(sprite, value);
 
-    static_cast<cc::MenuItemSprite *>(obj)->setNormalImage(sprite);
+        static_cast<cc::MenuItemSprite *>(obj)->setNormalImage(sprite);
+    }
 }
 void mf::_set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
-    cc::Sprite *sprite = cc::Sprite::create();
-    mf::_set_displayFrame(sprite, value);
-
-    static_cast<cc::MenuItemSprite *>(obj)->setSelectedImage(sprite);
+    if(typeid(*obj) == typeid(cc::MenuItemToggle))
+    {
+        auto toggle = static_cast<cc::MenuItemToggle *>(obj);
+        
+        cc::Sprite *sprite1 = cc::Sprite::create();
+        cc::Sprite *sprite2 = cc::Sprite::create();
+        
+        mf::_set_displayFrame(sprite1,  value);
+        mf::_set_displayFrame(sprite2, value);
+        
+        auto menuItem = cc::MenuItemSprite::create(sprite1, sprite2);
+        
+        toggle->addSubItem(menuItem);
+    }
+    else
+    {
+        cc::Sprite *sprite = cc::Sprite::create();
+        mf::_set_displayFrame(sprite, value);
+        
+        static_cast<cc::MenuItemSprite *>(obj)->setSelectedImage(sprite);
+    }
 }
 void mf::_set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
+    //There's no information to set the sprite, this is due
+    //the CocosBuild set the disabledSpriteFrame in plist even
+    //if the user doesn't set any of them...
+    if(_decodeAsSpriteFrame(value) == "")
+        return;
+    
     cc::Sprite *sprite = cc::Sprite::create();
     mf::_set_displayFrame(sprite, value);
 
