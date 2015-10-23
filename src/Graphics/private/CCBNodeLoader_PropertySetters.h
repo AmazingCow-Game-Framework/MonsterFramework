@@ -48,25 +48,41 @@
 
 NS_MF_BEGIN
 
-void _set_anchorPoint                  (cc::Node *obj, const cc::Value &value);
-void _set_scale                        (cc::Node *obj, const cc::Value &value);
-void _set_ignoreAnchorPointForPosition (cc::Node *obj, const cc::Value &value);
-void _set_isTouchEnabled               (cc::Node *obj, const cc::Value &value);
-void _set_isAccelerometerEnabled       (cc::Node *obj, const cc::Value &value);
-void _set_position                     (cc::Node *obj, const cc::Value &value);
-void _set_displayFrame                 (cc::Node *obj, const cc::Value &value);
-void _set_block                        (cc::Node *obj, const cc::Value &value, mf::ILoadResolver *pResolver);
-void _set_isEnabled                    (cc::Node *obj, const cc::Value &value);
-void _set_normalSpriteFrame            (cc::Node *obj, const cc::Value &value);
-void _set_selectedSpriteFrame          (cc::Node *obj, const cc::Value &value);
-void _set_disabledSpriteFrame          (cc::Node *obj, const cc::Value &value);
-void _set_color                        (cc::Node *obj, const cc::Value &value);
-void _set_contentSize                  (cc::Node *obj, const cc::Value &value);
-void _set_rotation                     (cc::Node *obj, const cc::Value &value);
-void _set_fontName                     (cc::Node *obj, const cc::Value &value);
-void _set_fontSize                     (cc::Node *obj, const cc::Value &value);
-void _set_string                       (cc::Node *obj, const cc::Value &value);
-void _set_opacity                      (cc::Node *obj, const cc::Value &value);
+// Anchor Point //
+void _set_anchorPoint                 (cc::Node *obj, const cc::Value &value);
+void _set_ignoreAnchorPointForPosition(cc::Node *obj, const cc::Value &value);
+
+// Tranforms //
+void _set_position(cc::Node *obj, const cc::Value &value);
+void _set_rotation(cc::Node *obj, const cc::Value &value);
+void _set_scale   (cc::Node *obj, const cc::Value &value);
+
+//COWTODO: FIND A "SECTION" NAME.
+void _set_isEnabled  (cc::Node *obj, const cc::Value &value);
+void _set_contentSize(cc::Node *obj, const cc::Value &value);
+
+//Color / Opacity //
+void _set_color  (cc::Node *obj, const cc::Value &value);
+void _set_opacity(cc::Node *obj, const cc::Value &value);
+
+// Input //
+void _set_isTouchEnabled        (cc::Node *obj, const cc::Value &value);
+void _set_isAccelerometerEnabled(cc::Node *obj, const cc::Value &value);
+
+// Frame //
+void _set_displayFrame(cc::Node *obj, const cc::Value &value);
+
+// Button //
+void _set_normalSpriteFrame  (cc::Node *obj, const cc::Value &value);
+void _set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value);
+void _set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value);
+void _set_block              (cc::Node *obj, const cc::Value &value,
+                              mf::ILoadResolver *pResolver);
+
+// Font //
+void _set_fontName(cc::Node *obj, const cc::Value &value);
+void _set_fontSize(cc::Node *obj, const cc::Value &value);
+void _set_string  (cc::Node *obj, const cc::Value &value);
 
 NS_MF_END
 #endif // defined(__MonsterFramework_src_Graphics_private_CCBNodeLoader_PropertySetters_h__) //

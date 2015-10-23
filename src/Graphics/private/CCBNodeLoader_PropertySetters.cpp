@@ -47,9 +47,20 @@
 
 USING_NS_STD_CC_CD_MF
 
+// Anchor Point //
 void mf::_set_anchorPoint(cc::Node *obj, const cc::Value &value)
 {
     obj->setAnchorPoint(_decodeAsPoint(value));
+}
+void mf::_set_ignoreAnchorPointForPosition(cc::Node *obj, const cc::Value &value)
+{
+    obj->ignoreAnchorPointForPosition(_decodeAsCheck(value));
+}
+
+// Transforms //
+void mf::_set_position(cc::Node *obj, const cc::Value &value)
+{
+    obj->setPosition(_decodeAsPosition(value, obj->getParent()));
 }
 void mf::_set_scale(cc::Node *obj, const cc::Value &value)
 {
@@ -58,10 +69,32 @@ void mf::_set_scale(cc::Node *obj, const cc::Value &value)
     auto point = _decodeAsPoint(value);
     obj->setScale(point.x, point.y);
 }
-void mf::_set_ignoreAnchorPointForPosition(cc::Node *obj, const cc::Value &value)
+void mf::_set_rotation(cc::Node *obj, const cc::Value &value)
 {
-    obj->ignoreAnchorPointForPosition(_decodeAsCheck(value));
+    obj->setRotation(_decodeAsDegrees(value));
 }
+
+// ???
+void mf::_set_isEnabled(cc::Node *obj, const cc::Value &value)
+{
+    static_cast<cc::MenuItem *>(obj)->setEnabled(_decodeAsCheck(value));
+}
+void mf::_set_contentSize(cc::Node *obj, const cc::Value &value)
+{
+    obj->setContentSize(_decodeAsSize(value));
+}
+
+// Color / Opacity //
+void mf::_set_color(cc::Node *obj, const cc::Value &value)
+{
+    static_cast<cc::LayerColor *>(obj)->setColor(_decodeAsColor3(value));
+}
+void mf::_set_opacity(cc::Node *obj, const cc::Value &value)
+{
+    obj->setOpacity(_decodeAsByte(value));
+}
+
+// Input //
 void mf::_set_isTouchEnabled(cc::Node *obj, const cc::Value &value)
 {
     //COWTODO:: Ignoring by now, but must check what this method will do.
@@ -70,23 +103,15 @@ void mf::_set_isAccelerometerEnabled(cc::Node *obj, const cc::Value &value)
 {
     //COWTODO:: Ignoring by now, but must check what this method will do.
 }
-void mf::_set_position(cc::Node *obj, const cc::Value &value)
-{
-    obj->setPosition(_decodeAsPosition(value, obj->getParent()));
-}
+
+// Frame //
 void mf::_set_displayFrame(cc::Node *obj, const cc::Value &value)
 {
     static_cast<cc::Sprite *>(obj)->setSpriteFrame(_decodeAsSpriteFrame(value));
 }
-void mf::_set_block(cc::Node *obj, const cc::Value &value, ILoadResolver *pResolver)
-{
-    pResolver->resolveMenuSelector(_decodeAsBlock(value),
-                                   static_cast<cc::MenuItem *>(obj));
-}
-void mf::_set_isEnabled(cc::Node *obj, const cc::Value &value)
-{
-    static_cast<cc::MenuItem *>(obj)->setEnabled(_decodeAsCheck(value));
-}
+
+
+// Button //
 void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
     if(typeid(*obj) == typeid(cc::MenuItemToggle))
@@ -148,18 +173,14 @@ void mf::_set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value)
 
     static_cast<cc::MenuItemSprite *>(obj)->setDisabledImage(sprite);
 }
-void mf::_set_color(cc::Node *obj, const cc::Value &value)
+void mf::_set_block(cc::Node *obj, const cc::Value &value,
+                    ILoadResolver *pResolver)
 {
-    static_cast<cc::LayerColor *>(obj)->setColor(_decodeAsColor3(value));
+    pResolver->resolveMenuSelector(_decodeAsBlock(value),
+                                   static_cast<cc::MenuItem *>(obj));
 }
-void mf::_set_contentSize(cc::Node *obj, const cc::Value &value)
-{
-    obj->setContentSize(_decodeAsSize(value));
-}
-void mf::_set_rotation(cc::Node *obj, const cc::Value &value)
-{
-    obj->setRotation(_decodeAsDegrees(value));
-}
+
+// Font //
 void mf::_set_fontName(cc::Node *obj, const cc::Value &value)
 {
     static_cast<cc::Label *>(obj)->setSystemFontName(value.asString());
@@ -171,8 +192,4 @@ void mf::_set_fontSize(cc::Node *obj, const cc::Value &value)
 void mf::_set_string(cc::Node *obj, const cc::Value &value)
 {
     static_cast<cc::Label *>(obj)->setString(_decodeAsString(value));
-}
-void mf::_set_opacity(cc::Node *obj, const cc::Value &value)
-{
-    obj->setOpacity(_decodeAsByte(value));
 }
