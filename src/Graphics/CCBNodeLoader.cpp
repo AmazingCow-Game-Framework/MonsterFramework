@@ -54,11 +54,12 @@ USING_NS_STD_CC_CD_MF
 // MACROS //
 #define _SET_PROPERTY_FUNCTION(_target_name_, _name_, _obj_, _value_) \
 if(_name_ == #_target_name_) {                                        \
-_set_ ## _target_name_(_obj_, _value_);                           \
+    _set_ ## _target_name_(_obj_, _value_);                           \
 }
 
 // Public Methods //
-void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent, mf::ILoadResolver *pResolver)
+void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
+                         mf::ILoadResolver *pResolver)
 {
     //Retrieve the values
     auto baseClass               = map.at("baseClass"              ).asString();
@@ -139,7 +140,9 @@ std::string CCBNodeLoader::findCCBFilename(const cc::ValueVector &properties)
     }
     return "";
 }
-cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj, const cc::ValueVector &properties, ILoadResolver *pResolver)
+cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
+                                          const cc::ValueVector &properties,
+                                          ILoadResolver *pResolver)
 {
     //Iterate for all properties.
     for(auto it = begin(properties); it != end(properties); ++it)
@@ -220,6 +223,7 @@ cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
                                               mf::ILoadResolver *pResolver,
                                               const cc::ValueVector &customProperties)
 {
+    
 //    cc::Node *node = nullptr;
 //    if(customClass == "MFSpriteBatch")
 //    {
