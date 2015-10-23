@@ -153,7 +153,7 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
         mf::__not_to_direct_use_mf_log("MFLOG [ERROR]:", \
                                        _format_,         \
                                        ##__VA_ARGS__);   \
-        exit(1);                                         \
+        abort();                                         \
     } while(0)
 
     //Assertion.
