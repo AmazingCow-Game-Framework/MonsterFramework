@@ -51,12 +51,6 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
-// MACROS //
-#define _SET_PROPERTY_FUNCTION(_target_name_, _name_, _obj_, _value_) \
-if(_name_ == #_target_name_) {                                        \
-    _set_ ## _target_name_(_obj_, _value_);                           \
-}
-
 // Public Methods //
 void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
                          mf::ILoadResolver *pResolver)
@@ -162,6 +156,13 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
 
         MF_LOG("CCBNodeLoader - %s", name.c_str());
 
+//This macro is just to ease the typing and make the code less cluttered
+//Since all functions follows the "same signature" chaging only the part
+//of it's name. This macro is undefined just after it's use.
+#define _SET_PROPERTY_FUNCTION(_target_name_, _name_, _obj_, _value_) \
+if(_name_ == #_target_name_) {                                        \
+    _set_ ## _target_name_(_obj_, _value_);                           \
+}
         //Check if the name of property matches and set the property.
         _SET_PROPERTY_FUNCTION(anchorPoint,                  name, obj, value);
         _SET_PROPERTY_FUNCTION(scale,                        name, obj, value);
@@ -182,6 +183,8 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
         _SET_PROPERTY_FUNCTION(string,                       name, obj, value);
         _SET_PROPERTY_FUNCTION(opacity,                      name, obj, value);
 
+#undef _SET_PROPERTY_FUNCTION //We don't want this anymore ;)
+        
         //Block is special, because we need the ILoadResolver
         //to communicate with the object owner class.
         if(name == "block")
