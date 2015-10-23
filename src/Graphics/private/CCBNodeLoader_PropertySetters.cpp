@@ -114,6 +114,7 @@ void mf::_set_displayFrame(cc::Node *obj, const cc::Value &value)
 // Button //
 void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
+    //COWTODO: Refactor and comment.
     if(typeid(*obj) == typeid(cc::MenuItemToggle))
     {
         auto toggle = static_cast<cc::MenuItemToggle *>(obj);
@@ -138,6 +139,7 @@ void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
 }
 void mf::_set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
+    //COWTODO: Refactor and comment.
     if(typeid(*obj) == typeid(cc::MenuItemToggle))
     {
         auto toggle = static_cast<cc::MenuItemToggle *>(obj);
@@ -162,6 +164,8 @@ void mf::_set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value)
 }
 void mf::_set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
+    //Implement MFToggle support.
+    
     //There's no information to set the sprite, this is due
     //the CocosBuild set the disabledSpriteFrame in plist even
     //if the user doesn't set any of them...
