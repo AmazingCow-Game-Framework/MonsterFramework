@@ -51,6 +51,18 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
+// Constants //
+//Default Nodes
+#define kNodeName_CCLayer         "CCLayer"
+#define kNodeName_CCLayerColor    "CCLayerColor"
+#define kNodeName_CCSprite        "CCSprite"
+#define kNodeName_CCMenu          "CCMenu"
+#define kNodeName_CCMenuItemImage "CCMenuItemImage"
+#define kNodeName_CCLabelTTF      "CCLabelTTF"
+//MF Nodes.
+#define kMFNodeName_MFToggle "MFToggle"
+
+
 // Public Methods //
 void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
                          mf::ILoadResolver *pResolver)
@@ -154,7 +166,7 @@ cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
         const auto &name  = item.at("name" ).asString();
         const auto &value = item.at("value");
 
-        MF_LOG("CCBNodeLoader - %s", name.c_str());
+//        MF_LOG("CCBNodeLoader - %s", name.c_str());
 
 //This macro is just to ease the typing and make the code less cluttered
 //Since all functions follows the "same signature" chaging only the part
@@ -200,7 +212,7 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
     cc::Node *node = nullptr;
 
     //Layer.
-    if(baseClass == "CCLayer")
+    if(baseClass == kNodeName_CCLayer)
         node = cc::Layer::create();
 
     //LayerColor
@@ -209,30 +221,30 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
     //of the LayerColor, later the object will not set any color. So any color
     //set in CCB won't be applied. I don't know why this behaviour is occurring
     //but know works in this way.
-    else if(baseClass == "CCLayerColor")
+    else if(baseClass == kNodeName_CCLayerColor)
         node = cc::LayerColor::create(cc::Color4B::BLUE);
 
     //Sprite
-    else if(baseClass == "CCSprite")
+    else if(baseClass == kNodeName_CCSprite)
         node = cc::Sprite::create();
 
     //Menu
-    else if(baseClass == "CCMenu")
+    else if(baseClass == kNodeName_CCMenu)
         node = cc::Menu::create();
 
     //MenuItem
-    else if(baseClass == "CCMenuItemImage")
+    else if(baseClass == kNodeName_CCMenuItemImage)
         node = cc::MenuItemSprite::create(nullptr, nullptr);
 
     //LabelTTF
-    else if(baseClass == "CCLabelTTF")
+    else if(baseClass == kNodeName_CCLabelTTF)
         node = cc::Label::create();
 
     return node;
 }
 cc::Node* CCBNodeLoader::resolveMFClasses(const std::string &customClass)
 {
-    if(customClass == "MFToggle")
+    if(customClass == kMFNodeName_MFToggle)
         return cc::MenuItemToggle::create();
     
     return nullptr;
@@ -241,18 +253,6 @@ cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
                                               mf::ILoadResolver *pResolver,
                                               const cc::ValueVector &customProperties)
 {
-    
-//    cc::Node *node = nullptr;
-//    if(customClass == "MFSpriteBatch")
-//    {
-//        auto imageName = customProperties.at(0).asValueMap().at("value").asString();
-//        MF_LOG("%s", imageName.c_str());
-//        auto texture = cc::SpriteFrameCache::getInstance()->addSpriteFramesWithFile(imageName);
-//        node = cc::SpriteBatchNode::createWithTexture(texture);
-//    }
-//    return node;
-
-
     return pResolver->resolveCustomClass(customClass);
 }
 
