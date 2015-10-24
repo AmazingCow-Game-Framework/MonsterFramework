@@ -59,23 +59,48 @@ public:
     
     // Public Methods //
 public:
+    //Set.
     void setItem(const std::string &key, const std::string &item);
+    
+    //Get.
     std::string getItem(const std::string &key, bool *pExists);
     
+    //Remove.
     void removeItem(const std::string &key);
     void removeAllItems();
 
     // Private Methods //
 private:
-    void init();
-    void denit();
+    //Create / Open / Close.
+    void createDatabase();
+    void openDatabase  ();
+    void closeDatabase ();
+    
+    //Prepare.
+    void prepareStatement(const std::string &sql);
+ 
+    void prepareStatement(const std::string &sql,
+                          const std::string &key);
+    
+    void prepareStatement(const std::string &sql,
+                          const std::string &key,
+                          const std::string &value);
+    
+    //Bind Text.
+    void bindStatementText(const std::string &txt, int index);
+    
+    //Execute / Finalize.
+    void executeStatement ();
+    void finalizeStatement();
     
     std::string getSQLError();
     
     // iVars //
 private:
     std::string  m_storagePath;
-    sqlite3     *m_pDB;
+
+    sqlite3      *m_pDB;
+    sqlite3_stmt *m_pStmt;
 };
 
 NS_MF_END

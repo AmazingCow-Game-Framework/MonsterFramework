@@ -50,215 +50,243 @@ USING_NS_STD_CC_CD_MF;
 #define kColumn_Key   "Key"
 #define kColumn_Value "Value"
 
-//COWTODO: Several methods have same code, check if could refactor them.
+#define kQuery_Replace   "REPLACE INTO %s (%s, %s) VALUES (?, ?);"
+#define kQuery_Select    "SELECT %s FROM %s WHERE %s=?;"
+#define kQuery_Delete    "DELETE FROM %s WHERE %s=?;"
+#define kQuery_DeleteAll "DELETE FROM %s;"
+
+#define kQuery_CreateTables "CREATE TABLE IF NOT EXISTS %s( %s VARCHAR(100) PRIMARY KEY, %s VARCHAR(100) );"
 
 // CTOR/DTOR //
 BasicStorage::BasicStorage(const std::string &storagePath) :
     m_storagePath(storagePath),
-    m_pDB(nullptr)
+    m_pDB        (nullptr),
+    m_pStmt      (nullptr)
 {
     MF_LOG("BasicStorage - CTOR");
-    init();
+    createDatabase();
 }
 
 BasicStorage::~BasicStorage()
 {
     MF_LOG("BasicStorage - DTOR");
-    denit();
+    closeDatabase();
 }
 
 // Public Methods //
+//Set.
 void BasicStorage::setItem(const std::string &key, const std::string &item)
 {
-    //REPALCE
-    auto sql = cc::StringUtils::format("REPLACE INTO %s (%s, %s) VALUES (?,?);",
+    //REPLACE.
+    auto sql = cc::StringUtils::format(kQuery_Replace,
                                        kTable_Name,
                                        kColumn_Key,
                                        kColumn_Value);
+    openDatabase();
+    prepareStatement(sql, key, item);
     
-    //Create the Statement.
-    sqlite3_stmt *stmt;
-    if(sqlite3_prepare_v2(m_pDB,
-                          sql.c_str(),
-                          -1,
-                          &stmt,
-                          nullptr) != SQLITE_OK)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed to create the REPLACE Statement - %s",
-                     getSQLError().c_str());
-    }
+    executeStatement();
     
-    //Execute the Statement.
-    if(sqlite3_step(stmt) != SQLITE_DONE)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed while executing REPLACE Statement - %s",
-                     getSQLError().c_str());
-    }
+    finalizeStatement();
+    closeDatabase();
 }
 
+//Get.
 std::string BasicStorage::getItem(const std::string &key, bool *pExists)
 {
-    //SELECT
-    auto sql = cc::StringUtils::format("SELECT %s FROM %s WHERE %s=?;",
+    //SELECT.
+    auto sql = cc::StringUtils::format(kQuery_Select,
                                        kColumn_Value,
                                        kTable_Name,
                                        kColumn_Key);
     
-    //Create the Statement.
-    sqlite3_stmt *stmt;
-    if(sqlite3_prepare_v2(m_pDB,
-                          sql.c_str(),
-                          -1,
-                          &stmt,
-                          nullptr) != SQLITE_OK)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed to create the Select Statement - %s",
-                     getSQLError().c_str());
-    }
+    openDatabase();
+    prepareStatement(sql, key);
     
-    //Execute the Statement.
-    if(sqlite3_step(stmt) != SQLITE_DONE)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed while executing Select Statement - %s",
-                     getSQLError().c_str());
-    }
+    executeStatement();
+    
+    //Let's assume that values won't be found.
+    //Set a "empty" return value.
+    *pExists   = false;
+    std::string returnValue = "";
     
     //Get the column's value.
-    auto colText = sqlite3_column_text(stmt, 0);
-    *pExists = (colText != nullptr);
+    auto collumnValue = sqlite3_column_text(m_pStmt, 0);
     
-    return cc::StringUtils::format("%s", colText);
+    //Check if there's a value.
+    if(collumnValue)
+    {
+        *pExists    = true;
+        returnValue = cc::StringUtils::format("%s", collumnValue);
+    }
+    
+    finalizeStatement();
+    closeDatabase();
+    
+    return returnValue;
 }
 
+//Remove.
 void BasicStorage::removeItem(const std::string &key)
 {
-    //DELETE
-    auto sql = cc::StringUtils::format("DELETE FROM %s WHERE %s=?;",
+    //DELETE.
+    auto sql = cc::StringUtils::format(kQuery_Delete,
                                        kTable_Name,
                                        kColumn_Key);
     
-    //Create the Statement.
-    sqlite3_stmt *stmt;
-    if(sqlite3_prepare_v2(m_pDB,
-                          sql.c_str(),
-                          -1,
-                          &stmt,
-                          nullptr) != SQLITE_OK)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed to create the Delete Statement - %s",
-                     getSQLError().c_str());
-    }
+    openDatabase();
+    prepareStatement(sql, key);
     
-    //Execute the Statement.
-    if(sqlite3_step(stmt) != SQLITE_DONE)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed while executing DELETE Statement - %s",
-                     getSQLError().c_str());
-    }
+    executeStatement();
+    
+    finalizeStatement();
+    closeDatabase();
 }
-
 void BasicStorage::removeAllItems()
 {
-    //DELETE
-    auto sql = cc::StringUtils::format("DELETE FROM %s;",
+    //DELETE ALL.
+    auto sql = cc::StringUtils::format(kQuery_DeleteAll,
                                        kTable_Name);
     
-    //Create the Statement.
-    sqlite3_stmt *stmt;
-    if(sqlite3_prepare_v2(m_pDB,
-                          sql.c_str(),
-                          -1,
-                          &stmt,
-                          nullptr) != SQLITE_OK)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed to create the Delete Statement - %s",
-                     getSQLError().c_str());
-    }
+    openDatabase();
+    prepareStatement(sql);
     
-    //Execute the Statement.
-    if(sqlite3_step(stmt) != SQLITE_DONE)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed while executing DELETE Statement - %s",
-                     getSQLError().c_str());
-    }
+    executeStatement();
+    
+    finalizeStatement();
+    closeDatabase();
 }
 
 // Private Methods //
-void BasicStorage::init()
+//Create / Open / Close.
+void BasicStorage::createDatabase()
 {
-    //If database is already initialized just do nothing.
-    if(m_pDB)
-    {
-        MF_LOG("Basic Storage - Database already initialized.");
-        return;
-    }
-    
     //Log.
     MF_LOG("Basic Storage - Initializing the storage at %s",
            m_storagePath.c_str());
+    
+    if(cc::FileUtils::getInstance()->isFileExist(m_storagePath))
+        return;
 
     
-    //Open the Database...
+    //COWTODO: Check which size of VARCHAR(XXXX) will be enough
+    //COWTODO: Or if has a better way to create it.
+    auto sql = cc::StringUtils::format(kQuery_CreateTables,
+                                       kTable_Name,
+                                       kColumn_Key,
+                                       kColumn_Value);
+    
+    
+    openDatabase();
+    prepareStatement(sql);
+
+    executeStatement();
+    
+    finalizeStatement();
+    closeDatabase();
+}
+void BasicStorage::openDatabase()
+{
+    //Sanity checks.
+    MF_ASSERT(m_pDB == nullptr, "Database must be not open.");
+    
+    //Try open - Fail if anything goes wrong.
     if(sqlite3_open(m_storagePath.c_str(), &m_pDB) != SQLITE_OK)
     {
         MF_LOG_ERROR("Basic Storage - Failed to open database - %s",
                      getSQLError().c_str());
     }
-    
-    //COWTODO: Check which size of VARCHAR(XXXX) will be enough
-    //COWTODO: Or if has a better way to create it.
-    auto create_table_sql = cc::StringUtils::format(
-                                    "CREATE TABLE IF NOT EXISTS %s(\
-                                    %s   VARCHAR(100) PRIMARY KEY, \
-                                    %s VARCHAR(100) ); ",
-                                    kTable_Name,
-                                    kColumn_Key,
-                                    kColumn_Value);
-    
+}
+void BasicStorage::closeDatabase()
+{
+    //Try close - Fail if anything goes wrong.
+    if(sqlite3_close(m_pDB) != SQLITE_OK)
+    {
+        MF_LOG_ERROR("BasicStorage - closeDatabase - %s", getSQLError().c_str());
+    }
+    m_pDB = nullptr;
+}
 
-    //Create the statement.
-    sqlite3_stmt *stmt;
+//Prepare.
+void BasicStorage::prepareStatement(const std::string &sql)
+{
+    //Sanity checks...
+    MF_ASSERT(m_pStmt == nullptr, "m_pStmt has invalid state, it cannot be non-null here.");
+    
+    //Try create a statement - Fail if anything goes wrong.
     if(sqlite3_prepare_v2(m_pDB,
-                          create_table_sql.c_str(),
+                          sql.c_str(),
                           -1,
-                          &stmt,
+                          &m_pStmt,
                           nullptr) != SQLITE_OK)
     {
-        MF_LOG_ERROR("Basic Storage - Failed to prepare statement - %s",
+        MF_LOG_ERROR("Basic Storage - prepareStatement - Failed to prepare statement (%s) - %s",
+                     sql.c_str(),
                      getSQLError().c_str());
     }
-    
-    //Execute the statement.
-    if(sqlite3_step(stmt) != SQLITE_DONE)
+}
+void BasicStorage::prepareStatement(const std::string &sql,
+                                    const std::string &key)
+{
+    //Call the basic version to prepare the statment.
+    prepareStatement(sql);
+    //Bind the key into the statment ("replace" the "?" for the key...)
+    bindStatementText(key, 1);
+}
+void BasicStorage::prepareStatement(const std::string &sql,
+                                    const std::string &key,
+                                    const std::string &value)
+{
+    //Call the basic version to prepare the statment.
+    prepareStatement(sql, key);
+    //Bind the value into the statment ("replace" the "?" for the value...)
+    bindStatementText(value, 2);
+}
+
+//Bind Text.
+void BasicStorage::bindStatementText(const std::string &txt, int index)
+{
+    //Try bind the value - Fail if anything goes wrong..
+    if(sqlite3_bind_text(m_pStmt,
+                         index,
+                         txt.c_str(),
+                         -1,
+                         SQLITE_TRANSIENT) != SQLITE_OK)
     {
-        MF_LOG_ERROR("Basic Storage - Failed to step - %s",
-                     getSQLError().c_str());
-    }
-    
-    //Finalize the statement.
-    if(sqlite3_finalize(stmt) != SQLITE_OK)
-    {
-        MF_LOG_ERROR("Basic Storage - Failed to finalize statement - %s",
+        MF_LOG_ERROR("Basic Storage - bindStatementText - Failed %s",
                      getSQLError().c_str());
     }
 }
 
-void BasicStorage::denit()
+//Execute / Finialize.
+void BasicStorage::executeStatement()
 {
-    //If database is not initialized just do nothing.
-    if(!m_pDB)
+    //Sanity checks.
+    MF_ASSERT(m_pDB,   "m_pDB must be openned first.");
+    MF_ASSERT(m_pStmt, "m_pStmt cannot be null here.");
+    
+    //Execute - Fail if anything goes wrong.
+    auto result = sqlite3_step(m_pStmt);
+    if(result != SQLITE_DONE && result != SQLITE_ROW) //ROW is for the SELECT...
     {
-        MF_LOG("Basic Storage - Database is not initialized.");
-        return;
+        MF_LOG_ERROR("Basic Storage - Failed while executing statement - %s",
+                     getSQLError().c_str());
+    }
+}
+void BasicStorage::finalizeStatement()
+{
+    //Sanity checks...
+    MF_ASSERT(m_pStmt != nullptr, "m_pStmt has invalid state, it cannot be null here.");
+
+    
+    //Finalize - - Fail if anything goes wrong.
+    if(sqlite3_finalize(m_pStmt) != SQLITE_OK)
+    {
+        MF_LOG_ERROR("Basic Storage - prepareStatement - Failed to finalize statement - %s",
+                     getSQLError().c_str());
     }
     
-    //Log.
-    MF_LOG("Basic Storage - Denitializing the storage at %s",
-           m_storagePath.c_str());
-
-    //Close and set null.
-    sqlite3_close(m_pDB);
-    m_pDB = nullptr;
+    m_pStmt = nullptr;
 }
 
 
