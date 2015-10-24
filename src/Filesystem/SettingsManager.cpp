@@ -52,7 +52,7 @@ SettingsManager::SettingsManager()
 {
     //Get the path for the storage.
     m_path = FileUtils::getInstance()->getWritablePath();
-    m_path += "CommonSettings";
+    m_path += "MONSTERFRAMEWORK_SETTINGSMANAGER_DB.db";
     
     //Initialize the unique_ptr. BasicStorage implements RAII.
     m_pStorage.reset(new BasicStorage(m_path));
