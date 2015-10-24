@@ -47,18 +47,22 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
+const std::string SettingsManager::kSettingsManagerDatabaseName = "MONSTERFRAMEWORK_SETTINGSMANAGER_DB.db";
+
 // Private CTOR/DTOR //
 SettingsManager::SettingsManager()
 {
     //Get the path for the storage.
     m_path = FileUtils::getInstance()->getWritablePath();
-    m_path += "MONSTERFRAMEWORK_SETTINGSMANAGER_DB.db";
+    m_path += SettingsManager::kSettingsManagerDatabaseName;
     
-    //Initialize the unique_ptr. BasicStorage implements RAII.
+    //Initialize the unique_ptr.
+    //BasicStorage implements RAII.
     m_pStorage.reset(new BasicStorage(m_path));
 }
 SettingsManager::~SettingsManager()
 {
+    //Empty..
 }
 
 // Public Methods //
@@ -81,7 +85,7 @@ const string& SettingsManager::getStoragePath()
 std::string SettingsManager::_getValueForKey(const std::string &key,
                                              bool *pExists)
 {
-    return m_pStorage->getItem(key, pExists);
+    return m_pStorage->getItem(key, pExists);;
 }
 void SettingsManager::_setValueForKey(const std::string &key,
                                       const std::string &value)

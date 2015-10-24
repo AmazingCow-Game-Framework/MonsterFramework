@@ -54,6 +54,10 @@ class BasicStorage;
 
 class SettingsManager
 {
+    // Constants/Enums/Typdefs //
+public:
+    static const std::string kSettingsManagerDatabaseName;
+    
     // Singleton //
 public:
     SINGLETON_OF(SettingsManager);
@@ -69,6 +73,7 @@ public:
     template <typename T>
     void setValueForKey(const std::string &key, const T &value)
     {
+        //Convert to string, since BasicStorage only accept string values.
         std::stringstream ss;
         ss << value;
         
@@ -85,6 +90,7 @@ public:
         if(!exists)
             return defaultValue;
 
+        //Convert from string, since BasicStorage only return string values.
         std::stringstream ss;
         ss << value;
         
@@ -99,8 +105,9 @@ public:
     void removeAllItems();
     
     //Other
-    const std::string& getStoragePath();
-
+    const std::string& getStoragePath();     
+    
+    
     // Private Methods //
 private:
     std::string _getValueForKey(const std::string &key, bool *pExists);
