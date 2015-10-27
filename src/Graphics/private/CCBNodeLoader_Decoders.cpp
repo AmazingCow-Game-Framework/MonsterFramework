@@ -39,8 +39,13 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
+//Header
 #include "CCBNodeLoader_Decoders.h"
 
+//MonsterFramework
+#include "MonsterFramework/include/Graphics/GraphicsHelper.h"
+
+//Usings.
 USING_NS_STD_CC_CD_MF
 
 //Decoders.
@@ -58,17 +63,13 @@ cc::Point mf::_decodeAsPosition(const cc::Value &value, cc::Node *parent)
     auto x = value.asValueVector().at(0).asFloat();
     auto y = value.asValueVector().at(1).asFloat();
     auto t = value.asValueVector().at(2).asInt();
-
-    auto fx = x;
-    auto fy = y;
-
+    
     if(t == 4)
     {
-        fx *= (parent->getContentSize().width  / 200.f);
-        fy *= (parent->getContentSize().height / 200.f);
+        auto p = mf::GraphicsHelper::getAbsolutePosition(x, y, parent);
+        return mf::GraphicsHelper::getAbsolutePosition(x, y, parent);
     }
-
-    return cc::Point(fx, fy);
+    return cc::Point(x, y);
 }
 std::string mf::_decodeAsSpriteFrame(const cc::Value &value)
 {
