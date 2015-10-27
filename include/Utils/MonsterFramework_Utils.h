@@ -138,8 +138,9 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
     } while(0)
 
     //Just print a new line.
-    #define MF_LOG_NL() \
+    #define MF_LOG_NL() do { \
         mf::__not_to_direct_use_mf_log("","")
+    } while(0)
 
     //Log a message with a GREAT warning prefix.
     #define MF_LOG_WARNING(_format_, ...) do { \
