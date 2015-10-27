@@ -67,7 +67,11 @@ namespace ccext = cocos2d::extension;
     using namespace mf;
 
 // Macros //
-#define SINGLETON_OF(__type__) static __type__ *instance() { static __type__ t; return &t; }
+#define SINGLETON_OF(__type__)    \
+    static __type__ *instance() { \
+        static __type__ t;        \
+        return &t;                \
+}
 
 //Similar to cocos2d's CREATE_FUNC macro, but for scenes.
 #define SCENE_FUNC(__LAYER_TYPE__)         \
