@@ -129,6 +129,7 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
 
 #ifdef MONSTERFRAMEWORK_DEBUG //MonsterFramework is in Debug mode.
 
+    // LOG MACROS //
     //Prototypes for the log functions. (Should not be used directly)
     void __not_to_direct_use_mf_log(const char *pPrefix, const char *pFormat, ...);
 
@@ -179,8 +180,15 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
                                                     (_rect_).size.width,  \
                                                     (_rect_).size.height)
 
+    // OTHER MACROS //
+
+    #define MF_ONLY_IN_DEBUG(_block_) do { \
+        _block_                            \
+    } while(0)
+
 #else //MONSTERFRAMEWORK_DEBUG - MonsterFramework in Release mode.
 
+    // LOG MACROS //
     //Just Log the message in Console.
     #define MF_LOG(        _format_, ...     ) do {} while(0)
     #define MF_LOG_WARNING(_format_, ...     ) do {} while(0)
@@ -188,6 +196,9 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
     #define MF_ASSERT(     _cond_, _msg_, ...) do {} while(0)
     #define MF_LOG_POINT(  _str_, _point_    ) do {} while(0)
     #define MF_LOG_RECT(   _str_, _rect_     ) do {} while(0)
+
+    // OTHER MACROS //
+    #define MF_ONLY_IN_DEBUG(_block_) do {} while(0)
 
 #endif //MONSTERFRAMEWORK_DEBUG
 
