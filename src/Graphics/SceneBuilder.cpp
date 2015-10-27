@@ -64,11 +64,13 @@ void SceneBuilder::build(const std::string &name, cc::Node *pOwner,
     std::string fullname = name;
     if(name.find(".ccb") == std::string::npos)
         fullname += ".ccb";
-    
+
     std::string fullpath = cc::FileUtils::getInstance()->fullPathForFilename(fullname);
+
     MF_ASSERT(!fullname.empty(),
-              "SceneBuilder - Cannot find the .ccb file (%s)", fullname.c_str());
-    
+              "SceneBuilder::build - Cannot find the .ccb file (%s)",
+              fullname.c_str());
+
     auto ccbMap = cc::FileUtils::getInstance()->getValueMapFromFile(fullpath);
 
     auto nodeGraphMap = ccbMap.at("nodeGraph").asValueMap();

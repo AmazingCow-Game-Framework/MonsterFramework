@@ -98,7 +98,7 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
     {
         node = resolveMFClasses(customClass);
     }
-    
+
     //Node isn't a Default class nor a custom MF class, so let's do a last
     //try and check if the client code has a loader for it.
     if(!node)
@@ -106,7 +106,7 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
         node = resolveCustomClasses(customClass, pResolver, customProperties);
     }
 
-    MF_ASSERT(node, "CCBNodeLoader - Node is null (%s)", baseClass.c_str());
+    MF_ASSERT(node, "CCBNodeLoader::load - Node is null (%s)", baseClass.c_str());
 
     parent->addChild(node);
     assignProperties(node, properties, pResolver);
@@ -196,7 +196,7 @@ if(_name_ == #_target_name_) {                                        \
         _SET_PROPERTY_FUNCTION(opacity,                      name, obj, value);
 
 #undef _SET_PROPERTY_FUNCTION //We don't want this anymore ;)
-        
+
         //Block is special, because we need the ILoadResolver
         //to communicate with the object owner class.
         if(name == "block")
@@ -246,7 +246,7 @@ cc::Node* CCBNodeLoader::resolveMFClasses(const std::string &customClass)
 {
     if(customClass == kMFNodeName_MFToggle)
         return cc::MenuItemToggle::create();
-    
+
     return nullptr;
 }
 cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,

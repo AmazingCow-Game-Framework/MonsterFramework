@@ -165,7 +165,7 @@ USING_NS_STD_CC_CD_MF
         [controller addAttachmentData:myData
                              mimeType:MF_STR_CPP2NS(attachment.mimeType)
                              fileName:MF_STR_CPP2NS(attachment.name)];
-        
+
     }
 }
 

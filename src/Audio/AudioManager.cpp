@@ -81,7 +81,7 @@ void AudioManager::muteAll(bool mute)
         setEffectsVolume(m_prevFxVol);
     }
 
-    MF_LOG("AudioManager - Audio is now %s", mute ? "Off" : "On");
+    MF_LOG("AudioManager::muteAll - Audio is now %s", mute ? "Off" : "On");
 }
 bool AudioManager::isMuted()
 {
@@ -95,7 +95,7 @@ void AudioManager::loadEffect(const std::string &effectId, const std::string &pa
     MF_ONLY_IN_DEBUG({
         auto fileExists = FileUtils::getInstance()->isFileExist(path.c_str());
         MF_ASSERT(fileExists,
-            "Audio Manager - Cannot load effect file [PATH:(%s)]",
+            "AudioManager::loadEffect - Cannot load effect file [PATH:(%s)]",
             path.c_str());
     });
 
@@ -103,16 +103,16 @@ void AudioManager::loadEffect(const std::string &effectId, const std::string &pa
     m_effectsMap[effectId] = make_pair(path, -1);
     m_pAudioEngine->preloadEffect(path.c_str());
 
-    MF_LOG("AudioManager - LoadEffect: (%s)", path.c_str());
+    MF_LOG("AudioManager::loadEffect - LoadEffect: (%s)", path.c_str());
 }
 void AudioManager::unloadEffect(const std::string &effectId)
 {
     auto it = m_effectsMap.find(effectId);
-    
+
     //Check if effectId is valid.
     MF_ONLY_IN_DEBUG({
         MF_ASSERT((it != end(m_effectsMap)),
-            "Audio Manager - Invalid EffectId %s",
+            "AudioManager::unloadEffect - Invalid EffectId %s",
             effectId.c_str());
     });
 
@@ -129,7 +129,7 @@ void AudioManager::playEffect(const std::string &effectId, bool loop /* = false 
     //In Debug mode check if file exists...
     MF_ONLY_IN_DEBUG({
         MF_ASSERT((it != m_effectsMap.end()),
-            "Audio Manager - EffectId is not loaded:(%s)",
+            "AudioManager::playEffect - EffectId is not loaded:(%s)",
             effectId.c_str());
     });
 
@@ -138,7 +138,9 @@ void AudioManager::playEffect(const std::string &effectId, bool loop /* = false 
     m_effectsMap[effectId].second = id;
 
     //Log
-    MF_LOG("AudioManager - Playing Effect:(%s) - EngineId:(%d)", effectId.c_str(), id);
+    MF_LOG("AudioManager::playEffect - Playing Effect:(%s) - EngineId:(%d)",
+        effectId.c_str(),
+        id);
 }
 void AudioManager::pauseEffect(const std::string &effectId)
 {
@@ -148,7 +150,7 @@ void AudioManager::pauseEffect(const std::string &effectId)
     //In Debug mode check if file exists...
     MF_ONLY_IN_DEBUG({
         MF_ASSERT((it != m_effectsMap.end()),
-             "Audio Manager - EffectId is not loaded:(%s)",
+             "AudioManager::pauseEffect - EffectId is not loaded:(%s)",
              effectId.c_str());
     });
 
@@ -166,7 +168,7 @@ void AudioManager::resumeEffect(const std::string &effectId)
     //In Debug mode check if file exists...
     MF_ONLY_IN_DEBUG({
         MF_ASSERT((it != m_effectsMap.end()),
-            "Audio Manager - EffectId is not loaded:(%s)",
+            "AudioManager::resumeEffect - EffectId is not loaded:(%s)",
             effectId.c_str());
     });
 
@@ -184,7 +186,7 @@ void AudioManager::stopEffect(const std::string &effectId)
     //In Debug mode check if file exists...
     MF_ONLY_IN_DEBUG({
         MF_ASSERT((it != m_effectsMap.end()),
-            "Audio Manager - EffectId is not loaded:(%s)",
+            "AudioManager::stopEffect - EffectId is not loaded:(%s)",
             effectId.c_str());
     });
 
