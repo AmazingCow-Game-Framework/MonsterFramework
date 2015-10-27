@@ -91,9 +91,6 @@ public:
     float getEffectsVolume();
     void setEffectsVolume(float volume);
 
-    // Private Methods //
-private:
-
     // iVars //
 private:
     cd::SimpleAudioEngine *m_pAudioEngine;
