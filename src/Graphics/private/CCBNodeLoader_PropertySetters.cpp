@@ -164,7 +164,7 @@ void mf::_set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value)
 }
 void mf::_set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
-    //Implement MFToggle support.
+    //COWTODO: Implement MFToggle support.
     
     //There's no information to set the sprite, this is due
     //the CocosBuild set the disabledSpriteFrame in plist even
