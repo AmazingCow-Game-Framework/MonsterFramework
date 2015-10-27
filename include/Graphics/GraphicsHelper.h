@@ -65,6 +65,7 @@ public:
     static void setPositionToCenter(cc::Node *pNode,
                                     cc::Node *pParentNode);
 
+    //COWTOOD: do something about this.
     typedef void PlatformImage;
     static PlatformImage* spriteToPlatformImage(cc::Sprite *pSprite);
 };
