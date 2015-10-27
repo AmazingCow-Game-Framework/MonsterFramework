@@ -50,6 +50,7 @@
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
 NS_MF_BEGIN
+
 class BasicStorage
 {
     // CTOR/DTOR //

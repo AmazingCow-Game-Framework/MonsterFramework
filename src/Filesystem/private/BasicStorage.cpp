@@ -57,6 +57,7 @@ USING_NS_STD_CC_CD_MF;
 
 #define kQuery_CreateTables "CREATE TABLE IF NOT EXISTS %s( %s VARCHAR(100) PRIMARY KEY, %s VARCHAR(100) );"
 
+
 // CTOR/DTOR //
 BasicStorage::BasicStorage(const std::string &storagePath) :
     m_storagePath(storagePath),
