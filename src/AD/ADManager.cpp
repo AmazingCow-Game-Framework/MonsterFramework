@@ -50,7 +50,7 @@
 USING_NS_STD_CC_CD_MF
 
 // Enums/Constants/Typedefs //
-const std::string ADManager::kADBasedKey = "N2OBoyz_MF_AdBasedKey";
+const std::string ADManager::kADBasedKey = "AMAZINGCOW_MF_AD_BASED_KEY";
 
 // Private CTOR/DTOR //
 ADManager::ADManager() :
