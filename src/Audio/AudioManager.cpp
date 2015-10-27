@@ -80,6 +80,7 @@ void AudioManager::muteAll(bool mute)
         //Restore the previous volumes.
         setEffectsVolume(m_prevFxVol);
     }
+
     MF_LOG("AudioManager - Audio is now %s", mute ? "Off" : "On");
 }
 bool AudioManager::isMuted()
@@ -90,6 +91,7 @@ bool AudioManager::isMuted()
 //Effects
 void AudioManager::loadEffect(const std::string &effectId, const std::string &path)
 {
+    //COWTODO: Create and encapsulate the following code in something like MF_ONLY_IN_DEBUG({...});
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
     auto fileExists = FileUtils::getInstance()->isFileExist(path.c_str());
@@ -104,6 +106,7 @@ void AudioManager::loadEffect(const std::string &effectId, const std::string &pa
 }
 void AudioManager::unloadEffect(const std::string &effectId)
 {
+    //COWTODO: Create and encapsulate the following code in something like MF_ONLY_IN_DEBUG({...});
     //Check if effectId is valid.
     auto it = m_effectsMap.find(effectId);
     MF_ASSERT((it != end(m_effectsMap)), "Audio Manager - Invalid EffectId %s", effectId.c_str());
@@ -113,10 +116,12 @@ void AudioManager::unloadEffect(const std::string &effectId)
     m_effectsMap.erase(effectId);
 }
 
-void AudioManager::playEffect(const std::string &effectId, bool loop)
+void AudioManager::playEffect(const std::string &effectId, bool loop /* = false */)
 {
     //Get the iterator for effectId.
     auto it = m_effectsMap.find(effectId);
+
+    //COWTODO: Create and encapsulate the following code in something like MF_ONLY_IN_DEBUG({...});
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
     MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
@@ -133,6 +138,8 @@ void AudioManager::pauseEffect(const std::string &effectId)
 {
     //Get the iterator for effectId.
     auto it = m_effectsMap.find(effectId);
+
+    //COWTODO: Create and encapsulate the following code in something like MF_ONLY_IN_DEBUG({...});
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
     MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
@@ -148,6 +155,8 @@ void AudioManager::resumeEffect(const std::string &effectId)
 {
     //Get the iterator for effectId.
     auto it = m_effectsMap.find(effectId);
+
+    //COWTODO: Create and encapsulate the following code in something like MF_ONLY_IN_DEBUG({...});
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
     MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
@@ -163,6 +172,8 @@ void AudioManager::stopEffect(const std::string &effectId)
 {
     //Get the iterator for effectId.
     auto it = m_effectsMap.find(effectId);
+
+    //COWTODO: Create and encapsulate the following code in something like MF_ONLY_IN_DEBUG({...});
 #if MONSTERFRAMEWORK_DEBUG
     //In Debug mode check if file exists...
     MF_ASSERT((it != m_effectsMap.end()), "Audio Manager - EffectId is not loaded:(%s)", effectId.c_str());
