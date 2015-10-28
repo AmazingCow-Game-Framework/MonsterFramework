@@ -53,11 +53,18 @@ class GraphicsHelper
 public:
     static void setAnchorToCenter(cc::Node *pNode);
 
+    
+    // Position Methods //
+    //Getters.
     static cc::Point getAbsolutePosition(float px, float py,
                                          cc::Node *pParentNode);
 
     static cc::Point getAbsolutePositionCenter(cc::Node *pParentNode);
 
+    static float getAbsolutePositionX(float px, cc::Node *pParentNode);
+    static float getAbsolutePositionY(float py, cc::Node *pParentNode);
+    
+    //Setters.
     static void setRelativePosition(float px, float py,
                                     cc::Node *pNode,
                                     cc::Node *pParentNode);

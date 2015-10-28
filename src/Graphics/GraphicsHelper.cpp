@@ -52,17 +52,30 @@ void GraphicsHelper::setAnchorToCenter(cc::Node *pNode)
     pNode->setAnchorPoint(cc::Point(0.5, 0.5));
 }
 
+// Position Methods //
+//Getters.
 cc::Point GraphicsHelper::getAbsolutePosition(float px, float py,
                                               cc::Node *pParentNode)
 {
-    auto size = pParentNode->getContentSize();
-    return cc::Point((size.width * (px/100.0f)), size.height * (py/100.0f));
+    //COWTODO: this should call the methods or perform the operation by itself.
+    //COWTODO: now the pParentNode::getContentSize is being called twice.
+    return cc::Point(getAbsolutePositionX(px, pParentNode),
+                     getAbsolutePositionY(py, pParentNode));
 }
 cc::Point GraphicsHelper::getAbsolutePositionCenter(cc::Node *pParentNode)
 {
     return getAbsolutePosition(50, 50, pParentNode);
 }
+float GraphicsHelper::getAbsolutePositionX(float px, cc::Node *pParentNode)
+{
+    return (pParentNode->getContentSize().width * (px/100.0f));
+}
+float GraphicsHelper::getAbsolutePositionY(float py, cc::Node *pParentNode)
+{
+    return (pParentNode->getContentSize().height * (py/100.0f));
+}
 
+//Setters.
 void GraphicsHelper::setRelativePosition(float px, float py,
                                          cc::Node *pNode,
                                          cc::Node *pParentNode)
