@@ -187,11 +187,21 @@ void mf::_set_block(cc::Node *obj, const cc::Value &value,
 // Font //
 void mf::_set_fontName(cc::Node *obj, const cc::Value &value)
 {
-    static_cast<cc::Label *>(obj)->setSystemFontName(value.asString());
+    //COWTODO: THIS IS A VERY VERY UGLY HACK.
+    auto label = static_cast<cc::Label *>(obj);
+    TTFConfig config = label->getTTFConfig();
+    config.fontFilePath = value.asString();
+
+    label->setTTFConfig(config);
 }
 void mf::_set_fontSize(cc::Node *obj, const cc::Value &value)
 {
-    static_cast<cc::Label *>(obj)->setSystemFontSize(_decodeAsFontScale(value));
+    //COWTODO: THIS IS A VERY VERY UGLY HACK.
+    auto label = static_cast<cc::Label *>(obj);
+    TTFConfig config = label->getTTFConfig();
+    config.fontSize = _decodeAsFontScale(value);
+
+    label->setTTFConfig(config);
 }
 void mf::_set_string(cc::Node *obj, const cc::Value &value)
 {
