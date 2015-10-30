@@ -144,7 +144,7 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
 
     //Just print a new line.
     #define MF_LOG_NL() do { \
-        mf::__not_to_direct_use_mf_log("","") \
+        mf::__not_to_direct_use_mf_log("","");  \
     } while(0)
 
     //Log a message with a GREAT warning prefix.
@@ -176,6 +176,10 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
     //Point
     #define MF_LOG_POINT(_str_, _point_) \
         MF_LOG("Point (%s): x: %.2f y: %.2f", (_str_), (_point_).x, (_point_).y)
+    //Size
+    #define MF_LOG_SIZE(_str_, _size_) \
+        MF_LOG("Size (%s): w: %.2f h: %.2f", (_str_), (_size_).width, (_size_).height)
+
     //Rect
     #define MF_LOG_RECT(_str_, _rect_)                                    \
         MF_LOG("Rect (%s): (%.2f,%.2f)(%.2f,%.2f)", (_str_),              \
@@ -199,6 +203,7 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
     #define MF_LOG_ERROR(  _format_, ...     ) do {} while(0)
     #define MF_ASSERT(     _cond_, _msg_, ...) do {} while(0)
     #define MF_LOG_POINT(  _str_, _point_    ) do {} while(0)
+    #define MF_LOG_SIZE(   _str_, _size_     ) do {} while(0)
     #define MF_LOG_RECT(   _str_, _rect_     ) do {} while(0)
 
     // OTHER MACROS //
