@@ -52,7 +52,6 @@ class GraphicsHelper
     // Public Static Methods //
 public:
     static void setAnchorToCenter(cc::Node *pNode);
-
     
     // Position Methods //
     //Getters.
