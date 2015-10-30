@@ -47,6 +47,23 @@
 
 USING_NS_STD_CC_CD_MF
 
+// Private Helper Functions //
+//THE FOLLWING FUNCTIONS ARE ONLY HELPERS FOR THE PROPERTY SETTERS
+//THE SHOULD NOT BE EXPOSED TO OUSIDE, SO THEM ARE DECLARED HERE
+//AND DEFINED AT BOTTOM OF THIS SOURCE FILE.
+//THE PURPOSE OF THEM IS TO HANDLE OF SOME NASTY THING ABOUT LOADING
+//THE CCB...
+
+void _private_helper_setNormalSpriteFrameForMFToggle  (cc::Node *node, const cc::Value &value);
+void _private_helper_setPressedSpriteFrameForMFToggle (cc::Node *node, const cc::Value &value);
+void _private_helper_setDisabledSpriteFrameForMFToggle(cc::Node *node, const cc::Value &value);
+void _private_helper_setSpriteFrameForToggle          (cc::Node *node, const cc::Value &value,
+                                                       int index, bool setSelected);
+
+// Public Helper Functions //
+//THIS IS THE IMPLEMENTATION OF FUNCTIONS DEFINED
+//AT CCBNodeLoader_PropertySetters.h"
+
 // Anchor Point //
 void mf::_set_anchorPoint(cc::Node *obj, const cc::Value &value)
 {
@@ -114,20 +131,12 @@ void mf::_set_displayFrame(cc::Node *obj, const cc::Value &value)
 // Button //
 void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
-    //COWTODO: Refactor and comment.
+    //Check if button is a toggle or not.
+    //If is a toogle calls the specialized function to set its sprite frame.
+    //This is needed because toogle uses a different aproach to set the frames.
     if(typeid(*obj) == typeid(cc::MenuItemToggle))
     {
-        auto toggle = static_cast<cc::MenuItemToggle *>(obj);
-        
-        cc::Sprite *sprite1 = cc::Sprite::create();
-        cc::Sprite *sprite2 = cc::Sprite::create();
-        
-        mf::_set_displayFrame(sprite1,  value);
-        mf::_set_displayFrame(sprite2, value);
-        
-        auto menuItem = cc::MenuItemSprite::create(sprite1, sprite2);
-        toggle->addSubItem(menuItem);
-        toggle->setSelectedIndex(0);
+        _private_helper_setNormalSpriteFrameForMFToggle(obj, value);
     }
     else
     {
@@ -139,43 +148,42 @@ void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
 }
 void mf::_set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
-    //COWTODO: Refactor and comment.
+    //Check if button is a toggle or not.
+    //If is a toogle calls the specialized function to set its sprite frame.
+    //This is needed because toogle uses a different aproach to set the frames.
     if(typeid(*obj) == typeid(cc::MenuItemToggle))
     {
-        auto toggle = static_cast<cc::MenuItemToggle *>(obj);
-        
-        cc::Sprite *sprite1 = cc::Sprite::create();
-        cc::Sprite *sprite2 = cc::Sprite::create();
-        
-        mf::_set_displayFrame(sprite1,  value);
-        mf::_set_displayFrame(sprite2, value);
-        
-        auto menuItem = cc::MenuItemSprite::create(sprite1, sprite2);
-        
-        toggle->addSubItem(menuItem);
+        _private_helper_setPressedSpriteFrameForMFToggle(obj, value);
     }
     else
     {
         cc::Sprite *sprite = cc::Sprite::create();
         mf::_set_displayFrame(sprite, value);
-        
+
         static_cast<cc::MenuItemSprite *>(obj)->setSelectedImage(sprite);
     }
 }
 void mf::_set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
-    //COWTODO: Implement MFToggle support.
-    
     //There's no information to set the sprite, this is due
     //the CocosBuild set the disabledSpriteFrame in plist even
     //if the user doesn't set any of them...
     if(_decodeAsSpriteFrame(value) == "")
         return;
-    
-    cc::Sprite *sprite = cc::Sprite::create();
-    mf::_set_displayFrame(sprite, value);
 
-    static_cast<cc::MenuItemSprite *>(obj)->setDisabledImage(sprite);
+    //Check if button is a toggle or not.
+    //If is a toogle calls the specialized function to set its sprite frame.
+    //This is needed because toogle uses a different aproach to set the frames.
+    if(typeid(*obj) == typeid(cc::MenuItemToggle))
+    {
+        _private_helper_setDisabledSpriteFrameForMFToggle(obj, value);
+    }
+    else
+    {
+        cc::Sprite *sprite = cc::Sprite::create();
+        mf::_set_displayFrame(sprite, value);
+        static_cast<cc::MenuItemSprite *>(obj)->setDisabledImage(sprite);
+    }
 }
 void mf::_set_block(cc::Node *obj, const cc::Value &value,
                     ILoadResolver *pResolver)
@@ -206,4 +214,42 @@ void mf::_set_fontSize(cc::Node *obj, const cc::Value &value)
 void mf::_set_string(cc::Node *obj, const cc::Value &value)
 {
     static_cast<cc::Label *>(obj)->setString(_decodeAsString(value));
+}
+
+
+
+// Private Helper Functions (Implementation) //
+//Check the comments at the top of this file to understand those functions...
+void _private_helper_setNormalSpriteFrameForMFToggle(cc::Node *node, const cc::Value &value)
+{
+    _private_helper_setSpriteFrameForToggle(node, value, 0, true);
+}
+
+void _private_helper_setPressedSpriteFrameForMFToggle(cc::Node *node, const cc::Value &value)
+{
+     _private_helper_setSpriteFrameForToggle(node, value, 1, false);
+}
+void _private_helper_setDisabledSpriteFrameForMFToggle(cc::Node *node, const cc::Value &value)
+{
+    _private_helper_setSpriteFrameForToggle(node, value, 3, false);
+}
+
+void _private_helper_setSpriteFrameForToggle(cc::Node *node, const cc::Value &value,
+                                             int index, bool setSelected)
+{
+    auto toggle = static_cast<cc::MenuItemToggle *>(node);
+    
+    cc::Sprite *sprite1 = cc::Sprite::create();
+    cc::Sprite *sprite2 = cc::Sprite::create();
+    
+    mf::_set_displayFrame(sprite1,  value);
+    mf::_set_displayFrame(sprite2,  value);
+    
+    auto menuItem = cc::MenuItemSprite::create(sprite1, sprite2);
+
+    auto &menuItems = toggle->getSubItems();
+    menuItems.insert(index, menuItem);
+    
+    if(setSelected)
+        toggle->setSelectedIndex(index);
 }
