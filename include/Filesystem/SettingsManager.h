@@ -43,8 +43,8 @@
 #define __MonsterFramework_include_Filesystem_SettingsManager_h__
 
 //std
-#include <string>
 #include <sstream>
+#include <string>
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 

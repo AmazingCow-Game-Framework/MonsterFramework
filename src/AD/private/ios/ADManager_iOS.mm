@@ -47,8 +47,8 @@
 #import <UIKit/UIKit.h>
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
-#include "MonsterFramework/src/Utils/private/Private_Utils.h"
 #include "MonsterFramework/src/AD/private/ADManager_Functions.h"
+#include "MonsterFramework/src/Utils/private/Private_Utils.h"
 //Usings
 USING_NS_STD_CC_CD_MF
 

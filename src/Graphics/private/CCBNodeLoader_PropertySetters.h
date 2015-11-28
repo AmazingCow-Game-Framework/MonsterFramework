@@ -43,8 +43,8 @@
 #define __MonsterFramework_src_Graphics_private_CCBNodeLoader_PropertySetters_h__
 
 //MonsterFramework
-#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 #include "MonsterFramework/include/Graphics/ILoadResolver.h"
+#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
 NS_MF_BEGIN
 

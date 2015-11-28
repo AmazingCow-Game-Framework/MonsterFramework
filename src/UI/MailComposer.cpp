@@ -41,7 +41,7 @@
 
 //Header
 #include "MonsterFramework/include/UI/MailComposer.h"
-//MonsterFramewrok
+//MonsterFramework
 #include "./private/MailComposer_Functions.h"
 
 //Usings
