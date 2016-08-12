@@ -1,18 +1,17 @@
-//----------------------------------------------------------------------------//
-//                 █      █                                                   //
-//                 ████████                                                   //
-//               ██        ██                                                 //
-//              ███  █  █  ███    BasicStorage.h                              //
-//              █ █        █ █    MonsterFramework                            //
-//               ████████████                                                 //
-//             █              █   Copyright (c) 2015 AmazingCow               //
-//            █     █    █     █  www.AmazingCow.com                          //
-//            █     █    █     █                                              //
-//             █              █   N2OMatt - n2omatt@amazingcow.com            //
-//               ████████████     www.amazingcow.com/n2omatt                  //
+﻿//----------------------------------------------------------------------------//
+//               █      █                                                     //
+//               ████████                                                     //
+//             ██        ██                                                   //
+//            ███  █  █  ███        BasicStorage.h                            //
+//            █ █        █ █        MonsterFramework                          //
+//             ████████████                                                   //
+//           █              █       Copyright (c) 2015, 2016                  //
+//          █     █    █     █      AmazingCow - www.AmazingCow.com           //
+//          █     █    █     █                                                //
+//           █              █       N2OMatt - n2omatt@amazingcow.com          //
+//             ████████████         www.amazingcow.com/n2omatt                //
 //                                                                            //
-//                                                                            //
-//                  This software is licensed as BSD-3                        //
+//                  This software is licensed as GPLv3                        //
 //                 CHECK THE COPYING FILE TO MORE DETAILS                     //
 //                                                                            //
 //    Permission is granted to anyone to use this software for any purpose,   //
@@ -27,9 +26,9 @@
 //        (See opensource.AmazingCow.com/acknowledgment.html for details).    //
 //        If you will not acknowledge, just send us a email. We'll be         //
 //        *VERY* happy to see our work being used by other people. :)         //
-//        The email is: acknowledgmentopensource@AmazingCow.com               //
+//        The email is: acknowledgment_opensource@AmazingCow.com              //
 //     3. Altered source versions must be plainly marked as such,             //
-//        and must notbe misrepresented as being the original software.       //
+//        and must not be misrepresented as being the original software.      //
 //     4. This notice may not be removed or altered from any source           //
 //        distribution.                                                       //
 //     5. Most important, you must have fun. ;)                               //
@@ -45,7 +44,7 @@
 //std
 #include <string>
 //sqlite3
-#include <sqlite3.h>
+#include "sqlite3.h"
 //MonsterFramework.
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
@@ -57,15 +56,15 @@ class BasicStorage
 public:
     BasicStorage(const std::string &storagePath);
     ~BasicStorage();
-    
+
     // Public Methods //
 public:
     //Set.
     void setItem(const std::string &key, const std::string &item);
-    
+
     //Get.
     std::string getItem(const std::string &key, bool *pExists);
-    
+
     //Remove.
     void removeItem(const std::string &key);
     void removeAllItems();
@@ -76,30 +75,30 @@ private:
     void createDatabase();
     void openDatabase  ();
     void closeDatabase ();
-    
+
     //Prepare.
     void prepareStatement(const std::string &sql);
- 
+
     void prepareStatement(const std::string &sql,
                           const std::string &key);
-    
+
     void prepareStatement(const std::string &sql,
                           const std::string &key,
                           const std::string &value);
-    
+
     //Bind Text.
     void bindStatementText(const std::string &txt, int index);
-    
+
     //Execute / Finalize.
     void executeStatement ();
     void finalizeStatement();
-    
+
     std::string getSQLError();
-    
+
     // iVars //
 private:
     std::string  m_storagePath;
-
+//    COWTODO:
     sqlite3      *m_pDB;
     sqlite3_stmt *m_pStmt;
 };
