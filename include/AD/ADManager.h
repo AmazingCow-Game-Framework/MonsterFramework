@@ -1,18 +1,17 @@
-//----------------------------------------------------------------------------//
-//                 █      █                                                   //
-//                 ████████                                                   //
-//               ██        ██                                                 //
-//              ███  █  █  ███    ADManager.h                                 //
-//              █ █        █ █    MonsterFramework                            //
-//               ████████████                                                 //
-//             █              █   Copyright (c) 2015 AmazingCow               //
-//            █     █    █     █  www.AmazingCow.com                          //
-//            █     █    █     █                                              //
-//             █              █   N2OMatt - n2omatt@amazingcow.com            //
-//               ████████████     www.amazingcow.com/n2omatt                  //
+﻿//----------------------------------------------------------------------------//
+//               █      █                                                     //
+//               ████████                                                     //
+//             ██        ██                                                   //
+//            ███  █  █  ███        ADManager.h                               //
+//            █ █        █ █        MonsterFramework                          //
+//             ████████████                                                   //
+//           █              █       Copyright (c) 2015, 2016                  //
+//          █     █    █     █      AmazingCow - www.AmazingCow.com           //
+//          █     █    █     █                                                //
+//           █              █       N2OMatt - n2omatt@amazingcow.com          //
+//             ████████████         www.amazingcow.com/n2omatt                //
 //                                                                            //
-//                                                                            //
-//                  This software is licensed as BSD-3                        //
+//                  This software is licensed as GPLv3                        //
 //                 CHECK THE COPYING FILE TO MORE DETAILS                     //
 //                                                                            //
 //    Permission is granted to anyone to use this software for any purpose,   //
@@ -27,9 +26,9 @@
 //        (See opensource.AmazingCow.com/acknowledgment.html for details).    //
 //        If you will not acknowledge, just send us a email. We'll be         //
 //        *VERY* happy to see our work being used by other people. :)         //
-//        The email is: acknowledgmentopensource@AmazingCow.com               //
+//        The email is: acknowledgment_opensource@AmazingCow.com              //
 //     3. Altered source versions must be plainly marked as such,             //
-//        and must notbe misrepresented as being the original software.       //
+//        and must not be misrepresented as being the original software.      //
 //     4. This notice may not be removed or altered from any source           //
 //        distribution.                                                       //
 //     5. Most important, you must have fun. ;)                               //
@@ -51,51 +50,18 @@ NS_MF_BEGIN
 
 class ADManager
 {
-    // Inner Types //
-public:
-    //COWTODO: Add descriptive comments.
-    struct AdOptions
-    {
-        // Enums/Constants/Typedefs //
-        enum class AdType { Banner, Interstitial };
-
-        // Public Vars //
-        std::string Key;
-        AdType      Type;
-    };
-
-    // Enums/Constants/Typedefs //
-public:
-    static const std::string kADBasedKey;
-
     // Singleton //
 public:
     SINGLETON_OF(ADManager);
-
-    // Private CTOR/DTOR //
 private:
      ADManager();
     ~ADManager();
 
+
     // Public Methods //
 public:
-    void setGameIsAdBased(bool adBased);
-    bool getGameIsAdBased() const;
-
-    bool showAd(const AdOptions &options);
-    bool hideAd(const AdOptions &options);
-
-    bool addAd   (const AdOptions &options);
-    bool removeAd(const AdOptions &options);
-
-    // Private Methods //
-private:
-    void saveSettings();
-    void loadSettings();
-
-    // iVars //
-private:
-    bool m_adBased;
+    void showAd();
+    void hideAd();
 };
 
 NS_MF_END
