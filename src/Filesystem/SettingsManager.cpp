@@ -1,18 +1,17 @@
-//----------------------------------------------------------------------------//
-//                 █      █                                                   //
-//                 ████████                                                   //
-//               ██        ██                                                 //
-//              ███  █  █  ███    SettingsManager.cpp                         //
-//              █ █        █ █    MonsterFramework                            //
-//               ████████████                                                 //
-//             █              █   Copyright (c) 2015 AmazingCow               //
-//            █     █    █     █  www.AmazingCow.com                          //
-//            █     █    █     █                                              //
-//             █              █   N2OMatt - n2omatt@amazingcow.com            //
-//               ████████████     www.amazingcow.com/n2omatt                  //
+﻿//----------------------------------------------------------------------------//
+//               █      █                                                     //
+//               ████████                                                     //
+//             ██        ██                                                   //
+//            ███  █  █  ███        SettingsManager.cpp                       //
+//            █ █        █ █        MonsterFramework                          //
+//             ████████████                                                   //
+//           █              █       Copyright (c) 2015, 2016                  //
+//          █     █    █     █      AmazingCow - www.AmazingCow.com           //
+//          █     █    █     █                                                //
+//           █              █       N2OMatt - n2omatt@amazingcow.com          //
+//             ████████████         www.amazingcow.com/n2omatt                //
 //                                                                            //
-//                                                                            //
-//                  This software is licensed as BSD-3                        //
+//                  This software is licensed as GPLv3                        //
 //                 CHECK THE COPYING FILE TO MORE DETAILS                     //
 //                                                                            //
 //    Permission is granted to anyone to use this software for any purpose,   //
@@ -27,9 +26,9 @@
 //        (See opensource.AmazingCow.com/acknowledgment.html for details).    //
 //        If you will not acknowledge, just send us a email. We'll be         //
 //        *VERY* happy to see our work being used by other people. :)         //
-//        The email is: acknowledgmentopensource@AmazingCow.com               //
+//        The email is: acknowledgment_opensource@AmazingCow.com              //
 //     3. Altered source versions must be plainly marked as such,             //
-//        and must notbe misrepresented as being the original software.       //
+//        and must not be misrepresented as being the original software.      //
 //     4. This notice may not be removed or altered from any source           //
 //        distribution.                                                       //
 //     5. Most important, you must have fun. ;)                               //
@@ -47,46 +46,62 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
+
+////////////////////////////////////////////////////////////////////////////////
+// Constants                                                                  //
+////////////////////////////////////////////////////////////////////////////////
 const std::string SettingsManager::kSettingsManagerDatabaseName = "MONSTERFRAMEWORK_SETTINGSMANAGER_DB.db";
 
-// Private CTOR/DTOR //
+
+////////////////////////////////////////////////////////////////////////////////
+// Private CTOR / DTOR                                                        //
+////////////////////////////////////////////////////////////////////////////////
 SettingsManager::SettingsManager()
 {
     //Get the path for the storage.
-    m_path = FileUtils::getInstance()->getWritablePath();
+    m_path  = FileUtils::getInstance()->getWritablePath();
     m_path += SettingsManager::kSettingsManagerDatabaseName;
-    
+
     //Initialize the unique_ptr.
-    //BasicStorage implements RAII.
+    // BasicStorage implements RAII.
     m_pStorage.reset(new BasicStorage(m_path));
 }
+
 SettingsManager::~SettingsManager()
 {
     //Empty..
 }
 
-// Public Methods //
+
+////////////////////////////////////////////////////////////////////////////////
+// Public Methods                                                             //
+////////////////////////////////////////////////////////////////////////////////
 //Remove
 void SettingsManager::removeItem(const std::string &key)
 {
     m_pStorage->removeItem(key);
 }
+
 void SettingsManager::removeAllItems()
 {
     m_pStorage->removeAllItems();
 }
+
 //Other
 const string& SettingsManager::getStoragePath()
 {
     return m_path;
 }
 
-// Private Methods //
+////////////////////////////////////////////////////////////////////////////////
+// Private Methods                                                            //
+////////////////////////////////////////////////////////////////////////////////
 std::string SettingsManager::_getValueForKey(const std::string &key,
                                              bool *pExists)
 {
     return m_pStorage->getItem(key, pExists);;
 }
+
 void SettingsManager::_setValueForKey(const std::string &key,
                                       const std::string &value)
 {
