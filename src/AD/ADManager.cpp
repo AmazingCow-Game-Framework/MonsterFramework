@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -49,55 +49,56 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
-// Enums/Constants/Typedefs //
-const std::string ADManager::kADBasedKey = "AMAZINGCOW_MF_AD_BASED_KEY";
-
-// Private CTOR/DTOR //
-ADManager::ADManager() :
-    m_adBased(false)
+////////////////////////////////////////////////////////////////////////////////
+// Singleton                                                                  //
+////////////////////////////////////////////////////////////////////////////////
+ADManager::ADManager()
 {
-    //Load from filesystem if the game is
-    //adbased or not.
-    loadSettings();
 }
+
 ADManager::~ADManager()
-{}
+{
 
-// Public Methods //
-void ADManager::setGameIsAdBased(bool adBased)
-{
-    m_adBased = adBased;
-    saveSettings();
-}
-bool ADManager::getGameIsAdBased() const
-{
-    return m_adBased;
 }
 
-bool ADManager::showAd(const AdOptions &options)
+
+////////////////////////////////////////////////////////////////////////////////
+// Singleton                                                                  //
+////////////////////////////////////////////////////////////////////////////////
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "platform/android/jni/JniHelper.h"
+
+const char* NativeActivityClassName = "org/cocos2dx/cpp/AppActivity";
+
+void ADManager::showAd()
 {
-    return ADManager_ShowAd(options);
+    cc::JniMethodInfo methodInfo;
+    if(cc::JniHelper::getStaticMethodInfo(
+           methodInfo,
+           NativeActivityClassName,
+           "showAd",
+           "()V")
+    ){
+        methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID);
+        methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    }
 }
-bool ADManager::hideAd(const AdOptions &options)
+void ADManager::hideAd()
 {
-    return ADManager_HideAd(options);
+    //    COWTODO:
+//    return ADManager_HideAd(options);
 }
 
-bool ADManager::addAd(const AdOptions &options)
+#else
+void ADManager::showAd()
 {
-    return ADManager_AddAd(options);
+    //    COWTODO:
+//    return ADManager_ShowAd(options);
 }
-bool ADManager::removeAd(const AdOptions &options)
+void ADManager::hideAd()
 {
-    return ADManager_RemoveAd(options);
+    //    COWTODO:
+//    return ADManager_HideAd(options);
 }
+#endif
 
-// Private Methods //
-void ADManager::saveSettings()
-{
-    SettingsManager::instance()->setValueForKey(ADManager::kADBasedKey, m_adBased);
-}
-void ADManager::loadSettings()
-{
-    m_adBased = SettingsManager::instance()->getValueForKey<bool>(ADManager::kADBasedKey);
-}

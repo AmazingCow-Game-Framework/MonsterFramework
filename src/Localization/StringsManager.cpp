@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -41,28 +41,166 @@
 
 //Header
 #include "MonsterFramework/include/Localization/StringsManager.h"
+//std
+#include <fstream>
+#include <sstream>
+#include <regex>
 //MonsterFramework
 
 //Usings
 USING_NS_STD_CC_CD_MF
 
-// Public Methods //
-void StringsManager::loadStringsFile(const std::string &filename)
+
+////////////////////////////////////////////////////////////////////////////////
+// Constatns                                                                  //
+////////////////////////////////////////////////////////////////////////////////
+constexpr int kBufferSize = 1024;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Public Methods                                                             //
+////////////////////////////////////////////////////////////////////////////////
+//Load / Purge
+void StringsManager::loadStrings(const std::string &filename,
+                                 const std::string &languageName)
 {
-    //COWTODO: Implement this method.
-    MF_ASSERT(false, "Not Implemented yet");
-}
-const std::string StringsManager::getString(const std::string &path)
-{
-    //COWTODO: Implement this method.
-    MF_ASSERT(false, "Not Implemented yet");
+    //Already Loaded.
+    if(m_languageMap.find(languageName) != std::end(m_languageMap))
+    {
+        MF_LOG(
+            "StringsManager::loadStrings - Already loaded strings file for language %s",
+            languageName.c_str()
+        );
+        return;
+    }
+
+    auto fullname = cc::FileUtils::getInstance()->fullPathForFilename(filename);
+
+    MF_ASSERT(
+        !fullname.empty(),
+        "StringsManager::loadStrings - Cannot find file: %s",
+        filename.c_str()
+    );
+
+    parseStringsFile(fullname, languageName);
 }
 
-// Private Methods //
-string StringsManager::getLocalizedFilename(const std::string &filename)
+void StringsManager::purgeStrings(const std::string &languageName)
 {
-    //COWTODO: Implement this method.
-    MF_ASSERT(false, "Not Implemented yet");
+    //Already Purged or Not loaded.
+    if(m_languageMap.find(languageName) != std::end(m_languageMap))
+    {
+        MF_LOG(
+            "StringsManager::purgeStrings - Already purged (or not loaded) strings file for language %s",
+            languageName.c_str()
+        );
+        return;
+    }
 
-    return "";
+    m_languageMap.erase(languageName);
+}
+
+
+//Get String
+std::string StringsManager::getString(const char *string, ...) const
+{
+    auto it = m_pCurrStringsMap->find(string);
+    MF_ASSERT(
+        it != std::end(*m_pCurrStringsMap),
+        "StringsManager::getString - Cannot find string (%s) for language (%s)",
+        string,
+        getCurrentLanguageName().c_str()
+    );
+
+
+    char buffer[kBufferSize] = {'\0'};
+    auto localizedStr        = (*it).second;
+
+    //Build the buffer with the variadic args list
+    va_list ap;
+
+    va_start(ap, string);
+        vsnprintf(buffer, kBufferSize, localizedStr.c_str(), ap);
+    va_end(ap);
+
+    return buffer;
+}
+
+
+//Language Map
+const std::string& StringsManager::getCurrentLanguageName() const
+{
+    return m_currLanguageName;
+}
+
+void StringsManager::setCurrentLanguageName(const std::string &languageName)
+{
+    //Already Loaded.
+    MF_ASSERT(
+       m_languageMap.find(languageName) != std::end(m_languageMap),
+       "StringsManager::setCurrentLanguageName - Strings for language (%s) isn't loaded",
+       languageName.c_str()
+    );
+
+    m_pCurrStringsMap  = &m_languageMap[languageName];
+    m_currLanguageName = languageName;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Private Methods                                                            //
+////////////////////////////////////////////////////////////////////////////////
+void StringsManager::parseStringsFile(const std::string &fullname,
+                                      const std::string &languageName)
+{
+
+    //Check if we already have this language.
+    MF_ASSERT(
+        m_languageMap.find(languageName) == std::end(m_languageMap),
+        "StringsManager::parseStrings - Already loaded language (%s)",
+        languageName.c_str()
+    );
+
+    //COWTODO: MonsterFramework should provide a FileRead / Write class.
+    //COWTODO: This code is problematic and very ugly.
+
+    //This is needed because android cannot use c++ streams.
+    ssize_t size;
+    unsigned char* pData = cc::FileUtils::getInstance()->getFileData(
+        fullname.c_str(),
+        "r",
+        &size
+    );
+
+    MF_ASSERT(
+        pData != nullptr,
+        "StringsManager::parseStringsFile - Cannot open file: %s",
+        fullname.c_str()
+    );
+
+    std::stringstream instream;
+    instream << pData;
+
+    free(pData); //MUST FREE.
+
+    //Read the file.
+    std::regex  regex("\"(.*?)\".*?=.*?\"(.*?)\"");
+    std::smatch match;
+
+
+    //COWTODO: Check this code...
+    while(!instream.eof())
+    {
+        std::string line;
+        std::getline(instream, line);
+
+        if(!std::regex_search(line, match, regex))
+            continue;
+
+        auto full = match[0].str();
+        auto key  = match[1].str();
+        auto val  = match[2].str();
+
+        m_languageMap[languageName][key] = val;
+    }
 }

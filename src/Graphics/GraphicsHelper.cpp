@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -45,36 +45,93 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
-// Public Static Methods //
+////////////////////////////////////////////////////////////////////////////////
+// Anchor                                                                     //
+////////////////////////////////////////////////////////////////////////////////
+void GraphicsHelper::setAnchorToTop(cc::Node *pNode)
+{
+    pNode->ignoreAnchorPointForPosition(false);
+    pNode->setAnchorPoint(cc::Point(0.5, 1));
+}
+
 void GraphicsHelper::setAnchorToCenter(cc::Node *pNode)
 {
     pNode->ignoreAnchorPointForPosition(false);
     pNode->setAnchorPoint(cc::Point(0.5, 0.5));
 }
 
-// Position Methods //
-//Getters.
-cc::Point GraphicsHelper::getAbsolutePosition(float px, float py,
-                                              cc::Node *pParentNode)
-{
-    //COWTODO: this should call the methods or perform the operation by itself.
-    //COWTODO: now the pParentNode::getContentSize is being called twice.
-    return cc::Point(getAbsolutePositionX(px, pParentNode),
-                     getAbsolutePositionY(py, pParentNode));
-}
+
+////////////////////////////////////////////////////////////////////////////////
+// Get Absolute Position                                                      //
+////////////////////////////////////////////////////////////////////////////////
 cc::Point GraphicsHelper::getAbsolutePositionCenter(cc::Node *pParentNode)
 {
     return getAbsolutePosition(50, 50, pParentNode);
 }
-float GraphicsHelper::getAbsolutePositionX(float px, cc::Node *pParentNode)
+
+//Get Absolute Position
+cc::Point GraphicsHelper::getAbsolutePosition(float px, float py,
+                                              cc::Node *pParentNode)
 {
-    return (pParentNode->getContentSize().width * (px/100.0f));
-}
-float GraphicsHelper::getAbsolutePositionY(float py, cc::Node *pParentNode)
-{
-    return (pParentNode->getContentSize().height * (py/100.0f));
+    return getAbsolutePosition(px, py, pParentNode->getBoundingBox());
 }
 
+cc::Point GraphicsHelper::getAbsolutePosition(float px, float py,
+                                              cc::Size size)
+{
+    return cc::Point(
+                getAbsolutePositionX(px, size),
+                getAbsolutePositionY(py, size)
+           );
+}
+
+cc::Point GraphicsHelper::getAbsolutePosition(float px, float py,
+                                              cc::Rect rect)
+{
+    return cc::Point(
+                getAbsolutePositionX(px, rect),
+                getAbsolutePositionY(py, rect)
+           );
+}
+
+
+//Get Absolute Position X
+float GraphicsHelper::getAbsolutePositionX(float px, cc::Node *pParentNode)
+{
+    return getAbsolutePositionX(px, pParentNode->getContentSize());
+}
+
+float GraphicsHelper::getAbsolutePositionX(float px, cc::Size size)
+{
+    return (size.width * (px/100.0f));
+}
+
+float GraphicsHelper::getAbsolutePositionX(float px, cc::Rect rect)
+{
+    return getAbsolutePositionX(px, rect.size);
+}
+
+//Get Absolute Position Y
+float GraphicsHelper::getAbsolutePositionY(float py, cc::Node *pParentNode)
+{
+    return getAbsolutePositionY(py, pParentNode->getContentSize());
+}
+
+float GraphicsHelper::getAbsolutePositionY(float py, cc::Size size)
+{
+    return (size.height * (py/100.0f));
+}
+
+float GraphicsHelper::getAbsolutePositionY(float py, cc::Rect rect)
+{
+    return getAbsolutePositionY(py, rect.size);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                //
+////////////////////////////////////////////////////////////////////////////////
 //Setters.
 void GraphicsHelper::setRelativePosition(float px, float py,
                                          cc::Node *pNode,

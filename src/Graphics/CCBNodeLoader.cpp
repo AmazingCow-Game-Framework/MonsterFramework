@@ -211,16 +211,17 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
 {
     cc::Node *node = nullptr;
 
-    //Layer.
+    //Layer
     if(baseClass == kNodeName_CCLayer)
         node = cc::Layer::create();
 
     //LayerColor
-    //COWTODO: Bug?
-    //This is very strange. With we don't set a color here at craetion
-    //of the LayerColor, later the object will not set any color. So any color
-    //set in CCB won't be applied. I don't know why this behaviour is occurring
-    //but know works in this way.
+    //COWTODO: Bug? \
+    //  This is very strange. With we don't set a color here at craetion   \
+    //  of the LayerColor, later the object will not set any color.        \
+    //  So any color m_options.panelType == DialogPanel::PanelType::Pause  \
+    //  x is occurring  but know works in this way.
+    //
     else if(baseClass == kNodeName_CCLayerColor)
         node = cc::LayerColor::create(cc::Color4B::BLUE);
 
@@ -240,8 +241,12 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
     else if(baseClass == kNodeName_CCLabelTTF)
         node = cc::Label::create();
 
+    // //LabelBMP
+    // else if(baseClass == kNodeName_CCLabelBPM)
+    //     node = cc::
     return node;
 }
+
 cc::Node* CCBNodeLoader::resolveMFClasses(const std::string &customClass)
 {
     if(customClass == kMFNodeName_MFToggle)
@@ -249,6 +254,7 @@ cc::Node* CCBNodeLoader::resolveMFClasses(const std::string &customClass)
 
     return nullptr;
 }
+
 cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
                                               mf::ILoadResolver *pResolver,
                                               const cc::ValueVector &customProperties)
