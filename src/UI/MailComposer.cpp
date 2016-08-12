@@ -54,7 +54,8 @@ const string MailComposer::kMIME_PNG = "image/png";
 // Static Methods //
 bool MailComposer::canSendMail()
 {
-    return MailComposer_CanSendMail();
+    //    COWTODO:
+//    return MailComposer_CanSendMail();
 }
 
 // CTOR/DTOR //
@@ -128,12 +129,13 @@ void MailComposer::setCallback(const Callback &callback)
 //Show
 void MailComposer::showMailComposer()
 {
-    MailComposer_ShowMailComposer(m_toRecipients,
-                                  m_ccRecipients,
-                                  m_bccRecipients,
-                                  m_subject,
-                                  m_message,
-                                  m_isHTML,
-                                  m_attachments,
-                                  m_callback);
+    //    COWTODO:
+//    MailComposer_ShowMailComposer(m_toRecipients,
+//                                  m_ccRecipients,
+//                                  m_bccRecipients,
+//                                  m_subject,
+//                                  m_message,
+//                                  m_isHTML,
+//                                  m_attachments,
+//                                  m_callback);
 }

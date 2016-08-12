@@ -92,9 +92,10 @@ void ActionSheet::setCallback(const Callback &callback)
 
 void ActionSheet::showActionSheet()
 {
-    ActionSheet_ShowActionSheet(m_title,
-                                m_cancelButtonTitle,
-                                m_destructiveButtonTitle,
-                                m_otherButtonTitles,
-                                m_callback);
+//    COWTODO:
+//    ActionSheet_ShowActionSheet(m_title,
+//                                m_cancelButtonTitle,
+//                                m_destructiveButtonTitle,
+//                                m_otherButtonTitles,
+//                                m_callback);
 }

@@ -50,7 +50,8 @@ USING_NS_STD_CC_CD_MF
 // Static Methods //
 bool TwitterComposer::canSendTweet()
 {
-    return TwitterComposer_CanSendTweet();
+    //    COWTODO:
+//    return TwitterComposer_CanSendTweet();
 }
 
 // CTOR/DTOR //
@@ -90,8 +91,9 @@ void TwitterComposer::setCallback(const Callback &callback)
 //Show
 void TwitterComposer::showTwitterComposer()
 {
-    TwitterComposer_ShowTwitterComposer(m_text,
-                                        m_images,
-                                        m_urls,
-                                        m_callback);
+    //    COWTODO:
+//    TwitterComposer_ShowTwitterComposer(m_text,
+//                                        m_images,
+//                                        m_urls,
+//                                        m_callback);
 }

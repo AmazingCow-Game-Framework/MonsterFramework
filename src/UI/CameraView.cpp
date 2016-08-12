@@ -62,23 +62,27 @@ CameraView::~CameraView()
 //Camera Methods.
 bool CameraView::canShowCamera() const
 {
-    return CameraView_CanAccessCamera();
+    //    COWTODO:
+//    return CameraView_CanAccessCamera();
 }
 bool CameraView::canShowCameraRoll() const
 {
-    return CameraView_CanAccessCameraRoll();
+    //    COWTODO:
+//    return CameraView_CanAccessCameraRoll();
 }
 
 void CameraView::showCameraWithCallback(const CameraView::Callback &func)
 {
-    clearMemoryAllocatedToImageData();
-    CameraView_ShowCamera(func, &m_pImageData, &m_length);
+    //    COWTODO:
+//    clearMemoryAllocatedToImageData();
+//    CameraView_ShowCamera(func, &m_pImageData, &m_length);
 
 }
 void CameraView::showCameraRollWithCallback(const CameraView::Callback &func)
 {
-    clearMemoryAllocatedToImageData();
-    CameraView_ShowCameraRoll(func, &m_pImageData, &m_length);
+    //    COWTODO:
+//    clearMemoryAllocatedToImageData();
+//    CameraView_ShowCameraRoll(func, &m_pImageData, &m_length);
 }
 
 //CleanUp Methods.

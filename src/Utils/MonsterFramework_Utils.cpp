@@ -42,6 +42,9 @@
 //Header
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
+//COWTODO:
+#include <iostream>
+
 #ifdef MONSTERFRAMEWORK_DEBUG
 
 constexpr int kBufferSize = 1024;
@@ -57,8 +60,10 @@ void  mf::__not_to_direct_use_mf_log(const char *pPrefix, const char *pFormat, .
     vsnprintf(buffer, kBufferSize, pFormat, ap);
     va_end(ap);
 
-    printf("%s", buffer);
-    printf("\n");
+//    printf("%s", buffer);
+//    printf("\n");
+
+    std::cout << buffer << std::endl;
 }
 
 #endif //MONSTERFRAMEWORK_DEBUG

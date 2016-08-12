@@ -50,9 +50,11 @@ USING_NS_STD_CC_CD_MF
 // Public Methods //
 bool Internet::hasInternetConnection()
 {
-    return Internet_HasInternetConnection();
-}
+    //    COWTODO:
+//    return Internet_HasInternetConnection();
+    }
 void Internet::openURLInBrowser(const std::string &url)
 {
-    Internet_OpenURLInBrowser(url);
+    //    COWTODO:
+//    Internet_OpenURLInBrowser(url);
 }

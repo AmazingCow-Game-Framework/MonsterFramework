@@ -92,9 +92,10 @@ void AlertView::setCallback(const Callback &callback)
 
 void AlertView::showAlertView()
 {
-    AlertView_ShowAlertView(m_title,
-                            m_message,
-                            m_cancelButtonTitle,
-                            m_otherButtonTitles,
-                            m_callback);
+    //    COWTODO:
+//    AlertView_ShowAlertView(m_title,
+//                            m_message,
+//                            m_cancelButtonTitle,
+//                            m_otherButtonTitles,
+//                            m_callback);
 }
