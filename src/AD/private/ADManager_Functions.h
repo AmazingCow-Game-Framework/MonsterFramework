@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -50,11 +50,11 @@
 
 NS_MF_BEGIN
 
-bool ADManager_ShowAd(const ADManager::AdOptions &options);
-bool ADManager_HideAd(const ADManager::AdOptions &options);
+//bool ADManager_ShowAd(const ADManager::AdOptions &options);
+//bool ADManager_HideAd(const ADManager::AdOptions &options);
 
-bool ADManager_AddAd   (const ADManager::AdOptions &options);
-bool ADManager_RemoveAd(const ADManager::AdOptions &options);
+//bool ADManager_AddAd   (const ADManager::AdOptions &options);
+//bool ADManager_RemoveAd(const ADManager::AdOptions &options);
 
 NS_MF_END
 #endif // defined(__MonsterFramework_src_AD_private_ADManager_Functions_h__)

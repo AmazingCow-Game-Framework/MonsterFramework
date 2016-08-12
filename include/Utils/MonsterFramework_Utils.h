@@ -45,14 +45,16 @@
 // Includes //
 //cocos2d
 #include "cocos2d.h"
-#include "cocos-ext.h"
-#include "SimpleAudioEngine.h"
+//COWTODO:
+//#include "cocos-ext.h"
+//#include "SimpleAudioEngine.h"
 
 // Namespaces //
 //Create aliases to reduce the verbosity of the use of cocos2d's namespaces.
 namespace cc    = cocos2d;
-namespace cd    = CocosDenshion;
-namespace ccext = cocos2d::extension;
+//COWTODO:
+//namespace cd    = CocosDenshion;
+//namespace ccext = cocos2d::extension;
 
 //Help reduce verbosity of MonsterFramework namespace declarations.
 #define NS_MF_BEGIN namespace mf {
@@ -62,9 +64,26 @@ namespace ccext = cocos2d::extension;
 #define USING_NS_STD_CC_CD_MF \
     using namespace std;      \
     using namespace cocos2d;  \
-    using namespace cd;       \
-    using namespace ccext;    \
     using namespace mf;
+
+//COWTODO:
+//    using namespace cd;
+//    using namespace ccext;
+
+
+NS_MF_BEGIN
+
+//Taken from: https://herbsutter.com/gotw/_102/
+//This enable us to use the Lore::make_unique in C++11
+//If code is to be compiled in C++14 is better use the std version :D
+template<typename T, typename ...Args>
+std::unique_ptr<T> make_unique( Args&& ...args )
+{
+    return std::unique_ptr<T>( new T( std::forward<Args>(args)... ) );
+}
+
+NS_MF_END
+
 
 // Macros //
 #define SINGLETON_OF(__type__)    \
@@ -117,7 +136,7 @@ static __TYPE__* create(const __OPT__ &options) \
 #define INIT_OPTIONS(__OPT__) \
     virtual bool init(const __OPT__ &options);
 #define INIT() \
-    bool init() override;
+    virtual bool init() override;
 
 // DEPRECATED //
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
@@ -194,7 +213,7 @@ NS_MF_BEGIN //Start the MonsterFramework Namespace.
         _block_                            \
     } while(0)
 
-#else //MONSTERFRAMEWORK_DEBUG - MonsterFramework in Release mode.
+#else //!MONSTERFRAMEWORK_DEBUG - MonsterFramework in Release mode.
 
     // LOG MACROS //
     //Just Log the message in Console.
