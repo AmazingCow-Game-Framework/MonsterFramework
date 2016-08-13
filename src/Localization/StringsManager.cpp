@@ -100,33 +100,6 @@ void StringsManager::purgeStrings(const std::string &languageName)
     m_languageMap.erase(languageName);
 }
 
-
-//Get String
-std::string StringsManager::getString(const char *string, ...) const
-{
-    auto it = m_pCurrStringsMap->find(string);
-    MF_ASSERT(
-        it != std::end(*m_pCurrStringsMap),
-        "StringsManager::getString - Cannot find string (%s) for language (%s)",
-        string,
-        getCurrentLanguageName().c_str()
-    );
-
-
-    char buffer[kBufferSize] = {'\0'};
-    auto localizedStr        = (*it).second;
-
-    //Build the buffer with the variadic args list
-    va_list ap;
-
-    va_start(ap, string);
-        vsnprintf(buffer, kBufferSize, localizedStr.c_str(), ap);
-    va_end(ap);
-
-    return buffer;
-}
-
-
 //Language Map
 const std::string& StringsManager::getCurrentLanguageName() const
 {
@@ -150,9 +123,23 @@ void StringsManager::setCurrentLanguageName(const std::string &languageName)
 ////////////////////////////////////////////////////////////////////////////////
 // Private Methods                                                            //
 ////////////////////////////////////////////////////////////////////////////////
+std::string StringsManager::_getString(const char *string, ...) const
+{
+    char buffer[kBufferSize] = {'\0'};
+
+    //Build the buffer with the variadic args list
+    va_list ap;
+
+    va_start(ap, string);
+        vsnprintf(buffer, kBufferSize, string, ap);
+    va_end(ap);
+
+    return buffer;
+}
+
 void StringsManager::parseStringsFile(const std::string &fullname,
                                       const std::string &languageName)
-{
+ {
 
     //Check if we already have this language.
     MF_ASSERT(

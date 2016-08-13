@@ -79,7 +79,25 @@ public:
 
 
     //Get String
-    std::string getString(const char *string, ...) const;
+    //COWTODO: Clean up...
+    template <typename... Args>
+    std::string getString(const std::string str, Args... argList)
+    {
+        auto it = m_pCurrStringsMap->find(str);
+        MF_ASSERT(
+            it != std::end(*m_pCurrStringsMap),
+            "StringsManager::getString - Cannot find string (%s) for language (%s)",
+            str.c_str(),
+            getCurrentLanguageName().c_str()
+        );
+
+        auto localizedStr = (*it).second;
+
+        if(sizeof...(argList) == 0)
+            return localizedStr;
+
+        return _getString(localizedStr.c_str(), argList...);
+    }
 
     //Language Map
     const std::string& getCurrentLanguageName() const;
@@ -88,6 +106,9 @@ public:
 
     // Private Methods //
 private:
+    //COWTODO: Clean up.
+    std::string _getString(const char *string, ...) const;
+
     void parseStringsFile(const std::string &fullname,
                           const std::string &languageName);
 
