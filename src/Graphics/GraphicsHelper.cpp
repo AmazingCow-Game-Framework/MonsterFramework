@@ -50,13 +50,13 @@ USING_NS_STD_CC_CD_MF
 ////////////////////////////////////////////////////////////////////////////////
 void GraphicsHelper::setAnchorToTop(cc::Node *pNode)
 {
-    pNode->ignoreAnchorPointForPosition(false);
+    pNode->setIgnoreAnchorPointForPosition(false);
     pNode->setAnchorPoint(cc::Point(0.5, 1));
 }
 
 void GraphicsHelper::setAnchorToCenter(cc::Node *pNode)
 {
-    pNode->ignoreAnchorPointForPosition(false);
+    pNode->setIgnoreAnchorPointForPosition(false);
     pNode->setAnchorPoint(cc::Point(0.5, 0.5));
 }
 

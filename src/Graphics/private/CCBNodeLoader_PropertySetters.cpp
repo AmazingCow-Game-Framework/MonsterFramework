@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -73,7 +73,7 @@ void mf::_set_anchorPoint(cc::Node *obj, const cc::Value &value)
 }
 void mf::_set_ignoreAnchorPointForPosition(cc::Node *obj, const cc::Value &value)
 {
-    obj->ignoreAnchorPointForPosition(_decodeAsCheck(value));
+    obj->setIgnoreAnchorPointForPosition(_decodeAsCheck(value));
 }
 
 // Transforms //
@@ -240,18 +240,18 @@ void _private_helper_setSpriteFrameForToggle(cc::Node *node, const cc::Value &va
                                              int index, bool setSelected)
 {
     auto toggle = static_cast<cc::MenuItemToggle *>(node);
-    
+
     cc::Sprite *sprite1 = cc::Sprite::create();
     cc::Sprite *sprite2 = cc::Sprite::create();
-    
+
     mf::_set_displayFrame(sprite1,  value);
     mf::_set_displayFrame(sprite2,  value);
-    
+
     auto menuItem = cc::MenuItemSprite::create(sprite1, sprite2);
 
     auto &menuItems = toggle->getSubItems();
     menuItems.insert(index, menuItem);
-    
+
     if(setSelected)
         toggle->setSelectedIndex(index);
 }
