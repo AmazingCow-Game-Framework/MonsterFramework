@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -52,6 +52,7 @@ bool TwitterComposer::canSendTweet()
 {
     //    COWTODO:
 //    return TwitterComposer_CanSendTweet();
+    return false;
 }
 
 // CTOR/DTOR //
@@ -59,6 +60,7 @@ TwitterComposer::TwitterComposer()
 {
     //Empty...
 }
+
 TwitterComposer::TwitterComposer(const std::string &text,
                                  const Callback &callback) :
     m_text(text),

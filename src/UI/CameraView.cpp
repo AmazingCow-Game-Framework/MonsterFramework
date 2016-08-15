@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -64,11 +64,13 @@ bool CameraView::canShowCamera() const
 {
     //    COWTODO:
 //    return CameraView_CanAccessCamera();
+    return false;
 }
 bool CameraView::canShowCameraRoll() const
 {
     //    COWTODO:
 //    return CameraView_CanAccessCameraRoll();
+    return false;
 }
 
 void CameraView::showCameraWithCallback(const CameraView::Callback &func)

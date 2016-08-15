@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -56,6 +56,7 @@ bool MailComposer::canSendMail()
 {
     //    COWTODO:
 //    return MailComposer_CanSendMail();
+    return false;
 }
 
 // CTOR/DTOR //
@@ -63,6 +64,7 @@ MailComposer::MailComposer()
 {
     //Empty...
 }
+
 MailComposer::MailComposer(const std::vector<std::string> &to,
                            const std::string &subject,
                            const std::string &message, bool isHTML,
