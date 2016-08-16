@@ -49,122 +49,57 @@
 
 USING_NS_STD_CC_CD_MF
 
-// Private Helper Functions //
-//THE FOLLWING FUNCTIONS ARE ONLY HELPERS FOR THE PROPERTY SETTERS
-//THE SHOULD NOT BE EXPOSED TO OUSIDE, SO THEM ARE DECLARED HERE
-//AND DEFINED AT BOTTOM OF THIS SOURCE FILE.
-//THE PURPOSE OF THEM IS TO HANDLE OF SOME NASTY THING ABOUT LOADING
-//THE CCB...
-
+////////////////////////////////////////////////////////////////////////////////
+// Private Helper Functions                                                   //
+// THE FOLLWING FUNCTIONS ARE ONLY HELPERS FOR THE PROPERTY SETTERS           //
+// THE SHOULD NOT BE EXPOSED TO OUSIDE, SO THEM ARE DECLARED HERE             //
+// AND DEFINED AT BOTTOM OF THIS SOURCE FILE.                                 //
+// THE PURPOSE OF THEM IS TO HANDLE OF SOME NASTY THING ABOUT LOADING         //
+// THE CCB...                                                                 //
+////////////////////////////////////////////////////////////////////////////////
 void _private_helper_setNormalSpriteFrameForMFToggle  (cc::Node *node, const cc::Value &value);
 void _private_helper_setPressedSpriteFrameForMFToggle (cc::Node *node, const cc::Value &value);
 void _private_helper_setDisabledSpriteFrameForMFToggle(cc::Node *node, const cc::Value &value);
 void _private_helper_setSpriteFrameForToggle          (cc::Node *node, const cc::Value &value,
                                                        int index, bool setSelected);
 
-// Public Helper Functions //
-//THIS IS THE IMPLEMENTATION OF FUNCTIONS DEFINED
-//AT CCBNodeLoader_PropertySetters.h"
 
-// Anchor Point //
+
+////////////////////////////////////////////////////////////////////////////////
+// Public Helper Functions                                                    //
+// THIS IS THE IMPLEMENTATION OF FUNCTIONS DEFINED                            //
+// AT CCBNodeLoader_PropertySetters.h"                                        //
+////////////////////////////////////////////////////////////////////////////////
 void mf::_set_anchorPoint(cc::Node *obj, const cc::Value &value)
 {
     obj->setAnchorPoint(_decodeAsPoint(value));
 }
-void mf::_set_ignoreAnchorPointForPosition(cc::Node *obj, const cc::Value &value)
+
+void mf::_set_block(cc::Node *obj, const cc::Value &value, ILoadResolver *pResolver)
 {
-    obj->setIgnoreAnchorPointForPosition(_decodeAsCheck(value));
+    pResolver->resolveMenuSelector(_decodeAsBlock(value),
+                                   static_cast<cc::MenuItem *>(obj));
 }
 
-// Transforms //
-void mf::_set_position(cc::Node *obj, const cc::Value &value)
+void mf::_set_color(cc::Node *obj, const cc::Value &value)
 {
-    obj->setPosition(_decodeAsPosition(value, obj->getParent()));
-}
-void mf::_set_scale(cc::Node *obj, const cc::Value &value)
-{
-    //EMSG: We're decided treat scale as a stand alone
-    //property. So it's not depends of anything else.
-    auto point = _decodeAsPoint(value);
-    obj->setScale(point.x, point.y);
-}
-void mf::_set_rotation(cc::Node *obj, const cc::Value &value)
-{
-    obj->setRotation(_decodeAsDegrees(value));
+    static_cast<cc::LayerColor *>(obj)->setColor(_decodeAsColor3(value));
 }
 
-// ???
-void mf::_set_isEnabled(cc::Node *obj, const cc::Value &value)
-{
-    static_cast<cc::MenuItem *>(obj)->setEnabled(_decodeAsCheck(value));
-}
 void mf::_set_contentSize(cc::Node *obj, const cc::Value &value)
 {
     obj->setContentSize(_decodeAsSize(value));
 }
 
-// Color / Opacity //
-void mf::_set_color(cc::Node *obj, const cc::Value &value)
+void mf::_set_dimensions(cc::Node *obj, const cc::Value &value)
 {
-    static_cast<cc::LayerColor *>(obj)->setColor(_decodeAsColor3(value));
-}
-void mf::_set_opacity(cc::Node *obj, const cc::Value &value)
-{
-    obj->setOpacity(_decodeAsByte(value));
-}
-
-// Input //
-void mf::_set_isTouchEnabled(cc::Node *obj, const cc::Value &value)
-{
-    //COWTODO:: Ignoring by now, but must check what this method will do.
-}
-void mf::_set_isAccelerometerEnabled(cc::Node *obj, const cc::Value &value)
-{
-    //COWTODO:: Ignoring by now, but must check what this method will do.
+    cc::Size decodedValue = _decodeAsSize(value);
+    static_cast<cc::Label *>(obj)->setDimensions(
+        decodedValue.width,
+        decodedValue.height
+    );
 }
 
-// Frame //
-void mf::_set_displayFrame(cc::Node *obj, const cc::Value &value)
-{
-    static_cast<cc::Sprite *>(obj)->setSpriteFrame(_decodeAsSpriteFrame(value));
-}
-
-
-// Button //
-void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
-{
-    //Check if button is a toggle or not.
-    //If is a toogle calls the specialized function to set its sprite frame.
-    //This is needed because toogle uses a different aproach to set the frames.
-    if(typeid(*obj) == typeid(cc::MenuItemToggle))
-    {
-        _private_helper_setNormalSpriteFrameForMFToggle(obj, value);
-    }
-    else
-    {
-        cc::Sprite *sprite = cc::Sprite::create();
-        mf::_set_displayFrame(sprite, value);
-
-        static_cast<cc::MenuItemSprite *>(obj)->setNormalImage(sprite);
-    }
-}
-void mf::_set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value)
-{
-    //Check if button is a toggle or not.
-    //If is a toogle calls the specialized function to set its sprite frame.
-    //This is needed because toogle uses a different aproach to set the frames.
-    if(typeid(*obj) == typeid(cc::MenuItemToggle))
-    {
-        _private_helper_setPressedSpriteFrameForMFToggle(obj, value);
-    }
-    else
-    {
-        cc::Sprite *sprite = cc::Sprite::create();
-        mf::_set_displayFrame(sprite, value);
-
-        static_cast<cc::MenuItemSprite *>(obj)->setSelectedImage(sprite);
-    }
-}
 void mf::_set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value)
 {
     //There's no information to set the sprite, this is due
@@ -187,14 +122,12 @@ void mf::_set_disabledSpriteFrame(cc::Node *obj, const cc::Value &value)
         static_cast<cc::MenuItemSprite *>(obj)->setDisabledImage(sprite);
     }
 }
-void mf::_set_block(cc::Node *obj, const cc::Value &value,
-                    ILoadResolver *pResolver)
+
+void mf::_set_displayFrame(cc::Node *obj, const cc::Value &value)
 {
-    pResolver->resolveMenuSelector(_decodeAsBlock(value),
-                                   static_cast<cc::MenuItem *>(obj));
+    static_cast<cc::Sprite *>(obj)->setSpriteFrame(_decodeAsSpriteFrame(value));
 }
 
-// Font //
 void mf::_set_fontName(cc::Node *obj, const cc::Value &value)
 {
     //COWTODO: THIS IS A VERY VERY UGLY HACK.
@@ -204,6 +137,7 @@ void mf::_set_fontName(cc::Node *obj, const cc::Value &value)
 
     label->setTTFConfig(config);
 }
+
 void mf::_set_fontSize(cc::Node *obj, const cc::Value &value)
 {
     //COWTODO: THIS IS A VERY VERY UGLY HACK.
@@ -213,15 +147,111 @@ void mf::_set_fontSize(cc::Node *obj, const cc::Value &value)
 
     label->setTTFConfig(config);
 }
+
+void mf::_set_horizontalAlignment(cc::Node *obj, const cc::Value &value)
+{
+    //COWTODO: This should have another decode function.
+    auto decodedValue = static_cast<TextHAlignment>(_decodeAsByte(value));
+    static_cast<cc::Label *>(obj)->setHorizontalAlignment(decodedValue);
+}
+
+void mf::_set_ignoreAnchorPointForPosition(cc::Node *obj, const cc::Value &value)
+{
+    obj->setIgnoreAnchorPointForPosition(_decodeAsCheck(value));
+}
+
+void mf::_set_isAccelerometerEnabled(cc::Node *obj, const cc::Value &value)
+{
+    //COWTODO:: Ignoring by now, but must check what this method will do.
+}
+
+void mf::_set_isEnabled(cc::Node *obj, const cc::Value &value)
+{
+    static_cast<cc::MenuItem *>(obj)->setEnabled(_decodeAsCheck(value));
+}
+
+void mf::_set_isTouchEnabled(cc::Node *obj, const cc::Value &value)
+{
+    //COWTODO:: Ignoring by now, but must check what this method will do.
+}
+
+void mf::_set_normalSpriteFrame(cc::Node *obj, const cc::Value &value)
+{
+    //Check if button is a toggle or not.
+    //If is a toogle calls the specialized function to set its sprite frame.
+    //This is needed because toogle uses a different aproach to set the frames.
+    if(typeid(*obj) == typeid(cc::MenuItemToggle))
+    {
+        _private_helper_setNormalSpriteFrameForMFToggle(obj, value);
+    }
+    else
+    {
+        cc::Sprite *sprite = cc::Sprite::create();
+        mf::_set_displayFrame(sprite, value);
+
+        static_cast<cc::MenuItemSprite *>(obj)->setNormalImage(sprite);
+    }
+}
+
+void mf::_set_opacity(cc::Node *obj, const cc::Value &value)
+{
+    obj->setOpacity(_decodeAsByte(value));
+}
+
+void mf::_set_position(cc::Node *obj, const cc::Value &value)
+{
+    obj->setPosition(_decodeAsPosition(value, obj->getParent()));
+}
+
+void mf::_set_rotation(cc::Node *obj, const cc::Value &value)
+{
+    obj->setRotation(_decodeAsDegrees(value));
+}
+
+void mf::_set_scale(cc::Node *obj, const cc::Value &value)
+{
+    //EMSG: We're decided treat scale as a stand alone
+    //property. So it's not depends of anything else.
+    auto point = _decodeAsPoint(value);
+    obj->setScale(point.x, point.y);
+}
+
+void mf::_set_selectedSpriteFrame(cc::Node *obj, const cc::Value &value)
+{
+    //Check if button is a toggle or not.
+    //If is a toogle calls the specialized function to set its sprite frame.
+    //This is needed because toogle uses a different aproach to set the frames.
+    if(typeid(*obj) == typeid(cc::MenuItemToggle))
+    {
+        _private_helper_setPressedSpriteFrameForMFToggle(obj, value);
+    }
+    else
+    {
+        cc::Sprite *sprite = cc::Sprite::create();
+        mf::_set_displayFrame(sprite, value);
+
+        static_cast<cc::MenuItemSprite *>(obj)->setSelectedImage(sprite);
+    }
+}
+
 void mf::_set_string(cc::Node *obj, const cc::Value &value)
 {
     static_cast<cc::Label *>(obj)->setString(_decodeAsString(value));
 }
 
+void mf::_set_verticalAlignment(cc::Node *obj, const cc::Value &value)
+{
+    //COWTODO: This should have another decode function.
+    auto decodedValue = static_cast<TextVAlignment>(_decodeAsByte(value));
+    static_cast<cc::Label *>(obj)->setVerticalAlignment(decodedValue);
+}
 
 
-// Private Helper Functions (Implementation) //
-//Check the comments at the top of this file to understand those functions...
+////////////////////////////////////////////////////////////////////////////////
+// Private Helper Functions (Implementation)                                  //
+// Check the comments at the top of this file                                 //
+// to understand those functions...                                           //
+////////////////////////////////////////////////////////////////////////////////
 void _private_helper_setNormalSpriteFrameForMFToggle(cc::Node *node, const cc::Value &value)
 {
     _private_helper_setSpriteFrameForToggle(node, value, 0, true);

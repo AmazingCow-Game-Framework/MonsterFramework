@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -177,23 +177,26 @@ if(_name_ == #_target_name_) {                                        \
 }
         //Check if the name of property matches and set the property.
         _SET_PROPERTY_FUNCTION(anchorPoint,                  name, obj, value);
-        _SET_PROPERTY_FUNCTION(scale,                        name, obj, value);
-        _SET_PROPERTY_FUNCTION(ignoreAnchorPointForPosition, name, obj, value);
-        _SET_PROPERTY_FUNCTION(isTouchEnabled,               name, obj, value);
-        _SET_PROPERTY_FUNCTION(isAccelerometerEnabled,       name, obj, value);
-        _SET_PROPERTY_FUNCTION(position,                     name, obj, value);
-        _SET_PROPERTY_FUNCTION(displayFrame,                 name, obj, value);
-        _SET_PROPERTY_FUNCTION(isEnabled,                    name, obj, value);
-        _SET_PROPERTY_FUNCTION(normalSpriteFrame,            name, obj, value);
-        _SET_PROPERTY_FUNCTION(selectedSpriteFrame,          name, obj, value);
-        _SET_PROPERTY_FUNCTION(disabledSpriteFrame,          name, obj, value);
         _SET_PROPERTY_FUNCTION(color,                        name, obj, value);
         _SET_PROPERTY_FUNCTION(contentSize,                  name, obj, value);
-        _SET_PROPERTY_FUNCTION(rotation,                     name, obj, value);
+        _SET_PROPERTY_FUNCTION(disabledSpriteFrame,          name, obj, value);
+        _SET_PROPERTY_FUNCTION(displayFrame,                 name, obj, value);
         _SET_PROPERTY_FUNCTION(fontName,                     name, obj, value);
         _SET_PROPERTY_FUNCTION(fontSize,                     name, obj, value);
-        _SET_PROPERTY_FUNCTION(string,                       name, obj, value);
+        _SET_PROPERTY_FUNCTION(ignoreAnchorPointForPosition, name, obj, value);
+        _SET_PROPERTY_FUNCTION(isAccelerometerEnabled,       name, obj, value);
+        _SET_PROPERTY_FUNCTION(isEnabled,                    name, obj, value);
+        _SET_PROPERTY_FUNCTION(isTouchEnabled,               name, obj, value);
+        _SET_PROPERTY_FUNCTION(normalSpriteFrame,            name, obj, value);
         _SET_PROPERTY_FUNCTION(opacity,                      name, obj, value);
+        _SET_PROPERTY_FUNCTION(position,                     name, obj, value);
+        _SET_PROPERTY_FUNCTION(rotation,                     name, obj, value);
+        _SET_PROPERTY_FUNCTION(scale,                        name, obj, value);
+        _SET_PROPERTY_FUNCTION(selectedSpriteFrame,          name, obj, value);
+        _SET_PROPERTY_FUNCTION(string,                       name, obj, value);
+        _SET_PROPERTY_FUNCTION(dimensions,                   name, obj, value);
+        _SET_PROPERTY_FUNCTION(horizontalAlignment,          name, obj, value);
+        _SET_PROPERTY_FUNCTION(verticalAlignment,            name, obj, value);
 
 #undef _SET_PROPERTY_FUNCTION //We don't want this anymore ;)
 
