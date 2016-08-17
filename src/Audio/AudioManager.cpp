@@ -97,15 +97,18 @@ AudioManager::~AudioManager()
     //Empty..
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // General                                                                    //
 ////////////////////////////////////////////////////////////////////////////////
 void AudioManager::muteAll(bool b)
 {
+    //COWTODO: Implement.
 }
 
 bool AudioManager::isMuted()
 {
+    //COWTODO: Implement.
 }
 
 
@@ -117,56 +120,97 @@ bool AudioManager::isMuted()
 void AudioManager::loadEffect(const std::string &effectId,
                               const std::string &path)
 {
+    _CHECK_AND_WARN_IF_EXISTS(
+        "AudioManager::loadEffect - Already preloaded: EffectId (%s) Path (%s)",
+        m_effectMap,
+        effectId
+    );
+
+    _AE::preload(path);
+
+    auto p = std::make_pair(
+        effectId,
+        Sound { AudioManager::kInvalidId, path }
+    );
+    m_effectMap.insert(p);
 }
 
 void AudioManager::unloadEffect(const std::string &effectId)
 {
+    _CHECK_AND_WARN_IF_NOT_EXISTS(
+        "AudioManager::unloadEffect - EffectId is not loaded: (%s)",
+        m_effectMap,
+        effectId
+    );
+
+    _AE::uncache(m_effectMap[effectId].filepath);
+    m_effectMap.erase(effectId);
 }
 
 
 //Play / Pause
+//COWTODO: Make the signature equal to the playMusic
 void AudioManager::playEffect(const std::string &effectId,
                               bool loop /* = false */)
 {
+    _CHECK_AND_WARN_IF_NOT_EXISTS(
+        "AudioManager::playEffect - Effect is not loaded: (%s)",
+        m_effectMap,
+        effectId
+    );
+
+    //Get the sound info object.
+    auto& sound = m_effectMap[effectId];
+
+    //Upadte the current internal id.
+    sound.currInternalId = _AE::play2d(sound.filepath, loop, 1.0f);
 }
 
 
 void AudioManager::pauseEffect(const std::string &effectId)
 {
+    //COWTODO: Implement.
 }
 
 void AudioManager::pauseAllEffects()
 {
+    //COWTODO: Implement.
 }
 
 
 //Resume
 void AudioManager::resumeEffect(const std::string &effectId)
 {
+    //COWTODO: Implement.
 }
 
 void AudioManager::resumeAllEffects()
 {
+    //COWTODO: Implement.
 }
 
 
 //Stop
 void AudioManager::stopEffect(const std::string &effectId)
 {
+    //COWTODO: Implement.
 }
 
 void AudioManager::stopAllEffects()
 {
+    //COWTODO: Implement.
 }
 
 
 //Query
 float AudioManager::getEffectsVolume() const
 {
+    //COWTODO: Implement.
 }
 
 void AudioManager::setEffectsVolume(float volume)
 {
+    //COWTODO: Implement.
 }
 
 

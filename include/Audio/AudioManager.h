@@ -89,7 +89,7 @@ public:
 
 
     // Effects //
-private:
+public:
     //Load / Unload
     void loadEffect  (const std::string &effectId, const std::string &path);
     void unloadEffect(const std::string &effectId);
@@ -142,6 +142,7 @@ public:
 
     // iVars //
 private:
+    SoundMap m_effectMap;
     SoundMap m_musicMap;
 
 }; //class AudioManager
