@@ -91,7 +91,9 @@ public:
     // Effects //
 public:
     //Load / Unload
-    void loadEffect  (const std::string &effectId, const std::string &path);
+    void loadEffect(const std::string &effectId,
+                    const std::string &path,
+                    bool ignoreIfAlreadyLoaded = false);
     void unloadEffect(const std::string &effectId);
 
     //Play / Pause

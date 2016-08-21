@@ -118,13 +118,17 @@ bool AudioManager::isMuted()
 ////////////////////////////////////////////////////////////////////////////////
 //Load / Unload
 void AudioManager::loadEffect(const std::string &effectId,
-                              const std::string &path)
+                              const std::string &path,
+                              bool ignoreIfAlreadyLoaded)
 {
-    _CHECK_AND_WARN_IF_EXISTS(
-        "AudioManager::loadEffect - Already preloaded: EffectId (%s) Path (%s)",
-        m_effectMap,
-        effectId
-    );
+    if(!ignoreIfAlreadyLoaded)
+    {
+        _CHECK_AND_WARN_IF_EXISTS(
+            "AudioManager::loadEffect - Already preloaded: EffectId (%s) Path (%s)",
+            m_effectMap,
+            effectId
+        );
+    }
 
     _AE::preload(path);
 
