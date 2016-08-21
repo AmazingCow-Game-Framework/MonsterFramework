@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -47,9 +47,11 @@
 
 #ifdef MONSTERFRAMEWORK_DEBUG
 
+NS_MF_BEGIN
+
 constexpr int kBufferSize = 1024;
 
-void  mf::__not_to_direct_use_mf_log(const char *pPrefix, const char *pFormat, ...)
+void  __not_to_direct_use_mf_log(const char *pPrefix, const char *pFormat, ...)
 {
     printf("%s ", pPrefix);
 
@@ -60,10 +62,17 @@ void  mf::__not_to_direct_use_mf_log(const char *pPrefix, const char *pFormat, .
     vsnprintf(buffer, kBufferSize, pFormat, ap);
     va_end(ap);
 
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+        __android_log_print(ANDROID_LOG_DEBUG, "SHARAIA TUEIN", "%s", buffer);
+        __android_log_print(ANDROID_LOG_DEBUG, "SHARAIA TUEIN", "%s", "\n");
+#else
 //    printf("%s", buffer);
 //    printf("\n");
 
     std::cout << buffer << std::endl;
+#endif
 }
+
+NS_MF_END
 
 #endif //MONSTERFRAMEWORK_DEBUG
