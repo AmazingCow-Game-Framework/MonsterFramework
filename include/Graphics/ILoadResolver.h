@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //               █      █                                                     //
 //               ████████                                                     //
 //             ██        ██                                                   //
@@ -76,4 +76,36 @@ public:
 };
 
 NS_MF_END
+
+////////////////////////////////////////////////////////////////////////////////
+// Utility Macros                                                             //
+////////////////////////////////////////////////////////////////////////////////
+// Selector
+#define MF_ILOADRESOLVER_RESOLVE_SELECTOR(_selector_, _name_, _pvar_, _func_, _target_) \
+    if((_selector_) == (_name_)) {                                  \
+        _pvar_->setCallback(CC_CALLBACK_1(_func_, _target_)); \
+        return;                                                     \
+    }                                                               \
+
+#define MF_ILOADRESOLVER_RESOLVE_SELECTOR_ASSERT(_name_) \
+    MF_ASSERT(                                                                 \
+        false,                                                                 \
+        "ILoadResolver::resolveMenuSelector - Failed to resolve selector:(%s)",\
+        _name_.c_str()                                                         \
+    );
+
+//Var assignment
+#define MF_ILOADRESOLVER_RESOLVE_VAR(_var_name_, _dst_var_, _type_, _name_, _pvar_) \
+    if((_var_name_) == (_name_)) {               \
+        _dst_var_ = static_cast<_type_ *>(_pvar_); \
+        return;                                  \
+    }
+
+#define MF_ILOADRESOLVER_RESOLVE_VAR_ASSERT(_name_) \
+    MF_ASSERT(                                                                 \
+        false,                                                                 \
+        "ILoadResolver::resolveVarAssignment - Failed to resolve var:(%s)",\
+        _name_.c_str()                                                         \
+    );
+
 #endif // defined(__MonsterFramework_include_Graphics_ILoadResolver_h__) //
