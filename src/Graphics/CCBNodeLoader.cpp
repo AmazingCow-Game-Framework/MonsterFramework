@@ -88,7 +88,7 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
     if(baseClass == "CCBFile")
     {
         auto ccbFilename = findCCBFilename(properties);
-        node = pResolver->resolveCustomClass(ccbFilename);
+        node = pResolver->resolveCustomClass(ccbFilename, customProperties);
     }
     else if(customClass.empty())
     {
@@ -220,7 +220,7 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
 
     //LayerColor
     //COWTODO: Bug? \
-    //  This is very strange. With we don't set a color here at craetion   \
+    //  This is very strange. With we don't set a color here at creations   \
     //  of the LayerColor, later the object will not set any color.        \
     //  So any color m_options.panelType == DialogPanel::PanelType::Pause  \
     //  x is occurring  but know works in this way.
@@ -262,7 +262,7 @@ cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
                                               mf::ILoadResolver *pResolver,
                                               const cc::ValueVector &customProperties)
 {
-    return pResolver->resolveCustomClass(customClass);
+    return pResolver->resolveCustomClass(customClass, customProperties);
 }
 
 

@@ -60,7 +60,8 @@ public:
     {
         //Empty..
     }
-    virtual cc::Node* resolveCustomClass(const std::string &name)
+    virtual cc::Node* resolveCustomClass(const std::string &name,
+                                         const cc::ValueVector &customProperties)
     {
         return nullptr;
     }
