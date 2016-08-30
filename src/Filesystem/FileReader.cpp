@@ -47,34 +47,39 @@
 USING_NS_STD_CC_CD_MF;
 
 
-// CTOR / DTOR //
+////////////////////////////////////////////////////////////////////////////////
+// CTOR / DTOR                                                                //
+////////////////////////////////////////////////////////////////////////////////
 FileReader::FileReader(const std::string &filename)
 {
-    auto fullname = cc::FileUtils::getInstance()->fullPathForFilename(filename);
-    m_pData = cc::FileUtils::getInstance()->getFileData(
-        fullname.c_str(),
-        "r",
-        &m_size
-    );
+    MF_LOG("FileReader::FileReader - Filename: (%s)", filename.c_str());
 
-    MF_ASSERT(
-        m_pData != nullptr,
-        "FileReader::FileReader - Cannot open file (%s)",
-        filename.c_str()
+    auto fullname = cc::FileUtils::getInstance()->fullPathForFilename(filename);
+    auto data     = cc::FileUtils::getInstance()->getDataFromFile(fullname);
+    auto size     = data.getSize ();
+    auto pBuffer  = data.getBytes();
+
+    m_data.insert(
+        std::end(m_data),
+        pBuffer,
+        (pBuffer + size)
     );
 }
 
 FileReader::~FileReader()
 {
-    CC_SAFE_FREE(m_pData);
+    //Empty...
 }
 
 
-// Public Methods //
+////////////////////////////////////////////////////////////////////////////////
+// Public Methods                                                             //
+////////////////////////////////////////////////////////////////////////////////
 std::vector<std::string> FileReader::readlines()
 {
-    std::stringstream instream;
-    instream << m_pData;
+    std::stringstream instream(
+        std::string(std::begin(m_data), std::end(m_data))
+    );
 
     std::vector<std::string> lines;
     lines.reserve(1024);

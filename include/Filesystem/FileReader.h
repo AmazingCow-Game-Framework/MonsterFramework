@@ -63,8 +63,7 @@ public:
 
     // iVars //
 private:
-    ssize_t m_size;
-    unsigned char *m_pData;
+    std::vector<char> m_data;
 };
 
 NS_MF_END
