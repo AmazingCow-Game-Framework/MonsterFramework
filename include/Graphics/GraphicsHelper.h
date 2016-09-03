@@ -48,10 +48,26 @@ NS_MF_BEGIN
 
 class GraphicsHelper
 {
+public:
+    //COWNOTE: [Explaining why we need this method]
+    //  This is needed due a lack of a "Label Button" in CocosBuilder
+    //  so we must add a label in the editor and convert it to a
+    //  MenuItemLabel in code :(
+    static cc::MenuItemLabel* createMenuItemLabelFromLabel(cc::Label *pLabel,
+                                                           const cc::ccMenuCallback &callback);
+
+    // Copy Properties //
+public:
+    static void copyPosition   (cc::Node *pSrc, cc::Node *pDst);
+    static void copySize       (cc::Node *pSrc, cc::Node *pDst);
+    static void copyAnchorPoint(cc::Node *pSrc, cc::Node *pDst);
+
+
     // Anchor //
 public:
     static void setAnchorToTop   (cc::Node *pNode);
     static void setAnchorToCenter(cc::Node *pNode);
+
 
     // Get Absolute Position //
 public:

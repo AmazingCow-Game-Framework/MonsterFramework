@@ -45,6 +45,43 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
+
+cc::MenuItemLabel* GraphicsHelper::createMenuItemLabelFromLabel(cc::Label *pLabel,
+                                                                const cc::ccMenuCallback &callback)
+{
+    auto pos = pLabel->getPosition();
+
+    pLabel->retain();
+    pLabel->removeFromParent();
+    pLabel->setPosition(cc::Vec2::ZERO); //The position inside the MenuItemLabel.
+
+    auto pButton = cc::MenuItemLabel::create(pLabel, callback);
+    pButton->setPosition(pos);
+
+    pLabel->release();
+
+    return pButton;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Copy Properties                                                            //
+////////////////////////////////////////////////////////////////////////////////
+void GraphicsHelper::copyPosition(cc::Node *pSrc, cc::Node *pDst)
+{
+    pDst->setPosition(pSrc->getPosition());
+}
+
+void GraphicsHelper::copySize(cc::Node *pSrc, cc::Node *pDst)
+{
+    pDst->setContentSize(pSrc->getContentSize());
+}
+
+void GraphicsHelper::copyAnchorPoint(cc::Node *pSrc, cc::Node *pDst)
+{
+    pDst->setAnchorPoint(pSrc->getAnchorPoint());
+    pDst->setIgnoreAnchorPointForPosition(pSrc->isIgnoreAnchorPointForPosition());
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Anchor                                                                     //
 ////////////////////////////////////////////////////////////////////////////////
