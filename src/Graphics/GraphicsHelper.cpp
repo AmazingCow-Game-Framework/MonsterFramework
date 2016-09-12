@@ -82,6 +82,20 @@ void GraphicsHelper::copyAnchorPoint(cc::Node *pSrc, cc::Node *pDst)
     pDst->setIgnoreAnchorPointForPosition(pSrc->isIgnoreAnchorPointForPosition());
 }
 
+
+
+////////////////////////////////////////////////////////////////////////////////
+// ??? //
+////////////////////////////////////////////////////////////////////////////////
+cc::Vec2 GraphicsHelper::getSizeScaleRatio(cc::Node *pNode1, cc::Node *pNode2)
+{
+    return cc::Vec2(
+        pNode1->getContentSize().width  / pNode2->getContentSize().width,
+        pNode1->getContentSize().height / pNode2->getContentSize().height
+    );
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Anchor                                                                     //
 ////////////////////////////////////////////////////////////////////////////////

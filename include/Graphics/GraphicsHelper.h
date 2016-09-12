@@ -62,6 +62,10 @@ public:
     static void copySize       (cc::Node *pSrc, cc::Node *pDst);
     static void copyAnchorPoint(cc::Node *pSrc, cc::Node *pDst);
 
+    // ??? //
+public:
+    static cc::Vec2 getSizeScaleRatio(cc::Node *pNode1, cc::Node *pNode2);
+
 
     // Anchor //
 public:
