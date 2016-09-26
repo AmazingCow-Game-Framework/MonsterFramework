@@ -106,7 +106,12 @@ void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
         node = resolveCustomClasses(customClass, pResolver, customProperties);
     }
 
-    MF_ASSERT(node, "CCBNodeLoader::load - Node is null (%s)", baseClass.c_str());
+    MF_ASSERT_EX(
+        node,
+        "CCBNodeLoader::load",
+        "Node is null (%s)",
+        baseClass.c_str()
+    );
 
     parent->addChild(node);
     assignProperties(node, properties, pResolver);

@@ -53,10 +53,11 @@ USING_NS_STD_CC_CD_MF
 ////////////////////////////////////////////////////////////////////////////////
 #define _AE cc::experimental::AudioEngine
 
-#define _CHECK_AND_WARN_IF_EXISTS(_msg_fmt_, _container_, _sound_id_) \
+#define _CHECK_AND_WARN_IF_EXISTS(_prefix_, _msg_fmt_, _container_, _sound_id_) \
     if(_container_.find(_sound_id_) != std::end(_container_))         \
     {                                                                 \
-        MF_LOG_WARNING(                                               \
+        MF_LOG_WARNING_EX(                                            \
+            _prefix_,                                                 \
             _msg_fmt_,                                                \
             _sound_id_.c_str(),                                       \
             _container_[_sound_id_].filepath.c_str()                  \
@@ -64,24 +65,28 @@ USING_NS_STD_CC_CD_MF
         return;                                                       \
     }
 
-#define _CHECK_AND_WARN_IF_NOT_EXISTS(_msg_fmt_, _container_, _sound_id_, ...) \
-    if(_container_.find(_sound_id_) == std::end(_container_))                  \
-    {                                                                          \
-        MF_LOG_WARNING(                                                        \
-            _msg_fmt_,                                                         \
-            _sound_id_.c_str()                                                 \
-        );                                                                     \
-        return __VA_ARGS__;                                                \
+#define _CHECK_AND_WARN_IF_NOT_EXISTS(_prefix_, _msg_fmt_,          \
+                                      _container_, _sound_id_, ...) \
+    if(_container_.find(_sound_id_) == std::end(_container_))       \
+    {                                                               \
+        MF_LOG_WARNING_EX(                                          \
+            _prefix_,                                               \
+            _msg_fmt_,                                              \
+            _sound_id_.c_str()                                      \
+        );                                                          \
+        return __VA_ARGS__;                                         \
     }
 
-#define _CHECK_AND_WARN_IF_INVALID_ID(_msg_fmt_, _container_, _sound_id_, ...) \
-    if(_container_[_sound_id_].currInternalId == AudioManager::kInvalidId)\
-    {                                                                          \
-        MF_LOG_WARNING(                                                        \
-            _msg_fmt_,                                                         \
-            _sound_id_.c_str()                                                 \
-        );                                                                     \
-        return __VA_ARGS__;                                                    \
+#define _CHECK_AND_WARN_IF_INVALID_ID(_prefix_, _msg_fmt_, _container_,    \
+                                      _sound_id_, ...)                     \
+    if(_container_[_sound_id_].currInternalId == AudioManager::kInvalidId) \
+    {                                                                      \
+        MF_LOG_WARNING_EX(                                                 \
+            _prefix_,                                                      \
+            _msg_fmt_,                                                     \
+            _sound_id_.c_str()                                             \
+        );                                                                 \
+        return __VA_ARGS__;                                                \
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +129,8 @@ void AudioManager::loadEffect(const std::string &effectId,
     if(!ignoreIfAlreadyLoaded)
     {
         _CHECK_AND_WARN_IF_EXISTS(
-            "AudioManager::loadEffect - Already preloaded: EffectId (%s) Path (%s)",
+            "AudioManager::loadEffect",
+            "Already preloaded: EffectId (%s) Path (%s)",
             m_effectMap,
             effectId
         );
@@ -142,7 +148,8 @@ void AudioManager::loadEffect(const std::string &effectId,
 void AudioManager::unloadEffect(const std::string &effectId)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::unloadEffect - EffectId is not loaded: (%s)",
+        "AudioManager::unloadEffect",
+        "EffectId is not loaded: (%s)",
         m_effectMap,
         effectId
     );
@@ -158,7 +165,8 @@ void AudioManager::playEffect(const std::string &effectId,
                               bool loop /* = false */)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::playEffect - Effect is not loaded: (%s)",
+        "AudioManager::playEffect",
+        "Effect is not loaded: (%s)",
         m_effectMap,
         effectId
     );
@@ -226,7 +234,8 @@ void AudioManager::setEffectsVolume(float volume)
 void AudioManager::loadMusic(const std::string &musicId, const std::string &path)
 {
     _CHECK_AND_WARN_IF_EXISTS(
-        "AudioManager::loadMusic - Already preloaded: MusicId (%s) Path (%s)",
+        "AudioManager::loadMusic",
+        "Already preloaded: MusicId (%s) Path (%s)",
         m_musicMap,
         musicId
     );
@@ -238,7 +247,8 @@ void AudioManager::loadMusic(const std::string &musicId, const std::string &path
 void AudioManager::unloadMusic(const std::string &musicId)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::unloadMusic - MusicId is not loaded: (%s)",
+        "AudioManager::unloadMusic",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId
     );
@@ -257,15 +267,17 @@ void AudioManager::playMusic(
 )
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::playMusic - MusicId is not loaded: (%s)",
+        "AudioManager::playMusic",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId
     );
 
     if(isPlayingMusic(musicId))
     {
-        MF_LOG_WARNING(
-            "AudioManager::playMusic - Already playing MusicId: (%s)",
+        MF_LOG_WARNING_EX(
+            "AudioManager::playMusic",
+            "Already playing MusicId: (%s)",
             musicId.c_str()
         );
         return;
@@ -291,7 +303,8 @@ void AudioManager::playMusic(
 void AudioManager::pauseMusic(const std::string &musicId)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::pauseMusic - MusicId is not loaded: (%s)",
+        "AudioManager::pauseMusic",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId
     );
@@ -302,7 +315,8 @@ void AudioManager::pauseMusic(const std::string &musicId)
 void AudioManager::resumeMusic(const std::string &musicId)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::resumeMusic - MusicId is not loaded: (%s)",
+        "AudioManager::resumeMusic",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId
     );
@@ -314,7 +328,8 @@ void AudioManager::stopMusic(const std::string &musicId,
                              bool unload /* = false */)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::stopMusic - MusicId is not loaded: (%s)",
+        "AudioManager::stopMusic",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId
     );
@@ -329,14 +344,16 @@ void AudioManager::stopMusic(const std::string &musicId,
 float AudioManager::getMusicTotalTime(const std::string &musicId)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::getMusicTotalTime - MusicId is not loaded: (%s)",
+        "AudioManager::getMusicTotalTime",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId,
         AudioManager::kInvalidTime
     );
 
     _CHECK_AND_WARN_IF_INVALID_ID(
-        "AudioManager::getMusicTotalTime - MusicId (%s) has invalid internal, perhaps you did forget to play it",
+        "AudioManager::getMusicTotalTime",
+        "MusicId (%s) has invalid internal, perhaps you did forget to play it",
         m_musicMap,
         musicId,
         AudioManager::kInvalidTime
@@ -348,14 +365,16 @@ float AudioManager::getMusicTotalTime(const std::string &musicId)
 float AudioManager::getMusicCurrentTime(const std::string &musicId)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::getMusicCurrentTime - MusicId is not loaded: (%s)",
+        "AudioManager::getMusicCurrentTime",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId,
         AudioManager::kInvalidTime
     );
 
     _CHECK_AND_WARN_IF_INVALID_ID(
-        "AudioManager::getMusicCurrentTime - MusicId (%s) has invalid internal, perhaps you did forget to play it",
+        "AudioManager::getMusicCurrentTime",
+        "MusicId (%s) has invalid internal, perhaps you did forget to play it",
         m_musicMap,
         musicId,
         AudioManager::kInvalidTime
@@ -367,13 +386,15 @@ float AudioManager::getMusicCurrentTime(const std::string &musicId)
 void AudioManager::setMusicCurrentTime(const std::string &musicId, float time)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::setMusicCurrentTime - MusicId is not loaded: (%s)",
+        "AudioManager::setMusicCurrentTime",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId
     );
 
     _CHECK_AND_WARN_IF_INVALID_ID(
-        "AudioManager::setMusicCurrentTime - MusicId (%s) has invalid internal, perhaps you did forget to play it",
+        "AudioManager::setMusicCurrentTime",
+        "MusicId (%s) has invalid internal, perhaps you did forget to play it",
         m_musicMap,
         musicId
     );
@@ -386,7 +407,8 @@ void AudioManager::setMusicCurrentTime(const std::string &musicId, float time)
 bool AudioManager::isPlayingMusic(const string &musicId)
 {
     _CHECK_AND_WARN_IF_NOT_EXISTS(
-        "AudioManager::isPlayingMusic - MusicId is not loaded: (%s)",
+        "AudioManager::isPlayingMusic",
+        "MusicId is not loaded: (%s)",
         m_musicMap,
         musicId,
         false
