@@ -52,11 +52,13 @@ class ILoadResolver
 {
     // ILoadResolver Interface //
 public:
-    virtual void resolveVarAssignment(const std::string &name, cc::Node  *pVar)
+    virtual void resolveVarAssignment(const std::string &name,
+                                      cc::Node *pVar)
     {
         //Empty...
     }
-    virtual void resolveMenuSelector(const std::string &name, cc::MenuItem *pVar)
+    virtual void resolveMenuSelector(const std::string &name,
+                                     cc::MenuItem *pVar)
     {
         //Empty..
     }
@@ -65,15 +67,6 @@ public:
     {
         return nullptr;
     }
-
-    //NOTICE:
-    //This are the same methods above, but formatted nicely to be pasted
-    //in the header file. Just to ease the process.
-//    // ILoadResolver Interface //
-//public:
-//    void      resolveVarAssignment(const std::string &name, cc::Node     *pVar) override;
-//    void      resolveMenuSelector (const std::string &name, cc::MenuItem *pVar) override;
-//    cc::Node* resolveCustomClass  (const std::string &name                    ) override;
 };
 
 NS_MF_END
@@ -83,30 +76,32 @@ NS_MF_END
 ////////////////////////////////////////////////////////////////////////////////
 // Selector
 #define MF_ILOADRESOLVER_RESOLVE_SELECTOR(_selector_, _name_, _pvar_, _func_, _target_) \
-    if((_selector_) == (_name_)) {                                  \
+    if((_selector_) == (_name_)) {                            \
         _pvar_->setCallback(CC_CALLBACK_1(_func_, _target_)); \
-        return;                                                     \
-    }                                                               \
+        return;                                               \
+    }
 
 #define MF_ILOADRESOLVER_RESOLVE_SELECTOR_ASSERT(_name_) \
-    MF_ASSERT(                                                                 \
-        false,                                                                 \
-        "ILoadResolver::resolveMenuSelector - Failed to resolve selector:(%s)",\
-        _name_.c_str()                                                         \
-    );
+    MF_ASSERT_EX(                                        \
+        false,                                           \
+        "ILoadResolver::resolveMenuSelector",            \
+        "Failed to resolve selector:(%s)",               \
+        _name_.c_str()                                   \
+    )
 
-//Var assignment
+// Var assignment
 #define MF_ILOADRESOLVER_RESOLVE_VAR(_var_name_, _dst_var_, _type_, _name_, _pvar_) \
-    if((_var_name_) == (_name_)) {               \
+    if((_var_name_) == (_name_)) {                 \
         _dst_var_ = static_cast<_type_ *>(_pvar_); \
-        return;                                  \
+        return;                                    \
     }
 
 #define MF_ILOADRESOLVER_RESOLVE_VAR_ASSERT(_name_) \
-    MF_ASSERT(                                                                 \
-        false,                                                                 \
-        "ILoadResolver::resolveVarAssignment - Failed to resolve var:(%s)",\
-        _name_.c_str()                                                         \
+    MF_ASSERT_EX(                                   \
+        false,                                      \
+        "ILoadResolver::resolveVarAssignment",      \
+        "Failed to resolve var:(%s)",               \
+        _name_.c_str()                              \
     );
 
 #endif // defined(__MonsterFramework_include_Graphics_ILoadResolver_h__) //
