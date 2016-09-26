@@ -24,17 +24,22 @@ void _mf_assert_print(const char   *pExpr,
 NS_MF_END
 
 #define MF_ASSERT_EX(_cond_, _prefix_, _msg_, ...) \
-    if(!(_cond_)) {                                \
-        mf::_mf_assert_print(                      \
-            #_cond_,                               \
-            __FILE__,                              \
-            __LINE__,                              \
-            __PRETTY_FUNCTION__,                   \
-            _prefix_,                              \
-            _msg_,                                 \
-            ##__VA_ARGS__                          \
-        );                                         \
-    }
+    do {                                           \
+        if(!(_cond_))                              \
+        {                                          \
+            mf::_mf_assert_print(                  \
+                #_cond_,                           \
+                __FILE__,                          \
+                __LINE__,                          \
+                __PRETTY_FUNCTION__,               \
+                _prefix_,                          \
+                _msg_,                             \
+                ##__VA_ARGS__                      \
+            );                                     \
+                                                   \
+            abort();                               \
+        }                                          \
+    } while(0)
 
 #define MF_ASSERT(_cond_, _msg_, ...) \
     MF_ASSERT_EX(_cond_, "", _msg_, ##__VA_ARGS__);
