@@ -52,7 +52,7 @@ USING_NS_STD_CC_CD_MF;
 ////////////////////////////////////////////////////////////////////////////////
 FileReader::FileReader(const std::string &filename)
 {
-    MF_LOG("FileReader::FileReader - Filename: (%s)", filename.c_str());
+    MF_LOG_EX("FileReader::FileReader", "Filename: (%s)", filename.c_str());
 
     auto fullname = cc::FileUtils::getInstance()->fullPathForFilename(filename);
     auto data     = cc::FileUtils::getInstance()->getDataFromFile(fullname);

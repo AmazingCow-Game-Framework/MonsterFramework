@@ -38,8 +38,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef FILEREADER_H
-#define FILEREADER_H
+#ifndef __MonsterFramework_include_Filesystem_FileReader_h__
+#define __MonsterFramework_include_Filesystem_FileReader_h__
 
 //std
 #include <string>
@@ -67,4 +67,4 @@ private:
 };
 
 NS_MF_END
-#endif // FILEREADER_H
+#endif // __MonsterFramework_include_Filesystem_FileReader_h__
