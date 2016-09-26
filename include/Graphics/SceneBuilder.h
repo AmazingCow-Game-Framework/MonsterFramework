@@ -18,7 +18,6 @@ class SceneBuilder
 public:
     SINGLETON_OF(SceneBuilder);
 
-    // CTOR //
 private:
     SceneBuilder()  { /* Empty */ }
     ~SceneBuilder() { /* Empty */ }

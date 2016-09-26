@@ -67,8 +67,9 @@ void StringsManager::loadStrings(const std::string &filename,
     //Already Loaded.
     if(m_languageMap.find(languageName) != std::end(m_languageMap))
     {
-        MF_LOG(
-            "StringsManager::loadStrings - Already loaded strings file for language %s",
+        MF_LOG_EX(
+            "StringsManager::loadStrings",
+            "Already loaded strings file for language %s",
             languageName.c_str()
         );
         return;
@@ -76,9 +77,10 @@ void StringsManager::loadStrings(const std::string &filename,
 
     auto fullname = cc::FileUtils::getInstance()->fullPathForFilename(filename);
 
-    MF_ASSERT(
+    MF_ASSERT_EX(
         !fullname.empty(),
-        "StringsManager::loadStrings - Cannot find file: %s",
+        "StringsManager::loadStrings",
+        "Cannot find file: %s",
         filename.c_str()
     );
 
@@ -90,8 +92,9 @@ void StringsManager::purgeStrings(const std::string &languageName)
     //Already Purged or Not loaded.
     if(m_languageMap.find(languageName) != std::end(m_languageMap))
     {
-        MF_LOG(
-            "StringsManager::purgeStrings - Already purged (or not loaded) strings file for language %s",
+        MF_LOG_EX(
+            "StringsManager::purgeStrings",
+            "Already purged (or not loaded) strings file for language %s",
             languageName.c_str()
         );
         return;
@@ -109,9 +112,10 @@ const std::string& StringsManager::getCurrentLanguageName() const
 void StringsManager::setCurrentLanguageName(const std::string &languageName)
 {
     //Already Loaded.
-    MF_ASSERT(
+    MF_ASSERT_EX(
        m_languageMap.find(languageName) != std::end(m_languageMap),
-       "StringsManager::setCurrentLanguageName - Strings for language (%s) isn't loaded",
+       "StringsManager::setCurrentLanguageName",
+       "Strings for language (%s) isn't loaded",
        languageName.c_str()
     );
 
@@ -142,9 +146,10 @@ void StringsManager::parseStringsFile(const std::string &fullname,
  {
 
     //Check if we already have this language.
-    MF_ASSERT(
+    MF_ASSERT_EX(
         m_languageMap.find(languageName) == std::end(m_languageMap),
-        "StringsManager::parseStrings - Already loaded language (%s)",
+        "StringsManager::parseStrings",
+        "Already loaded language (%s)",
         languageName.c_str()
     );
 
@@ -159,9 +164,10 @@ void StringsManager::parseStringsFile(const std::string &fullname,
         &size
     );
 
-    MF_ASSERT(
+    MF_ASSERT_EX(
         pData != nullptr,
-        "StringsManager::parseStringsFile - Cannot open file: %s",
+        "StringsManager::parseStringsFile",
+        "Cannot open file: %s",
         fullname.c_str()
     );
 

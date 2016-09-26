@@ -22,9 +22,12 @@ void SceneBuilder::build(const std::string &name, cc::Node *pOwner,
 
     auto fullpath = cc::FileUtils::getInstance()->fullPathForFilename(fullname);
 
-    MF_ASSERT(!fullpath.empty(),
-              "SceneBuilder::build - Cannot find the .ccb file (%s)",
-              fullname.c_str());
+    MF_ASSERT_EX(
+        !fullpath.empty(),
+        "SceneBuilder::build",
+        "Cannot find the .ccb file (%s)",
+        fullname.c_str()
+    );
 
     auto ccbMap = cc::FileUtils::getInstance()->getValueMapFromFile(fullpath);
 

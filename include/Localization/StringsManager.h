@@ -84,9 +84,10 @@ public:
     std::string getString(const std::string str, Args... argList)
     {
         auto it = m_pCurrStringsMap->find(str);
-        MF_ASSERT(
+        MF_ASSERT_EX(
             it != std::end(*m_pCurrStringsMap),
-            "StringsManager::getString - Cannot find string (%s) for language (%s)",
+            "StringsManager::getString",
+            "Cannot find string (%s) for language (%s)",
             str.c_str(),
             getCurrentLanguageName().c_str()
         );

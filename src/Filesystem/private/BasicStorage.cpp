@@ -162,8 +162,11 @@ void BasicStorage::removeAllItems()
 void BasicStorage::createDatabase()
 {
     //Log.
-    MF_LOG("Basic Storage::createDatabase - Initializing the storage at %s",
-           m_storagePath.c_str());
+    MF_LOG_EX(
+        "Basic Storage::createDatabase",
+        "Initializing the storage at %s",
+        m_storagePath.c_str()
+    );
 
     if(cc::FileUtils::getInstance()->isFileExist(m_storagePath))
         return;
@@ -188,13 +191,20 @@ void BasicStorage::createDatabase()
 void BasicStorage::openDatabase()
 {
     //Sanity checks.
-    MF_ASSERT(m_pDB == nullptr, "Database must be not open.");
+    MF_ASSERT_EX(
+        m_pDB == nullptr,
+        "BasicStorage::openDatabase",
+        "Database must be not open."
+    );
 
     //Try open - Fail if anything goes wrong.
     if(sqlite3_open(m_storagePath.c_str(), &m_pDB) != SQLITE_OK)
     {
-        MF_LOG_ERROR("BasicStorage::openDatabase - Failed to open database - %s",
-                     getSQLError().c_str());
+        MF_LOG_ERROR_EX(
+            "BasicStorage::openDatabase",
+            "Failed to open database - %s",
+            getSQLError().c_str()
+        );
     }
 }
 void BasicStorage::closeDatabase()
@@ -202,8 +212,11 @@ void BasicStorage::closeDatabase()
     //Try close - Fail if anything goes wrong.
     if(sqlite3_close(m_pDB) != SQLITE_OK)
     {
-        MF_LOG_ERROR("BasicStorage::closeDatabase - Failed to close database - %s",
-          getSQLError().c_str());
+        MF_LOG_ERROR_EX(
+            "BasicStorage::closeDatabase",
+            "Failed to close database - %s",
+            getSQLError().c_str()
+        );
     }
     m_pDB = nullptr;
 }
@@ -212,7 +225,11 @@ void BasicStorage::closeDatabase()
 void BasicStorage::prepareStatement(const std::string &sql)
 {
     //Sanity checks...
-    MF_ASSERT(m_pStmt == nullptr, "m_pStmt has invalid state, it cannot be non-null here.");
+    MF_ASSERT_EX(
+        m_pStmt == nullptr,
+        "BasicStorage::prepareStatement",
+        "m_pStmt has invalid state, it cannot be non-null here."
+    );
 
     //Try create a statement - Fail if anything goes wrong.
     if(sqlite3_prepare_v2(m_pDB,
@@ -221,9 +238,12 @@ void BasicStorage::prepareStatement(const std::string &sql)
                           &m_pStmt,
                           nullptr) != SQLITE_OK)
     {
-        MF_LOG_ERROR("BasicStorage::prepareStatement - Failed to prepare statement (%s) - %s",
-                     sql.c_str(),
-                     getSQLError().c_str());
+        MF_LOG_ERROR_EX(
+            "BasicStorage::prepareStatement",
+            "Failed to prepare statement (%s) - %s",
+            sql.c_str(),
+            getSQLError().c_str()
+        );
     }
 }
 void BasicStorage::prepareStatement(const std::string &sql,
@@ -254,8 +274,11 @@ void BasicStorage::bindStatementText(const std::string &txt, int index)
                          -1,
                          SQLITE_TRANSIENT) != SQLITE_OK)
     {
-        MF_LOG_ERROR("Basic Storage - bindStatementText - Failed %s",
-                     getSQLError().c_str());
+        MF_LOG_ERROR_EX(
+            "BasicStorage::bindStatementText",
+            "Failed %s",
+            getSQLError().c_str()
+        );
     }
 }
 
@@ -263,28 +286,46 @@ void BasicStorage::bindStatementText(const std::string &txt, int index)
 void BasicStorage::executeStatement()
 {
     //Sanity checks.
-    MF_ASSERT(m_pDB,   "m_pDB must be openned first.");
-    MF_ASSERT(m_pStmt, "m_pStmt cannot be null here.");
+    MF_ASSERT_EX(
+        m_pDB,
+        "BasicStorage::executeStatement",
+        "m_pDB must be openned first."
+    );
+    MF_ASSERT_EX(
+        m_pStmt,
+        "BasicStorage::executeStatement",
+        "m_pStmt cannot be null here."
+    );
 
     //Execute - Fail if anything goes wrong.
     auto result = sqlite3_step(m_pStmt);
     if(result != SQLITE_DONE && result != SQLITE_ROW) //ROW is for the SELECT...
     {
-        MF_LOG_ERROR("BasicStorage::executeStatement - Failed while executing statement - %s",
-                     getSQLError().c_str());
+        MF_LOG_ERROR_EX(
+            "BasicStorage::executeStatement",
+            "Failed while executing statement - %s",
+            getSQLError().c_str()
+        );
     }
 }
 void BasicStorage::finalizeStatement()
 {
     //Sanity checks...
-    MF_ASSERT(m_pStmt != nullptr, "m_pStmt has invalid state, it cannot be null here.");
+    MF_ASSERT_EX(
+        m_pStmt != nullptr,
+        "BasicStorage::finalizeStatement",
+        "m_pStmt has invalid state, it cannot be null here."
+    );
 
 
     //Finalize - - Fail if anything goes wrong.
     if(sqlite3_finalize(m_pStmt) != SQLITE_OK)
     {
-        MF_LOG_ERROR("BasicStorage::finalizeStatement - Failed to finalize statement - %s",
-                     getSQLError().c_str());
+        MF_LOG_ERROR_EX(
+            "BasicStorage::finalizeStatement",
+            "Failed to finalize statement - %s",
+            getSQLError().c_str()
+        );
     }
 
     m_pStmt = nullptr;
