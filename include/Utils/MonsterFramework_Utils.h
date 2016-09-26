@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                 █      █                                                   //
 //                 ████████                                                   //
 //               ██        ██                                                 //
@@ -42,35 +42,20 @@
 #ifndef __MonsterFramework_include_Utils_MonsterFramework_Utils_h__
 #define __MonsterFramework_include_Utils_MonsterFramework_Utils_h__
 
-// Includes //
-//cocos2d
-#include "cocos2d.h"
-//COWTODO:
-//#include "cocos-ext.h"
-//#include "SimpleAudioEngine.h"
-
-// Namespaces //
-//Create aliases to reduce the verbosity of the use of cocos2d's namespaces.
-namespace cc    = cocos2d;
-//COWTODO:
-//namespace cd    = CocosDenshion;
-//namespace ccext = cocos2d::extension;
-
-//Help reduce verbosity of MonsterFramework namespace declarations.
-#define NS_MF_BEGIN namespace mf {
-#define NS_MF_END   }
-
-//One shot using...
-#define USING_NS_STD_CC_CD_MF \
-    using namespace std;      \
-    using namespace cocos2d;  \
-    using namespace mf;
-
-//COWTODO:
-//    using namespace cd;
-//    using namespace ccext;
+////////////////////////////////////////////////////////////////////////////////
+// MonsterFramework Includes                                                  //
+////////////////////////////////////////////////////////////////////////////////
+#include "./Macros/MonsterFramework_Assert.h"
+#include "./Macros/MonsterFramework_CreateSceneInitFunc.h"
+#include "./Macros/MonsterFramework_Disallow.h"
+#include "./Macros/MonsterFramework_Log.h"
+#include "./Macros/MonsterFramework_Macros.h"
+#include "./Macros/MonsterFramework_Namespaces.h"
 
 
+////////////////////////////////////////////////////////////////////////////////
+// Uncategorized                                                              //
+////////////////////////////////////////////////////////////////////////////////
 NS_MF_BEGIN
 
 //Taken from: https://herbsutter.com/gotw/_102/
@@ -84,151 +69,4 @@ std::unique_ptr<T> make_unique( Args&& ...args )
 
 NS_MF_END
 
-
-// Macros //
-#define SINGLETON_OF(__type__)    \
-    static __type__ *instance() { \
-        static __type__ t;        \
-        return &t;                \
-}
-
-//Similar to cocos2d's CREATE_FUNC macro, but for scenes.
-#define SCENE_FUNC(__LAYER_TYPE__)         \
-static cc::Scene* scene()                  \
-{                                          \
-    auto scene = cc::Scene::create();      \
-    auto layer = __LAYER_TYPE__::create(); \
-    scene->addChild(layer);                \
-    return scene;                          \
-}
-
-//Similar to SCENE_FUNC, but the scene will receive one
-//parameter called options with the type passed in __OPT_TYPE__.
-//This method will call the create(options) of the __LAYER_TYPE__.
-#define SCENE_FUNC_OPTIONS(__LAYER_TYPE__, __OPT_TYPE__) \
-static cc::Scene* scene(const __OPT_TYPE__ &options)     \
-{                                                        \
-    auto scene = cc::Scene::create();                    \
-    auto layer = __LAYER_TYPE__::create(options);        \
-    scene->addChild(layer);                              \
-    return scene;                                        \
-}
-
-//Similar to the CREATE_FUNC of cocos2d, but the __TYPE__'s
-//init will be called with the options of type __OPT_TYPE__
-//passed as argument.
-#define CREATE_FUNC_OPTIONS(__TYPE__, __OPT__)  \
-static __TYPE__* create(const __OPT__ &options) \
-{                                               \
-    auto ret = new __TYPE__();                  \
-    if(ret && ret->init((options)))             \
-    {                                           \
-        ret->autorelease();                     \
-    }                                           \
-    else                                        \
-    {                                           \
-        delete ret;                             \
-        ret = NULL;                             \
-    }                                           \
-    return ret;\
-}
-
-#define INIT_OPTIONS(__OPT__) \
-    virtual bool init(const __OPT__ &options);
-#define INIT() \
-    virtual bool init() override;
-
-// DEPRECATED //
-#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-    #define MF_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
-#elif _MSC_VER >= 1400 //vs 2005 or higher
-    #define MF_DEPRECATED_ATTRIBUTE __declspec(deprecated)
-#else
-    #define MF_DEPRECATED_ATTRIBUTE
-#endif
-
-// Log //
-NS_MF_BEGIN //Start the MonsterFramework Namespace.
-
-#ifdef MONSTERFRAMEWORK_DEBUG //MonsterFramework is in Debug mode.
-
-    // LOG MACROS //
-    //Prototypes for the log functions. (Should not be used directly)
-    void __not_to_direct_use_mf_log(const char *pPrefix, const char *pFormat, ...);
-
-    //Just Log the message in Console.
-    #define MF_LOG(_format_, ...) do { \
-        mf::__not_to_direct_use_mf_log("MFLOG:", _format_, ##__VA_ARGS__); \
-    } while(0)
-
-    //Just print a new line.
-    #define MF_LOG_NL() do { \
-        mf::__not_to_direct_use_mf_log("","");  \
-    } while(0)
-
-    //Log a message with a GREAT warning prefix.
-    #define MF_LOG_WARNING(_format_, ...) do { \
-        mf::__not_to_direct_use_mf_log("MFLOG [WARNING]:", \
-                                       _format_,           \
-                                       ##__VA_ARGS__);     \
-    } while(0)
-
-    //Log the message and exit.
-    #define MF_LOG_ERROR(_format_, ...) do { \
-        mf::__not_to_direct_use_mf_log("MFLOG [ERROR]:", \
-                                       _format_,         \
-                                       ##__VA_ARGS__);   \
-        abort();                                         \
-    } while(0)
-
-    //Assertion.
-    #define MF_ASSERT(_cond_, _msg_, ...) do { \
-        if(!(_cond_)) {                                 \
-            mf::__not_to_direct_use_mf_log("MFASSERT:", \
-                                       _msg_,           \
-                                       ##__VA_ARGS__);  \
-            abort();                                    \
-        }                                               \
-    } while(0)
-
-    //Help log the cocos2d's objets that follows the MF_LOG_XXX
-    //Point
-    #define MF_LOG_POINT(_str_, _point_) \
-        MF_LOG("Point (%s): x: %.2f y: %.2f", (_str_), (_point_).x, (_point_).y)
-    //Size
-    #define MF_LOG_SIZE(_str_, _size_) \
-        MF_LOG("Size (%s): w: %.2f h: %.2f", (_str_), (_size_).width, (_size_).height)
-
-    //Rect
-    #define MF_LOG_RECT(_str_, _rect_)                                    \
-        MF_LOG("Rect (%s): (%.2f,%.2f)(%.2f,%.2f)", (_str_),              \
-                                                    (_rect_).origin.x,    \
-                                                    (_rect_).origin.y,    \
-                                                    (_rect_).size.width,  \
-                                                    (_rect_).size.height)
-
-    // OTHER MACROS //
-
-    #define MF_ONLY_IN_DEBUG(_block_) do { \
-        _block_                            \
-    } while(0)
-
-#else //!MONSTERFRAMEWORK_DEBUG - MonsterFramework in Release mode.
-
-    // LOG MACROS //
-    //Just Log the message in Console.
-    #define MF_LOG(        _format_, ...     ) do {} while(0)
-    #define MF_LOG_WARNING(_format_, ...     ) do {} while(0)
-    #define MF_LOG_ERROR(  _format_, ...     ) do {} while(0)
-    #define MF_ASSERT(     _cond_, _msg_, ...) do {} while(0)
-    #define MF_LOG_POINT(  _str_, _point_    ) do {} while(0)
-    #define MF_LOG_SIZE(   _str_, _size_     ) do {} while(0)
-    #define MF_LOG_RECT(   _str_, _rect_     ) do {} while(0)
-
-    // OTHER MACROS //
-    #define MF_ONLY_IN_DEBUG(_block_) do {} while(0)
-
-#endif //MONSTERFRAMEWORK_DEBUG
-
-NS_MF_END
 #endif // defined(__MonsterFramework_include_Utils_MonsterFramework_Utils_h__) //
