@@ -30,7 +30,13 @@ void SceneBuilder::build(const std::string &name, cc::Node *pOwner,
     );
 
     auto ccbMap = cc::FileUtils::getInstance()->getValueMapFromFile(fullpath);
-
+    
+    MF_ASSERT_EX(
+        ccbMap.empty() == false,
+        "SceneBuilder::build",
+        "Failed to load ValeuMap from file: %s",
+        fullpath.c_str()
+    );
     auto nodeGraphMap = ccbMap.at("nodeGraph").asValueMap();
     //COWTODO: Implement the sequence (animation) stuff.
     //auto sequencesMap = ccbMap.at("sequences").asValueVector();
