@@ -1,6 +1,6 @@
 
-#ifndef Application_h
-#define Application_h
+#ifndef __MonsterFramework_include_Platform_Application_h__
+#define __MonsterFramework_include_Platform_Application_h__
 
 //std
 #include <string>
@@ -29,4 +29,4 @@ private:
 
 NS_MF_END
 
-#endif // defined(Application_h) //
+#endif // defined(__MonsterFramework_include_Platform_Application_h__) //
