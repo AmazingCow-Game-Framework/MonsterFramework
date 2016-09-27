@@ -41,29 +41,30 @@
 #ifndef __MonsterFramework_MonsterFramework_h__
 #define __MonsterFramework_MonsterFramework_h__
 
-//Utils
-#include "include/Utils/MonsterFramework_Utils.h"
+//AD
+#include "include/AD/ADManager.h"
+//Audio
+#include "include/Audio/AudioManager.h"
+//Filesystem
+#include "include/Filesystem/SettingsManager.h"
+#include "include/Filesystem/FileReader.h"
 //Graphics
 #include "include/Graphics/GraphicsHelper.h"
 #include "include/Graphics/SceneBuilder.h"
 #include "include/Graphics/ILoadResolver.h"
+//Localization
+#include "include/Localization/StringsManager.h"
+//Network
+#include "include/Network/Internet.h"
+//Platform
+#include "include/Platform/Application.h"
 //UI
 #include "include/UI/AlertView.h"
 #include "include/UI/ActionSheet.h"
 #include "include/UI/TwitterComposer.h"
 #include "include/UI/MailComposer.h"
 #include "include/UI/CameraView.h"
-//Network
-#include "include/Network/Internet.h"
-//AD
-#include "include/AD/ADManager.h"
-//Filesystem
-#include "include/Filesystem/SettingsManager.h"
-#include "include/Filesystem/FileReader.h"
-//Core
-//Audio
-#include "include/Audio/AudioManager.h"
-//Localization
-#include "include/Localization/StringsManager.h"
+//Utils
+#include "include/Utils/MonsterFramework_Utils.h"
 
 #endif // defined(__MonsterFramework_MonsterFramework_h__) //
