@@ -8,6 +8,8 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+//MonsterFramework
+#include "MonsterFramework/src/Utils/private/_mf_print.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF;
@@ -25,16 +27,15 @@ void _mf_assert_print(const char   *pExpr,
 {
     va_list args;
     va_start(args, pMsg);
-    
+
     constexpr int kBufferSize = 1024;
     char buffer[kBufferSize]  = { '\0' };
-    
+
     vsnprintf(buffer, kBufferSize, pMsg, args);
-    
+
     va_end(args);
 
-    fprintf(
-        stderr,
+    _mf_error_printf(
         "MF_ASSERT: assertion failed on: \n \
         file       : %s \n \
         line       : %d \n \
