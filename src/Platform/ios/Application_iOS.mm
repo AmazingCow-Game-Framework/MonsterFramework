@@ -1,13 +1,13 @@
-
-
-
-//Prevent the file to be compiled in NON MAC builds.
-#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
-
+﻿
 //Header
 #include "MonsterFramework/include/Platform/Application.h"
+
+//Prevent the file to be compiled in NON IOS builds.
+#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
+
 //ObjC
 #import <Foundation/Foundation.h>
+
 
 //Usings
 USING_NS_MF;
@@ -20,7 +20,7 @@ Application::Application() :
 {
     id ns_dict = [[NSBundle mainBundle] infoDictionary];
     id ns_name = [ns_dict objectForKey:(id)kCFBundleNameKey];
-    
+
     m_appName = [ns_name UTF8String];
 }
 
