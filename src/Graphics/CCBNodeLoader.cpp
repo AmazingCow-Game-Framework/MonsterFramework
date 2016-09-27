@@ -53,14 +53,14 @@ USING_NS_STD_CC_CD_MF
 
 // Constants //
 //Default Nodes
-#define kNodeName_CCLayer         "CCLayer"
-#define kNodeName_CCLayerColor    "CCLayerColor"
-#define kNodeName_CCSprite        "CCSprite"
-#define kNodeName_CCMenu          "CCMenu"
-#define kNodeName_CCMenuItemImage "CCMenuItemImage"
-#define kNodeName_CCLabelTTF      "CCLabelTTF"
+constexpr auto kNodeName_CCLayer         = "CCLayer";
+constexpr auto kNodeName_CCLayerColor    = "CCLayerColor";
+constexpr auto kNodeName_CCSprite        = "CCSprite";
+constexpr auto kNodeName_CCMenu          = "CCMenu";
+constexpr auto kNodeName_CCMenuItemImage = "CCMenuItemImage";
+constexpr auto kNodeName_CCLabelTTF      = "CCLabelTTF";
 //MF Nodes.
-#define kMFNodeName_MFToggle "MFToggle"
+constexpr auto kMFNodeName_MFToggle = "MFToggle";
 
 
 // Public Methods //

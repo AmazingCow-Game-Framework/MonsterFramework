@@ -45,16 +45,16 @@
 USING_NS_STD_CC_CD_MF;
 
 // Constants //
-#define kTable_Name   "Data_Table"
-#define kColumn_Key   "Key"
-#define kColumn_Value "Value"
+constexpr auto kTable_Name   = "Data_Table";
+constexpr auto kColumn_Key   = "Key";
+constexpr auto kColumn_Value = "Value";
 
-#define kQuery_Replace   "REPLACE INTO %s (%s, %s) VALUES (?, ?);"
-#define kQuery_Select    "SELECT %s FROM %s WHERE %s=?;"
-#define kQuery_Delete    "DELETE FROM %s WHERE %s=?;"
-#define kQuery_DeleteAll "DELETE FROM %s;"
+constexpr auto kQuery_Replace   = "REPLACE INTO %s (%s, %s) VALUES (?, ?);";
+constexpr auto kQuery_Select    = "SELECT %s FROM %s WHERE %s=?;";
+constexpr auto kQuery_Delete    = "DELETE FROM %s WHERE %s=?;";
+constexpr auto kQuery_DeleteAll = "DELETE FROM %s;";
 
-#define kQuery_CreateTables "CREATE TABLE IF NOT EXISTS %s( %s VARCHAR(100) PRIMARY KEY, %s VARCHAR(100) );"
+constexpr auto kQuery_CreateTables = "CREATE TABLE IF NOT EXISTS %s( %s VARCHAR(100) PRIMARY KEY, %s VARCHAR(100) );";
 
 
 // CTOR/DTOR //
