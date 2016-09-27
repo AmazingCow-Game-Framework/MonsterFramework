@@ -54,11 +54,6 @@ class BasicStorage;
 
 class SettingsManager
 {
-    // Constants / Enums / Typdefs //
-public:
-    static const std::string kSettingsManagerDatabaseName;
-
-
     // Singleton //
 public:
     SINGLETON_OF(SettingsManager);
@@ -68,7 +63,6 @@ public:
 private:
     SettingsManager();
     ~SettingsManager();
-
 
     // Public Methods //
 public:

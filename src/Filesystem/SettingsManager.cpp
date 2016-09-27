@@ -40,17 +40,18 @@
 
 //Header
 #include "MonsterFramework/include/Filesystem/SettingsManager.h"
+//Platform
+#include "MonsterFramework/include/Platform/Application.h"
 //Storage.
 #include "./private/BasicStorage.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Constants                                                                  //
 ////////////////////////////////////////////////////////////////////////////////
-const std::string SettingsManager::kSettingsManagerDatabaseName = "MONSTERFRAMEWORK_SETTINGSMANAGER_DB.db";
+constexpr auto kSettingsManagerDatabaseName = ".%s_MONSTERFRAMEWORK_SETTINGSMANAGER_DB.db";
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -58,10 +59,24 @@ const std::string SettingsManager::kSettingsManagerDatabaseName = "MONSTERFRAMEW
 ////////////////////////////////////////////////////////////////////////////////
 SettingsManager::SettingsManager()
 {
-    //Get the path for the storage.
-    m_path  = FileUtils::getInstance()->getWritablePath();
-    m_path += SettingsManager::kSettingsManagerDatabaseName;
+    //COWTODO: The Database should be placed inside a hidden
+    //         folder with the name of the application.
+    auto pApplication = static_cast<mf::Application *>(mf::Application::getInstance());
 
+    auto appName   = pApplication->getApplicationName();
+    auto writePath = FileUtils::getInstance()->getWritablePath();
+    
+    m_path = writePath + cc::StringUtils::format(
+       kSettingsManagerDatabaseName,
+       appName.c_str()
+    );
+
+    MF_LOG_EX(
+        "SettingsManager::SettignsManager",
+        "Settings write path is: (%s)",
+        m_path.c_str()
+    );
+    
     //Initialize the unique_ptr.
     // BasicStorage implements RAII.
     m_pStorage.reset(new BasicStorage(m_path));
