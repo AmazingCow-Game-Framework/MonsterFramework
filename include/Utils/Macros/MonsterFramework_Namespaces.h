@@ -14,6 +14,7 @@ namespace cc = cocos2d;
 // Help reduce verbosity of MonsterFramework namespace declarations.
 #define NS_MF_BEGIN namespace mf {
 #define NS_MF_END   }
+#define USING_NS_MF using namespace mf;
 
 // One shot using...
 #define USING_NS_STD_CC_CD_MF \
