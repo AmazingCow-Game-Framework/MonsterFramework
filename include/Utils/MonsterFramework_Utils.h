@@ -42,6 +42,8 @@
 #ifndef __MonsterFramework_include_Utils_MonsterFramework_Utils_h__
 #define __MonsterFramework_include_Utils_MonsterFramework_Utils_h__
 
+#include "cocos2d.h"
+
 ////////////////////////////////////////////////////////////////////////////////
 // MonsterFramework Includes                                                  //
 ////////////////////////////////////////////////////////////////////////////////
