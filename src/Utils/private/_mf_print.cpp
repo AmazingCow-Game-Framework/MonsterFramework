@@ -61,14 +61,13 @@ void _internal_printf(FILE *pFile, const char *pStr)
     __android_log_print(
         ANDROID_LOG_DEBUG,
         "MonsterFramework",
-        "MF_LOG: %s - %s\n",
-        pPrefix,
-        buffer
+        "%s",
+        pStr
     );
 
 #else //!(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
-    fprintf(pFile, pStr);
+    fprintf(pFile, "%s", pStr);
     fflush(pFile);
 
 #endif // (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
