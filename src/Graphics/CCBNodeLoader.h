@@ -55,21 +55,26 @@ class CCBNodeLoader
 {
     // Public Methods //
 public:
-    void load(const cc::ValueMap &map, cc::Node *parent, mf::ILoadResolver *pResolver);
-    void loadNodeGraph(const cc::ValueMap &map, cc::Node *parent, mf::ILoadResolver *pResolver);
+    void load(const cc::ValueMap &map,
+              cc::Node *parent,
+              mf::ILoadResolver *pResolver);
+    
+    void loadNodeGraph(const cc::ValueMap &map,
+                       cc::Node *parent,
+                       mf::ILoadResolver *pResolver);
+
 
     // Private Methods //
 private:
     std::string findCCBFilename(const cc::ValueVector &properties);
-    cc::Node*   assignProperties(cc::Node *obj,
-                                 const cc::ValueVector &properties,
-                                 mf::ILoadResolver *pResolver);
+
+    
+    cc::Node* assignProperties(cc::Node *obj,
+                               const cc::ValueVector &properties,
+                               mf::ILoadResolver *pResolver);
+
 
     cc::Node* resolveDefaultClasses(const std::string &baseClass);
-    cc::Node* resolveMFClasses(const std::string &customClass);
-    cc::Node* resolveCustomClasses(const std::string &customClass,
-                                   mf::ILoadResolver *pResolver,
-                                   const cc::ValueVector &customProperties);
 };
 
 NS_MF_END

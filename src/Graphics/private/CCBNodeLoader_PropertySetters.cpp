@@ -86,15 +86,15 @@ void mf::_set_color(cc::Node *obj, const cc::Value &value)
     static_cast<cc::LayerColor *>(obj)->setColor(_decodeAsColor3(value));
 }
 
-void mf::_set_contentSize(cc::Node *obj, const cc::Value &value)
+void mf::_set_contentSize(cc::Node *pObj, const cc::Value &value)
 {
-    obj->setContentSize(_decodeAsSize(value));
+    pObj->setContentSize(_decodeAsSize(value, pObj));
 }
 
-void mf::_set_dimensions(cc::Node *obj, const cc::Value &value)
+void mf::_set_dimensions(cc::Node *pObj, const cc::Value &value)
 {
-    cc::Size decodedValue = _decodeAsSize(value);
-    static_cast<cc::Label *>(obj)->setDimensions(
+    cc::Size decodedValue = _decodeAsSize(value, pObj);
+    static_cast<cc::Label *>(pObj)->setDimensions(
         decodedValue.width,
         decodedValue.height
     );
@@ -198,9 +198,9 @@ void mf::_set_opacity(cc::Node *obj, const cc::Value &value)
     obj->setOpacity(_decodeAsByte(value));
 }
 
-void mf::_set_position(cc::Node *obj, const cc::Value &value)
+void mf::_set_position(cc::Node *pObj, const cc::Value &value)
 {
-    obj->setPosition(_decodeAsPosition(value, obj->getParent()));
+    pObj->setPosition(_decodeAsPosition(value, pObj));
 }
 
 void mf::_set_rotation(cc::Node *obj, const cc::Value &value)

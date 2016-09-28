@@ -51,177 +51,206 @@
 //Usings
 USING_NS_STD_CC_CD_MF
 
-// Constants //
-//Default Nodes
-constexpr auto kNodeName_CCLayer         = "CCLayer";
-constexpr auto kNodeName_CCLayerColor    = "CCLayerColor";
-constexpr auto kNodeName_CCSprite        = "CCSprite";
-constexpr auto kNodeName_CCMenu          = "CCMenu";
-constexpr auto kNodeName_CCMenuItemImage = "CCMenuItemImage";
-constexpr auto kNodeName_CCLabelTTF      = "CCLabelTTF";
-//MF Nodes.
-constexpr auto kMFNodeName_MFToggle = "MFToggle";
-
-
-// Public Methods //
-void CCBNodeLoader::load(const cc::ValueMap &map, cc::Node *parent,
+////////////////////////////////////////////////////////////////////////////////
+// Public Methods                                                             //
+////////////////////////////////////////////////////////////////////////////////
+void CCBNodeLoader::load(const cc::ValueMap &map,
+                         cc::Node          *pParent,
                          mf::ILoadResolver *pResolver)
 {
-    //Retrieve the values
-    auto baseClass               = map.at("baseClass"              ).asString();
-    auto customClass             = map.at("customClass"            ).asString();
-    auto children                = map.at("children"               ).asValueVector();
-    auto memberVarAssignmentName = map.at("memberVarAssignmentName").asString();
-    auto properties              = map.at("properties"             ).asValueVector();
+    //Constants.
+    constexpr auto kBaseClass        = "baseClass";
+    constexpr auto kCustomClass      = "customClass";
+    constexpr auto kChildren         = "children";
+    constexpr auto kMemberVar        = "memberVarAssignmentName";
+    constexpr auto kProperties       = "properties";
+    constexpr auto kCustomProperties = "customProperties";
+    constexpr auto kCCBFile          = "CCBFile";
+
+    //Load info.
+    auto baseClass               = map.at(kBaseClass  ).asString     ();
+    auto customClass             = map.at(kCustomClass).asString     ();
+    auto children                = map.at(kChildren   ).asValueVector();
+    auto memberVarAssignmentName = map.at(kMemberVar  ).asString     ();
+    auto properties              = map.at(kProperties ).asValueVector();
 
     cc::ValueVector customProperties;
-    auto customPropertiesIt = map.find("customProperties");
-    if(customPropertiesIt != end(map))
-         customProperties = map.at("customProperties").asValueVector();
+    auto customPropertiesIt = map.find(kCustomProperties);
+    if(customPropertiesIt != std::end(map))
+         customProperties = map.at(kCustomProperties).asValueVector();
 
-    //LOG
-//    MF_LOG("Loading a Node with BaseClass:(%s) with CustomClass:(%s) and MemberVarAssignment:(%s)",
-//          baseClass.c_str(), customClass.c_str(), memberVarAssignmentName.c_str());
 
-    //Create the node and assign its properties.
-    cc::Node *node = nullptr;
-    if(baseClass == "CCBFile")
+    //Load the node.
+    cc::Node *pNode = nullptr;
+
+    // CCBFile.
+    if(baseClass == kCCBFile)
     {
         auto ccbFilename = findCCBFilename(properties);
-        node = pResolver->resolveCustomClass(ccbFilename, customProperties);
+        pNode = pResolver->resolveCustomClass(ccbFilename, customProperties);
     }
+    // Default Classes.
     else if(customClass.empty())
     {
-        node = resolveDefaultClasses(baseClass);
+        pNode = this->resolveDefaultClasses(baseClass);
     }
-    else if(customClass.size() > 2 && customClass.substr(0, 2) == "MF")
+    // Custom Classes.
+    else
     {
-        node = resolveMFClasses(customClass);
+        pNode = pResolver->resolveCustomClass(customClass, customProperties);
     }
 
-    //Node isn't a Default class nor a custom MF class, so let's do a last
-    //try and check if the client code has a loader for it.
-    if(!node)
-    {
-        node = resolveCustomClasses(customClass, pResolver, customProperties);
-    }
-
+    //Ensure that Node was loaded.
     MF_ASSERT_EX(
-        node,
+        pNode,
         "CCBNodeLoader::load",
         "Node is null (%s)",
         baseClass.c_str()
     );
 
-    parent->addChild(node);
-    assignProperties(node, properties, pResolver);
+    pParent->addChild(pNode);
 
-    //Resolve Custom Class.
+    //Assign Properties.
+    this->assignProperties(pNode, properties, pResolver);
 
-    //Resolve Member Var Assignment
+    //Resolve Var Assignment.
     if(!memberVarAssignmentName.empty())
-        pResolver->resolveVarAssignment(memberVarAssignmentName, node);
+        pResolver->resolveVarAssignment(memberVarAssignmentName, pNode);
 
     //Create the Node's children.
+    CCBNodeLoader nodeLoader;
     for(const auto &childItem : children)
     {
-        CCBNodeLoader nodeLoader;
-        nodeLoader.load(childItem.asValueMap(), node, pResolver);
+        nodeLoader.load(
+            childItem.asValueMap(), //Graph
+            pNode,                  //Owner
+            pResolver               //Resolver
+        );
     }
 }
-void CCBNodeLoader::loadNodeGraph(const cc::ValueMap &map, cc::Node *parent, mf::ILoadResolver *pResolver)
+
+void CCBNodeLoader::loadNodeGraph(const cc::ValueMap &map,
+                                  cc::Node           *pParent,
+                                  mf::ILoadResolver  *pResolver)
 {
-    auto children   = map.at("children"  ).asValueVector();
-    auto properties = map.at("properties").asValueVector();
+    constexpr auto kChildren   = "children";
+    constexpr auto kProperties = "properties";
 
-    assignProperties(parent, properties, pResolver);
+    //Load info.
+    auto children   = map.at(kChildren  ).asValueVector();
+    auto properties = map.at(kProperties).asValueVector();
+
+    //Make the Code Owner (The class object) has equal
+    //prorperties as the CCBFile Owner (First Object).
+    this->assignProperties(pParent, properties, pResolver);
 
     //Create the Node's children.
+    CCBNodeLoader nodeLoader;
     for(const auto &childItem : children)
     {
-        CCBNodeLoader nodeLoader;
-        nodeLoader.load(childItem.asValueMap(), parent, pResolver);
+        nodeLoader.load(
+           childItem.asValueMap(),  //Graph
+           pParent,                 //Owner
+           pResolver                //Resolver
+        );
     }
 }
 
-// Private Methods //
+////////////////////////////////////////////////////////////////////////////////
+// Private Methods                                                            //
+////////////////////////////////////////////////////////////////////////////////
 std::string CCBNodeLoader::findCCBFilename(const cc::ValueVector &properties)
 {
+    //Constants.
+    constexpr auto kName    = "name";
+    constexpr auto kCCBFile = "ccbFile";
+    constexpr auto kValue   = "value";
+
     //Search for a property named ccbFile and return its value
     //if found, otherwise just return an empty string.
-    for(auto it = begin(properties); it != end(properties); ++it)
+    for(const auto &item : properties)
     {
-        const auto &item = it->asValueMap();
+        const auto &map = item.asValueMap();
 
-        if(item.at("name").asString() == "ccbFile")
-            return item.at("value").asString();
+        if(map.at(kName).asString() == kCCBFile)
+            return map.at(kValue).asString();
     }
+
     return "";
 }
-cc::Node* CCBNodeLoader::assignProperties(cc::Node *obj,
+
+cc::Node* CCBNodeLoader::assignProperties(cc::Node              *pObj,
                                           const cc::ValueVector &properties,
-                                          ILoadResolver *pResolver)
+                                          ILoadResolver         *pResolver)
 {
+    //Constants
+    constexpr auto kName  = "name";
+    constexpr auto kValue = "value";
+
     //Iterate for all properties.
-    for(auto it = begin(properties); it != end(properties); ++it)
+    for(const auto &item : properties)
     {
         //Get the item.
-        const auto &item  = it->asValueMap();
+        const auto &propMap = item.asValueMap();
         //Get the name/value pair.
-        const auto &name  = item.at("name" ).asString();
-        const auto &value = item.at("value");
-
-//        MF_LOG("CCBNodeLoader - %s", name.c_str());
+        const auto &name  = propMap.at(kName ).asString();
+        const auto &value = propMap.at(kValue);
 
 //This macro is just to ease the typing and make the code less cluttered
 //Since all functions follows the "same signature" chaging only the part
 //of it's name. This macro is undefined just after it's use.
-#define _SET_PROPERTY_FUNCTION(_target_name_, _name_, _obj_, _value_) \
-if(_name_ == #_target_name_) {                                        \
-    _set_ ## _target_name_(_obj_, _value_);                           \
-}
+#define _SET_PROPERTY_FUNCTION(_target_name_)     \
+    if(name == #_target_name_) {                  \
+        _set_ ## _target_name_(pObj, value);      \
+    }
+
         //Check if the name of property matches and set the property.
-        _SET_PROPERTY_FUNCTION(anchorPoint,                  name, obj, value);
-        _SET_PROPERTY_FUNCTION(color,                        name, obj, value);
-        _SET_PROPERTY_FUNCTION(contentSize,                  name, obj, value);
-        _SET_PROPERTY_FUNCTION(disabledSpriteFrame,          name, obj, value);
-        _SET_PROPERTY_FUNCTION(displayFrame,                 name, obj, value);
-        _SET_PROPERTY_FUNCTION(fontName,                     name, obj, value);
-        _SET_PROPERTY_FUNCTION(fontSize,                     name, obj, value);
-        _SET_PROPERTY_FUNCTION(ignoreAnchorPointForPosition, name, obj, value);
-        _SET_PROPERTY_FUNCTION(isAccelerometerEnabled,       name, obj, value);
-        _SET_PROPERTY_FUNCTION(isEnabled,                    name, obj, value);
-        _SET_PROPERTY_FUNCTION(isTouchEnabled,               name, obj, value);
-        _SET_PROPERTY_FUNCTION(normalSpriteFrame,            name, obj, value);
-        _SET_PROPERTY_FUNCTION(opacity,                      name, obj, value);
-        _SET_PROPERTY_FUNCTION(position,                     name, obj, value);
-        _SET_PROPERTY_FUNCTION(rotation,                     name, obj, value);
-        _SET_PROPERTY_FUNCTION(scale,                        name, obj, value);
-        _SET_PROPERTY_FUNCTION(selectedSpriteFrame,          name, obj, value);
-        _SET_PROPERTY_FUNCTION(string,                       name, obj, value);
-        _SET_PROPERTY_FUNCTION(dimensions,                   name, obj, value);
-        _SET_PROPERTY_FUNCTION(horizontalAlignment,          name, obj, value);
-        _SET_PROPERTY_FUNCTION(verticalAlignment,            name, obj, value);
+        _SET_PROPERTY_FUNCTION(anchorPoint                 );
+        _SET_PROPERTY_FUNCTION(color                       );
+        _SET_PROPERTY_FUNCTION(contentSize                 );
+        _SET_PROPERTY_FUNCTION(disabledSpriteFrame         );
+        _SET_PROPERTY_FUNCTION(displayFrame                );
+        _SET_PROPERTY_FUNCTION(fontName                    );
+        _SET_PROPERTY_FUNCTION(fontSize                    );
+        _SET_PROPERTY_FUNCTION(ignoreAnchorPointForPosition);
+        _SET_PROPERTY_FUNCTION(isAccelerometerEnabled      );
+        _SET_PROPERTY_FUNCTION(isEnabled                   );
+        _SET_PROPERTY_FUNCTION(isTouchEnabled              );
+        _SET_PROPERTY_FUNCTION(normalSpriteFrame           );
+        _SET_PROPERTY_FUNCTION(opacity                     );
+        _SET_PROPERTY_FUNCTION(position                    );
+        _SET_PROPERTY_FUNCTION(rotation                    );
+        _SET_PROPERTY_FUNCTION(scale                       );
+        _SET_PROPERTY_FUNCTION(selectedSpriteFrame         );
+        _SET_PROPERTY_FUNCTION(string                      );
+        _SET_PROPERTY_FUNCTION(dimensions                  );
+        _SET_PROPERTY_FUNCTION(horizontalAlignment         );
+        _SET_PROPERTY_FUNCTION(verticalAlignment           );
 
 #undef _SET_PROPERTY_FUNCTION //We don't want this anymore ;)
 
         //Block is special, because we need the ILoadResolver
         //to communicate with the object owner class.
         if(name == "block")
-            _set_block(obj, value, pResolver);
+            _set_block(pObj, value, pResolver);
     }
 
-    return obj;
+    return pObj;
 }
-
 
 cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
 {
-    cc::Node *node = nullptr;
-
+    //Constants
+    constexpr auto kCCLayer         = "CCLayer";
+    constexpr auto kCCLayerColor    = "CCLayerColor";
+    constexpr auto kCCSprite        = "CCSprite";
+    constexpr auto kCCMenu          = "CCMenu";
+    constexpr auto kCCMenuItemImage = "CCMenuItemImage";
+    constexpr auto kCCLabelTTF      = "CCLabelTTF";
+    
     //Layer
-    if(baseClass == kNodeName_CCLayer)
-        node = cc::Layer::create();
+    if(baseClass == kCCLayer)
+        return cc::Layer::create();
 
     //LayerColor
     //COWTODO: Bug? \
@@ -230,45 +259,25 @@ cc::Node* CCBNodeLoader::resolveDefaultClasses(const std::string &baseClass)
     //  So any color m_options.panelType == DialogPanel::PanelType::Pause  \
     //  x is occurring  but know works in this way.
     //
-    else if(baseClass == kNodeName_CCLayerColor)
-        node = cc::LayerColor::create(cc::Color4B::BLUE);
+    if(baseClass == kCCLayerColor)
+        return cc::LayerColor::create(cc::Color4B::BLUE);
 
     //Sprite
-    else if(baseClass == kNodeName_CCSprite)
-        node = cc::Sprite::create();
+    if(baseClass == kCCSprite)
+        return cc::Sprite::create();
 
     //Menu
-    else if(baseClass == kNodeName_CCMenu)
-        node = cc::Menu::create();
+    if(baseClass == kCCMenu)
+        return cc::Menu::create();
 
     //MenuItem
-    else if(baseClass == kNodeName_CCMenuItemImage)
-        node = cc::MenuItemSprite::create(nullptr, nullptr);
+    if(baseClass == kCCMenuItemImage)
+        return cc::MenuItemSprite::create(nullptr, nullptr);
 
     //LabelTTF
-    else if(baseClass == kNodeName_CCLabelTTF)
-        node = cc::Label::create();
-
-    // //LabelBMP
-    // else if(baseClass == kNodeName_CCLabelBPM)
-    //     node = cc::
-    return node;
-}
-
-cc::Node* CCBNodeLoader::resolveMFClasses(const std::string &customClass)
-{
-    if(customClass == kMFNodeName_MFToggle)
-        return cc::MenuItemToggle::create();
-
+    else if(baseClass == kCCLabelTTF)
+        return cc::Label::create();
+    
+    
     return nullptr;
 }
-
-cc::Node* CCBNodeLoader::resolveCustomClasses(const std::string &customClass,
-                                              mf::ILoadResolver *pResolver,
-                                              const cc::ValueVector &customProperties)
-{
-    return pResolver->resolveCustomClass(customClass, customProperties);
-}
-
-
-#undef _SET_PROPERTY_FUNCTION
