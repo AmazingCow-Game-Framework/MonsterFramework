@@ -1,4 +1,4 @@
-﻿
+
 // Only compile this file in debug mode.
 #ifdef MONSTERFRAMEWORK_DEBUG
 
