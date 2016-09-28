@@ -58,6 +58,7 @@
 #include "include/Network/Internet.h"
 //Platform
 #include "include/Platform/Application.h"
+#include "include/Platform/Device.h"
 //UI
 #include "include/UI/AlertView.h"
 #include "include/UI/ActionSheet.h"

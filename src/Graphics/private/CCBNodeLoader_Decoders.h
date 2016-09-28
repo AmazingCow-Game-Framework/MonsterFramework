@@ -50,11 +50,11 @@ NS_MF_BEGIN
 //Decoders.
 cc::Point   _decodeAsPoint       (const cc::Value &value);
 bool        _decodeAsCheck       (const cc::Value &value);
-cc::Point   _decodeAsPosition    (const cc::Value &value, cc::Node *parent);
+cc::Point   _decodeAsPosition    (const cc::Value &value, cc::Node *pNode);
 std::string _decodeAsSpriteFrame (const cc::Value &value);
 std::string _decodeAsBlock       (const cc::Value &value);
 cc::Color3B _decodeAsColor3      (const cc::Value &value);
-cc::Size    _decodeAsSize        (const cc::Value &value);
+cc::Size    _decodeAsSize        (const cc::Value &value, cc::Node *pNode);
 float       _decodeAsDegrees     (const cc::Value &value);
 float       _decodeAsFontScale   (const cc::Value &value);
 std::string _decodeAsString      (const cc::Value &value);

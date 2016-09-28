@@ -58,19 +58,46 @@ bool mf::_decodeAsCheck(const cc::Value &value)
 {
     return value.asBool();
 }
-cc::Point mf::_decodeAsPosition(const cc::Value &value, cc::Node *parent)
+cc::Point mf::_decodeAsPosition(const cc::Value &value, cc::Node *pNode)
 {
-    auto x = value.asValueVector().at(0).asFloat();
-    auto y = value.asValueVector().at(1).asFloat();
-    auto t = value.asValueVector().at(2).asInt();
+    //Constants
+    constexpr auto kIndex_X    = 0;
+    constexpr auto kIndex_Y    = 1;
+    constexpr auto kIndex_Type = 2;
     
-    if(t == 4)
+    constexpr auto kType_Abs = 0;
+    constexpr auto kType_Per = 4;
+    
+    //Get the values.
+    auto x = value.asValueVector().at(kIndex_X).asFloat();
+    auto y = value.asValueVector().at(kIndex_Y).asFloat();
+    
+    auto type = value.asValueVector().at(kIndex_Type).asInt();
+    
+    MF_ASSERT_EX(
+        ((type == kType_Abs) || (type == kType_Per)),
+        "SceneBuilder - _decodeAsPosition",
+        "Tried decoded an unsuported type of position: (%d)",
+        type
+    );
+    
+    if(type == kType_Abs)
     {
-        auto p = mf::GraphicsHelper::getAbsolutePosition(x, y, parent);
-        return mf::GraphicsHelper::getAbsolutePosition(x, y, parent);
+        return cc::Vec2(x, y);
     }
-    return cc::Point(x, y);
+    else if(type == kType_Per)
+    {
+        auto size = (pNode && pNode->getParent())
+                    ? pNode->getParent()->getContentSize()
+                    : cc::Director::getInstance()->getWinSize();
+        
+        return mf::GraphicsHelper::getAbsolutePosition(x, y, size);
+    }
+    
+    return cc::Point::ZERO; //Just to make the compile happy.
 }
+
+
 std::string mf::_decodeAsSpriteFrame(const cc::Value &value)
 {
     return value.asValueVector().at(1).asString();
@@ -86,11 +113,50 @@ cc::Color3B mf::_decodeAsColor3(const cc::Value &value)
                              value.asValueVector().at(2).asInt());
     return color;
 }
-cc::Size mf::_decodeAsSize(const cc::Value &value)
+
+cc::Size mf::_decodeAsSize(const cc::Value &value, cc::Node *pNode)
 {
-    return cc::Size(value.asValueVector().at(0).asFloat(),
-                    value.asValueVector().at(1).asFloat());
+    //Constants.
+    constexpr auto kIndex_Width  = 0;
+    constexpr auto kIndex_Height = 1;
+    constexpr auto kIndex_Type   = 2;
+    
+    constexpr auto kType_Abs = 0;
+    constexpr auto kType_Per = 1;
+    
+    //Get the Values.
+    auto w = value.asValueVector().at(kIndex_Width ).asFloat();
+    auto h = value.asValueVector().at(kIndex_Height).asFloat();
+    
+    auto type = value.asValueVector().at(kIndex_Type).asInt();
+    
+    
+    MF_ASSERT_EX(
+        ((type == kType_Abs) || (type == kType_Per)),
+        "SceneBuilder - _decodeAsSize",
+        "Tried decoded an unsuported type of size: (%d)",
+        type
+    );
+    
+    if(type == kType_Abs)
+    {
+        return cc::Size(w, h);
+    }
+    else if(type == kType_Per)
+    {
+        auto parentSize = (pNode && pNode->getParent())
+                          ? pNode->getParent()->getContentSize()
+                          : cc::Director::getInstance()->getWinSize();
+        
+        return cc::Size(
+                   parentSize.width  * (w / 100.0f),
+                   parentSize.height * (h / 100.0f)
+               );
+    }
+    
+    return cc::Size::ZERO; //Just to make the compile happy.
 }
+
 float mf::_decodeAsDegrees(const cc::Value &value)
 {
     return value.asFloat();

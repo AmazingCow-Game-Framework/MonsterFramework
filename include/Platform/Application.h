@@ -27,6 +27,6 @@ private:
     std::string m_appName;
 };
 
-NS_MF_END
 
+NS_MF_END
 #endif // defined(__MonsterFramework_include_Platform_Application_h__) //
