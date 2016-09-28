@@ -1,4 +1,4 @@
-﻿
+
 //Header
 #include "MonsterFramework/include/Platform/Application.h"
 
