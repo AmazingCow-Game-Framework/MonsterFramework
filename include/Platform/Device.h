@@ -24,9 +24,9 @@ public:
     static float getScreenSizeRatio()
     {
         auto size = mf::Device::getScreenSize();
-        return std::max(
-                  size.width, size.height) / std::min(size.width, size.height
-               );
+        
+        return std::max(size.width, size.height) /
+               std::min(size.width, size.height);
     }
 };
 
