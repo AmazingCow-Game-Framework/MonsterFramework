@@ -1,4 +1,4 @@
-﻿
+
 #include "MonsterFramework/include/Platform/Application.h"
 
 //Prevent the file to be compiled in NON Android builds.
@@ -20,11 +20,10 @@ mf::Application::Application() :
     JniMethodInfo t;
     auto success = JniHelper::getStaticMethodInfo(
                         t,
-                        "AppActivity",
+                        "org/cocos2dx/cpp/AppActivity",
                         "getApplicationName",
                         "()Ljava/lang/String;"
                     );
-
     MF_ASSERT_EX(
         success == true,
         "[Android] Application::Application()",
