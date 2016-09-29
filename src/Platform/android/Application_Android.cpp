@@ -17,21 +17,25 @@ USING_NS_CC;
 mf::Application::Application() :
     cc::Application()
 {
-    JniMethodInfo t;
-    auto success = JniHelper::getStaticMethodInfo(
-                        t,
-                        "org/cocos2dx/cpp/AppActivity",
-                        "getApplicationName",
-                        "()Ljava/lang/String;"
-                    );
-    MF_ASSERT_EX(
-        success == true,
-        "[Android] Application::Application()",
-        "Cannot extract method info"
-    );
+//    JniMethodInfo t;
+//    auto success = JniHelper::getStaticMethodInfo(
+//                        t,
+//                        "org/cocos2dx/cpp/AppActivity",
+//                        "getApplicationName",
+//                        "()Ljava/lang/String;"
+//                    );
+//    MF_ASSERT_EX(
+//        success == true,
+//        "[Android] Application::Application()",
+//        "Cannot extract method info"
+//    );
 
-    jstring s = (jstring)t.env->CallObjectMethod(t.classID, t.methodID);
-    m_appName = JniHelper::jstring2string(s);
+//    jstring s = (jstring)t.env->CallObjectMethod(t.classID, t.methodID);
+//    m_appName = JniHelper::jstring2string(s);
+
+
+    //COWTODO: NOT_IMPLEMENTED_YET
+    m_appName = "NOT_IMPLEMENTED_YET";
 }
 
 
