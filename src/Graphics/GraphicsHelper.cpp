@@ -82,6 +82,10 @@ void GraphicsHelper::copyAnchorPoint(cc::Node *pSrc, cc::Node *pDst)
     pDst->setIgnoreAnchorPointForPosition(pSrc->isIgnoreAnchorPointForPosition());
 }
 
+void GraphicsHelper::copyScale(cc::Node *pSrc, cc::Node *pDst)
+{
+    pDst->setScale(pSrc->getScaleX(), pSrc->getScaleY());
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
