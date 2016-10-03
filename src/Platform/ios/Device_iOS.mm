@@ -29,12 +29,12 @@ cc::Size Device::getScreenSize()
         "[iOS] Device::getWindowSize()",
         "Failed to get an instance of mainScreen"
     );
-    
+
     CGRect  screenBounds = [ui_screen bounds];
     CGFloat screenScale  = [ui_screen scale];
-    
+
     return cc::Size(
-               screenBounds.size.width * screenScale,
+               screenBounds.size.width  * screenScale,
                screenBounds.size.height * screenScale
            );
 }
