@@ -54,17 +54,9 @@
 #include "include/Graphics/ILoadResolver.h"
 //Localization
 #include "include/Localization/StringsManager.h"
-//Network
-#include "include/Network/Internet.h"
 //Platform
 #include "include/Platform/Application.h"
 #include "include/Platform/Device.h"
-//UI
-#include "include/UI/AlertView.h"
-#include "include/UI/ActionSheet.h"
-#include "include/UI/TwitterComposer.h"
-#include "include/UI/MailComposer.h"
-#include "include/UI/CameraView.h"
 //Utils
 #include "include/Utils/MonsterFramework_Utils.h"
 
