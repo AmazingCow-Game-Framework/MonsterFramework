@@ -43,8 +43,6 @@
 #include "MonsterFramework/include/AD/ADManager.h"
 //MonsterFramework
 #include "MonsterFramework/include/Filesystem/SettingsManager.h"
-#include "MonsterFramework/include/Network/Internet.h"
-#include "MonsterFramework/src/AD/private/ADManager_Functions.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
