@@ -17,25 +17,22 @@ USING_NS_CC;
 mf::Application::Application() :
     cc::Application()
 {
-//    JniMethodInfo t;
-//    auto success = JniHelper::getStaticMethodInfo(
-//                        t,
-//                        "org/cocos2dx/cpp/AppActivity",
-//                        "getApplicationName",
-//                        "()Ljava/lang/String;"
-//                    );
-//    MF_ASSERT_EX(
-//        success == true,
-//        "[Android] Application::Application()",
-//        "Cannot extract method info"
-//    );
+    constexpr auto kClassPath = "org/cocos2dx/cpp/AppActivity";
+    constexpr auto kMethodName = "getApplicationName";
+    constexpr auto kMethodSig  = "()Ljava/lang/String;";
 
-//    jstring s = (jstring)t.env->CallObjectMethod(t.classID, t.methodID);
-//    m_appName = JniHelper::jstring2string(s);
+    JNIEnv* pEnv;
 
+    JavaVM*   j_jvm      = cc::JniHelper::getJavaVM();
+    jint      j_ret      = j_jvm->GetEnv((void**)&pEnv, JNI_VERSION_1_4);
+    jclass    j_class    = pEnv->FindClass(kClassPath);
+    jmethodID j_methodId = pEnv->GetStaticMethodID(j_class, kMethodName, kMethodSig);
+    jstring   j_str      = (jstring)pEnv->CallStaticObjectMethod(j_class, j_methodId);
 
-    //COWTODO: NOT_IMPLEMENTED_YET
-    m_appName = "NOT_IMPLEMENTED_YET";
+    const char* cstr = pEnv->GetStringUTFChars(j_str, JNI_FALSE);
+    m_appName = cstr;
+
+    pEnv->ReleaseStringUTFChars(j_str, cstr); //Release the Java stuff.
 }
 
 
