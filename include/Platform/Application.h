@@ -15,13 +15,16 @@ class Application :
     // CTOR / DTOR //
 public:
     Application();
-    
-    
+
+
+    static mf::Application* getMFInstance() {
+        return static_cast<mf::Application*>(cc::Application::getInstance());
+    }
     // Public Methods //
 public:
     const std::string& getApplicationName() const;
-    
-    
+
+
     // iVars //
 private:
     std::string m_appName;
