@@ -56,9 +56,20 @@ FileReader::FileReader(const std::string &filename)
 
     auto fullname = cc::FileUtils::getInstance()->fullPathForFilename(filename);
     auto data     = cc::FileUtils::getInstance()->getDataFromFile(fullname);
-    auto size     = data.getSize ();
-    auto pBuffer  = data.getBytes();
 
+    MF_ASSERT_EX(
+        data.isNull() == false,
+        "FileReader::FileReader",
+        "Cannot open file: %s",
+        fullname.c_str()
+    );
+
+    auto size    = data.getSize ();
+    auto pBuffer = data.getBytes();
+
+    //Inserting in the vector so we have our own copy.
+    //  This way the cocos2d are free to do whatever they
+    //  seem to fit.
     m_data.insert(
         std::end(m_data),
         pBuffer,
