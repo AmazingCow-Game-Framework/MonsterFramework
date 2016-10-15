@@ -50,8 +50,8 @@ cc::Size Device::getScreenSize()
     std::stringstream ss(cstr);
 
     auto size = cc::Size::ZERO;
-    ss >> size.height;
     ss >> size.width;
+    ss >> size.height;
 
 
     pEnv->ReleaseStringUTFChars(j_str, cstr); //Release the Java stuff.
