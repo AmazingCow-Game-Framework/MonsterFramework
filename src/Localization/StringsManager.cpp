@@ -46,6 +46,7 @@
 #include <sstream>
 #include <regex>
 //MonsterFramework
+#include "MonsterFramework/include/Filesystem/FileReader.h"
 
 //Usings
 USING_NS_STD_CC_CD_MF
@@ -153,46 +154,27 @@ void StringsManager::parseStringsFile(const std::string &fullname,
         languageName.c_str()
     );
 
-    //COWTODO: MonsterFramework should provide a FileRead / Write class.
-    //COWTODO: This code is problematic and very ugly.
-
-    //This is needed because android cannot use c++ streams.
-    ssize_t size;
-    unsigned char* pData = cc::FileUtils::getInstance()->getFileData(
-        fullname.c_str(),
-        "r",
-        &size
-    );
-
-    MF_ASSERT_EX(
-        pData != nullptr,
-        "StringsManager::parseStringsFile",
-        "Cannot open file: %s",
-        fullname.c_str()
-    );
-
-    std::stringstream instream;
-    instream << pData;
-
-    free(pData); //MUST FREE.
-
     //Read the file.
+    auto fileReader = mf::FileReader(fullname);
+    auto lines      = fileReader.readlines();
+
+
+    //Parse all lines
     std::regex  regex("\"(.*?)\".*?=.*?\"(.*?)\"");
     std::smatch match;
 
-
-    //COWTODO: Check this code...
-    while(!instream.eof())
-    {
-        std::string line;
-        std::getline(instream, line);
-
+    for(auto &line : lines)
+    {        
         if(!std::regex_search(line, match, regex))
             continue;
 
-        auto full = match[0].str();
-        auto key  = match[1].str();
-        auto val  = match[2].str();
+        //COWTODO: What we want with this info?
+        MF_ONLY_IN_DEBUG({
+            auto full = match[0].str();
+        });
+
+        auto key = match[1].str();
+        auto val = match[2].str();
 
         m_languageMap[languageName][key] = val;
     }
