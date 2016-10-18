@@ -49,12 +49,27 @@ cc::Size Device::getScreenSize()
     //by a space. So we need to parse it here.
     std::stringstream ss(cstr);
 
+    MF_LOG_EX(
+        "[Android] Device::getScreenSize",
+        "String from Java: (%s)",
+        cstr
+    );
+
     auto size = cc::Size::ZERO;
     ss >> size.width;
     ss >> size.height;
 
 
+    MF_LOG_EX(
+        "[Android] Device::getScreenSize",
+        "Device size: (%.2f, %.2f)",
+        size.width,
+        size.height
+    );
+
     pEnv->ReleaseStringUTFChars(j_str, cstr); //Release the Java stuff.
+
+    return size;
 }
 
 #endif // ( CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ) //
