@@ -106,13 +106,19 @@ cc::Vec2 GraphicsHelper::getSizeScaleRatio(cc::Node *pNode1, cc::Node *pNode2)
 void GraphicsHelper::setAnchorToTop(cc::Node *pNode)
 {
     pNode->setIgnoreAnchorPointForPosition(false);
-    pNode->setAnchorPoint(cc::Point(0.5, 1));
+    pNode->setAnchorPoint(cc::Vec2::ANCHOR_MIDDLE_TOP);
 }
 
 void GraphicsHelper::setAnchorToCenter(cc::Node *pNode)
 {
     pNode->setIgnoreAnchorPointForPosition(false);
-    pNode->setAnchorPoint(cc::Point(0.5, 0.5));
+    pNode->setAnchorPoint(cc::Vec2::ANCHOR_MIDDLE);
+}
+
+void GraphicsHelper::setAnchorToBottom(cc::Node *pNode)
+{
+    pNode->setIgnoreAnchorPointForPosition(false);
+    pNode->setAnchorPoint(cc::Vec2::ANCHOR_MIDDLE_BOTTOM);
 }
 
 

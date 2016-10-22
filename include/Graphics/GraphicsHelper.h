@@ -72,6 +72,7 @@ public:
 public:
     static void setAnchorToTop   (cc::Node *pNode);
     static void setAnchorToCenter(cc::Node *pNode);
+    static void setAnchorToBottom(cc::Node *pNode);
 
 
     // Get Absolute Position //
