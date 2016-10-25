@@ -174,14 +174,35 @@ void AudioManager::playEffect(const std::string &effectId,
     //Get the sound info object.
     auto& sound = m_effectMap[effectId];
 
-    //Upadte the current internal id.
+    //Update the current internal id.
     sound.currInternalId = _AE::play2d(sound.filepath, loop, 1.0f);
 }
 
 
 void AudioManager::pauseEffect(const std::string &effectId)
-{
-    //COWTODO: Implement.
+{    
+    _CHECK_AND_WARN_IF_NOT_EXISTS(
+        "AudioManager::pauseEffect",
+        "Effect is not loaded: (%s)",
+        m_effectMap,
+        effectId
+    );
+
+    //Get the sound info object.
+    auto& sound = m_effectMap[effectId];
+
+    if(sound.currInternalId == AudioManager::kInvalidId)
+    {
+        _AE::pause(sound.currInternalId);
+    }
+    else
+    {
+        MF_LOG_EX(
+            "AudioManager::pauseEffect",
+            "Effect is not playing: (%s)",
+            effectId.c_str()
+        );
+    }
 }
 
 void AudioManager::pauseAllEffects()
