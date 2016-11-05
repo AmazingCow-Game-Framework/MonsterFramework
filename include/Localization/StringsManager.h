@@ -83,6 +83,12 @@ public:
     template <typename... Args>
     std::string getString(const std::string str, Args... argList)
     {
+        MF_ASSERT_EX(
+            m_pCurrStringsMap != nullptr,
+            "StringsManager::getString",
+            "m_pCurrStringsMap is null - Probably didn't loaded the strings"
+        );
+
         auto it = m_pCurrStringsMap->find(str);
         MF_ASSERT_EX(
             it != std::end(*m_pCurrStringsMap),

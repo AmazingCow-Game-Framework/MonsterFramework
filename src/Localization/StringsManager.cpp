@@ -164,17 +164,21 @@ void StringsManager::parseStringsFile(const std::string &fullname,
     std::smatch match;
 
     for(auto &line : lines)
-    {        
+    {
         if(!std::regex_search(line, match, regex))
             continue;
+
+        auto key = match[1].str();
+        auto val = match[2].str();
 
         //COWTODO: What we want with this info?
         MF_ONLY_IN_DEBUG({
             auto full = match[0].str();
+            MF_LOG_EX(
+                "StringsManager::parseStringsFile",
+                "Loaded String: %s - %s", key.c_str(), val.c_str()
+            );
         });
-
-        auto key = match[1].str();
-        auto val = match[2].str();
 
         m_languageMap[languageName][key] = val;
     }
