@@ -1,11 +1,11 @@
-﻿//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 //               █      █                                                     //
 //               ████████                                                     //
 //             ██        ██                                                   //
-//            ███  █  █  ███        MonsterFramework.h                        //
+//            ███  █  █  ███        FileWritter.h                             //
 //            █ █        █ █        MonsterFramework                          //
 //             ████████████                                                   //
-//           █              █       Copyright (c) 2015, 2016                  //
+//           █              █       Copyright (c) 2016                        //
 //          █     █    █     █      AmazingCow - www.AmazingCow.com           //
 //          █     █    █     █                                                //
 //           █              █       N2OMatt - n2omatt@amazingcow.com          //
@@ -38,27 +38,75 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_MonsterFramework_h__
-#define __MonsterFramework_MonsterFramework_h__
+#ifndef FILEWRITTER_H
+#define FILEWRITTER_H
 
-//AD
-#include "include/AD/ADManager.h"
-//Audio
-#include "include/Audio/AudioManager.h"
-//Filesystem
-#include "include/Filesystem/SettingsManager.h"
-#include "include/Filesystem/FileReader.h"
-#include "include/Filesystem/FileWritter.h"
-//Graphics
-#include "include/Graphics/GraphicsHelper.h"
-#include "include/Graphics/SceneBuilder.h"
-#include "include/Graphics/ILoadResolver.h"
-//Localization
-#include "include/Localization/StringsManager.h"
-//Platform
-#include "include/Platform/Application.h"
-#include "include/Platform/Device.h"
-//Utils
-#include "include/Utils/MonsterFramework_Utils.h"
+//std
+#include <cstdio>
+#include <string>
+#include <sstream>
+//MonsterFramework
+#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
-#endif // defined(__MonsterFramework_MonsterFramework_h__) //
+NS_MF_BEGIN
+
+class FileWritter
+{
+
+    // CTOR / DTOR //
+public:
+    FileWritter(const std::string &basename);
+    FileWritter(const std::string &dirname, const std::string &basename);
+
+    ~FileWritter();
+
+
+    // File Methods //
+public:
+    // Write
+    template <typename T>
+    FileWritter& write(const T& t)
+    {
+        std::stringstream ss;
+        ss << t;
+
+        return this->write(ss.str());
+    }
+
+    FileWritter& write    (const std::string &str);
+
+
+    // Writeline
+    template <typename T>
+    FileWritter& writeline(const T& t)
+    {
+        std::stringstream ss;
+        ss << t;
+
+        return this->writeline(ss.str());
+    }
+
+    FileWritter& writeline(const std::string &str);
+
+
+    // Close
+    void close();
+
+
+    // Query Methods //
+public:
+    const std::string& getBasename() const;
+    const std::string& getDirname () const;
+    std::string        getFullpath() const;
+
+
+    // iVars //
+private:
+    FILE *m_pFILE;
+
+    std::string m_dirname;
+    std::string m_basename;
+};
+
+NS_MF_END
+#endif // FILEWRITTER_H

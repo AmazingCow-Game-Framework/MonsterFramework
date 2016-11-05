@@ -1,11 +1,11 @@
-﻿//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 //               █      █                                                     //
 //               ████████                                                     //
 //             ██        ██                                                   //
-//            ███  █  █  ███        MonsterFramework.h                        //
+//            ███  █  █  ███        FileWritter.cpp                           //
 //            █ █        █ █        MonsterFramework                          //
 //             ████████████                                                   //
-//           █              █       Copyright (c) 2015, 2016                  //
+//           █              █       Copyright (c) 2016                        //
 //          █     █    █     █      AmazingCow - www.AmazingCow.com           //
 //          █     █    █     █                                                //
 //           █              █       N2OMatt - n2omatt@amazingcow.com          //
@@ -38,27 +38,100 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_MonsterFramework_h__
-#define __MonsterFramework_MonsterFramework_h__
+//Header
+#include "MonsterFramework/include/Filesystem/FileWritter.h"
 
-//AD
-#include "include/AD/ADManager.h"
-//Audio
-#include "include/Audio/AudioManager.h"
-//Filesystem
-#include "include/Filesystem/SettingsManager.h"
-#include "include/Filesystem/FileReader.h"
-#include "include/Filesystem/FileWritter.h"
-//Graphics
-#include "include/Graphics/GraphicsHelper.h"
-#include "include/Graphics/SceneBuilder.h"
-#include "include/Graphics/ILoadResolver.h"
-//Localization
-#include "include/Localization/StringsManager.h"
-//Platform
-#include "include/Platform/Application.h"
-#include "include/Platform/Device.h"
-//Utils
-#include "include/Utils/MonsterFramework_Utils.h"
+//Usings
+USING_NS_STD_CC_CD_MF;
 
-#endif // defined(__MonsterFramework_MonsterFramework_h__) //
+
+////////////////////////////////////////////////////////////////////////////////
+// CTOR / DTOR                                                                //
+////////////////////////////////////////////////////////////////////////////////
+FileWritter::FileWritter(const std::string &filename) :
+    FileWritter(
+        cc::FileUtils::getInstance()->getWritablePath(),
+        filename
+    )
+{
+    //Empty...
+}
+
+
+FileWritter::FileWritter(const std::string &dirname,
+                         const std::string &basename) :
+    m_pFILE   (nullptr),
+    m_dirname (dirname ),
+    m_basename(basename)
+{
+    m_pFILE = fopen(getFullpath().c_str(), "w");
+
+    MF_ASSERT_EX(
+        m_pFILE != nullptr,
+        "FileWritter::FileWritter",
+        "Cannot open file for write: (%s)",
+        getFullpath().c_str()
+    );
+}
+
+FileWritter::~FileWritter()
+{
+    //FILE is already closed.
+    if(!m_pFILE)
+        return;
+
+    this->close();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// File Methods                                                               //
+////////////////////////////////////////////////////////////////////////////////
+FileWritter& FileWritter::write(const std::string &str)
+{
+    fprintf(m_pFILE, "%s", str.c_str());
+    return *this;
+}
+
+FileWritter& FileWritter::writeline(const std::string &str)
+{
+    fprintf(m_pFILE, "%s\n", str.c_str());
+    return *this;
+}
+
+void FileWritter::close()
+{
+    MF_ASSERT_EX(
+        m_pFILE != nullptr,
+        "FileWritter::close",
+        "Trying to close an aready closed (or invalid) file: (%s)",
+        getFullpath().c_str()
+    );
+
+    fflush(m_pFILE);
+    fclose(m_pFILE);
+
+    m_pFILE = nullptr;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Query Methods                                                              //
+////////////////////////////////////////////////////////////////////////////////
+const std::string& FileWritter::getBasename() const
+{
+    return m_basename;
+}
+
+const std::string& FileWritter::getDirname() const
+{
+    return m_dirname;
+}
+
+std::string FileWritter::getFullpath() const
+{
+    if(m_dirname.back() == '/')
+        return m_dirname + m_basename;
+
+    return m_dirname + "/" + m_basename;
+}
