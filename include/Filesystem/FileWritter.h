@@ -55,8 +55,11 @@ class FileWritter
 
     // CTOR / DTOR //
 public:
-    FileWritter(const std::string &basename);
-    FileWritter(const std::string &dirname, const std::string &basename);
+    FileWritter(const std::string &basename, bool append = false);
+
+    FileWritter(const std::string &dirname,
+                const std::string &basename,
+                bool append);
 
     ~FileWritter();
 

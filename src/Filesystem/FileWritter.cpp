@@ -48,10 +48,12 @@ USING_NS_STD_CC_CD_MF;
 ////////////////////////////////////////////////////////////////////////////////
 // CTOR / DTOR                                                                //
 ////////////////////////////////////////////////////////////////////////////////
-FileWritter::FileWritter(const std::string &filename) :
+FileWritter::FileWritter(const std::string &filename,
+                         bool append /* = false */) :
     FileWritter(
         cc::FileUtils::getInstance()->getWritablePath(),
-        filename
+        filename,
+        append
     )
 {
     //Empty...
@@ -59,12 +61,16 @@ FileWritter::FileWritter(const std::string &filename) :
 
 
 FileWritter::FileWritter(const std::string &dirname,
-                         const std::string &basename) :
+                         const std::string &basename,
+                         bool append /* = false */) :
     m_pFILE   (nullptr),
     m_dirname (dirname ),
     m_basename(basename)
 {
-    m_pFILE = fopen(getFullpath().c_str(), "w");
+    m_pFILE = fopen(
+        getFullpath().c_str(),
+        (append) ? "a" : "w"
+    );
 
     MF_ASSERT_EX(
         m_pFILE != nullptr,
