@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef Device_h
-#define Device_h
+#ifndef __MonsterFramework_include_Platform_Device_h__
+#define __MonsterFramework_include_Platform_Device_h__
 
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
@@ -31,4 +31,4 @@ public:
 };
 
 NS_MF_END
-#endif /* Device_h */
+#endif /* __MonsterFramework_include_Platform_Device_h__ */

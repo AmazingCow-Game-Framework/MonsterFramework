@@ -38,8 +38,8 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef FILEWRITTER_H
-#define FILEWRITTER_H
+#ifndef __MonsterFramework_include_Filesystem_FileWritter_h__
+#define __MonsterFramework_include_Filesystem_FileWritter_h__
 
 //std
 #include <cstdio>
@@ -112,4 +112,4 @@ private:
 };
 
 NS_MF_END
-#endif // FILEWRITTER_H
+#endif // __MonsterFramework_include_Filesystem_FileWritter_h__
