@@ -1,11 +1,11 @@
-﻿//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 //               █      █                                                     //
 //               ████████                                                     //
 //             ██        ██                                                   //
-//            ███  █  █  ███        MonsterFramework.h                        //
+//            ███  █  █  ███        IAppDelegate.h                            //
 //            █ █        █ █        MonsterFramework                          //
 //             ████████████                                                   //
-//           █              █       Copyright (c) 2015, 2016, 2017            //
+//           █              █       Copyright (c) 2017                        //
 //          █     █    █     █      AmazingCow - www.AmazingCow.com           //
 //          █     █    █     █                                                //
 //           █              █       N2OMatt - n2omatt@amazingcow.com          //
@@ -38,29 +38,69 @@
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
 
-#ifndef __MonsterFramework_MonsterFramework_h__
-#define __MonsterFramework_MonsterFramework_h__
+#ifndef  __MonsterFramework_include_AppDelegate_IAppDelegate_h__
+#define  __MonsterFramework_include_AppDelegate_IAppDelegate_h__
 
-//AD
-#include "include/AD/ADManager.h"
-//AppDelegate
-#include "include/AppDelegate/IAppDelegate.h"
-//Audio
-#include "include/Audio/AudioManager.h"
-//Filesystem
-#include "include/Filesystem/SettingsManager.h"
-#include "include/Filesystem/FileReader.h"
-#include "include/Filesystem/FileWritter.h"
-//Graphics
-#include "include/Graphics/GraphicsHelper.h"
-#include "include/Graphics/SceneBuilder.h"
-#include "include/Graphics/ILoadResolver.h"
-//Localization
-#include "include/Localization/StringsManager.h"
-//Platform
-#include "include/Platform/Application.h"
-#include "include/Platform/Device.h"
-//Utils
-#include "include/Utils/MonsterFramework_Utils.h"
+//std
+#include <string>
+//MonsterFramework
+#include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
-#endif // defined(__MonsterFramework_MonsterFramework_h__) //
+NS_MF_BEGIN
+
+class IAppDelegate :
+    public cc::Application
+{
+    // CTOR / DTOR //
+public:
+    IAppDelegate(const std::string &gameCaption, int fps, bool showStats);
+    virtual ~IAppDelegate();
+
+
+    // Init //
+public:
+    virtual cc::Scene* getInitialScene() = 0;
+
+    virtual void initGLContextAttrs() override;
+
+
+    // Lifecycle //
+public:
+    virtual bool applicationDidFinishLaunching () override;
+    virtual void applicationDidEnterBackground () override;
+    virtual void applicationWillEnterForeground() override;
+
+
+    // Getters //
+public:
+    const cc::Size& getScreenSize             () const;
+    float           getScreenRatio            () const;
+    const cc::Size& getBestFitDesignResolution() const;
+
+    const std::string& getSpriteSheetSufix  () const;
+    const float        getContentScaleFactor() const;
+
+
+    // Private Methods //
+private:
+    void createGLView();
+    void findBestFitDeviceResolutionSize();
+
+
+    // iVars //
+private:
+    std::string m_gameCaption;
+    int         m_fps;
+    int         m_showStats;
+
+    cc::Size m_deviceScreenSize;
+    float    m_deviceScreenRatio;
+    cc::Size m_bestFitDesignResolution;
+
+    float       m_scaleFactor;
+    std::string m_spriteSheetSufix;
+};
+
+NS_MF_END
+#endif // __MonsterFramework_include_AppDelegate_IAppDelegate_h__
+
