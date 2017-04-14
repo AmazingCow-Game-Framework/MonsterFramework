@@ -43,6 +43,7 @@
 
 //std
 #include <string>
+#include <type_traits> //for std::remove_pointer
 //MonsterFramework
 #include "MonsterFramework/include/Utils/MonsterFramework_Utils.h"
 
@@ -92,7 +93,7 @@ NS_MF_END
 // Var assignment
 #define MF_ILOADRESOLVER_RESOLVE_VAR(_var_name_, _dst_var_, _type_, _name_, _pvar_) \
     if((_var_name_) == (_name_)) {                 \
-        _dst_var_ = static_cast<_type_ *>(_pvar_); \
+        _dst_var_ = static_cast<std::remove_pointer<_type_>::type *>(_pvar_); \
         return;                                    \
     }
 
