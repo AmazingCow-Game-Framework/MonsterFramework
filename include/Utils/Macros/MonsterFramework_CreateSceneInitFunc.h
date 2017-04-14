@@ -54,9 +54,9 @@ static __TYPE__* create(const __OPT__ &options) \
 ////////////////////////////////////////////////////////////////////////////////
 // Init                                                                       //
 ////////////////////////////////////////////////////////////////////////////////
-#define INIT_OPTIONS(__OPT__) \
+#define INIT_OPTIONS(_UNUSED_TYPE_, __OPT__) \
     virtual bool init(const __OPT__ &options);
-#define INIT() \
+#define INIT(_UNUSED_TYPE_) \
     virtual bool init() override;
 
 
