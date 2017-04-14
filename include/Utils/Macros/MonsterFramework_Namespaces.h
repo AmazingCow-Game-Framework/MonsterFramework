@@ -22,5 +22,7 @@ namespace cc = cocos2d;
     using namespace cocos2d;  \
     using namespace mf;
 
+#define MF_NAMESPACE_BEGIN(_name_) namespace _name_ {
+#define MF_NAMESPACE_END(_name_)   }
 
 #endif // defined(__MonsterFramework_include_Utils_Macros_MonsterFramework_Namespaces_h__)
